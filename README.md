@@ -10,6 +10,7 @@ Scheduling App allows users to sync their calendars in order to find the optimal
 * [ ] User can add friends and create group calendar requests
 * [ ] Users can create group chats
 * [ ] Voters can find a time to go vote / nearest polling location
+* [ ] Students can find a time to meet with friends
 
 The following are **optional** features:
 * [ ] Find-my-friends type feature to locate friends
