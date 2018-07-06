@@ -11,6 +11,7 @@ Scheduling App allows users to sync their calendars in order to find the optimal
 * [ ] Users can create group chats
 * [ ] Voters can find a time to go vote / nearest polling location
 * [ ] Students can find a time to meet with friends
+* [ ] As someone who is forgetful, I want push notifications texted to me as a reminder.
 
 The following are **optional** features:
 * [ ] As someone having trouble finding their friends, they can use the location tag to locate them
