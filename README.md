@@ -1,5 +1,7 @@
-# SchedulingApp
+# Scheduling App
 
-* Short description of our app:
+Scheduling App allows user to sync their calendars into the app in order to find the ideal time to meet.
 
-* User stories for your app in a bulleted list:
+## User Stories
+
+* [] User can **scroll through current movies** from the Movie Database API
