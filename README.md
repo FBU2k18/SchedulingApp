@@ -1,7 +1,15 @@
 # Scheduling App
 
-Scheduling App allows user to sync their calendars into the app in order to find the ideal time to meet.
+Scheduling App allows users to sync their calendars in order to find the optimal meeting time.
+
 
 ## User Stories
 
-* [] User can **scroll through current movies** from the Movie Database API
+* [ ] User can log in
+* [ ] User can add their calendar to the app / sync Google calendar
+* [ ] User can add friends and create group calendar requests
+* [ ] Users can create group chats
+
+The following are **optional** features:
+* [ ] Find-my-friends type feature to locate friends
+
