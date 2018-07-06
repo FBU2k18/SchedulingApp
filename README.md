@@ -13,5 +13,6 @@ Scheduling App allows users to sync their calendars in order to find the optimal
 * [ ] Students can find a time to meet with friends
 
 The following are **optional** features:
-* [ ] Find-my-friends type feature to locate friends
+* [ ] As someone having trouble finding their friends, they can use the location tag to locate them
+* [ ] As someone who arrives to a big event at a different time, I want to quickly locate my friends using a compass
 
