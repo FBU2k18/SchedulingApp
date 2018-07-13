@@ -17,3 +17,48 @@ The following are **optional** features:
 * [ ] As someone having trouble finding their friends, they can use the location tag to locate them
 * [ ] As someone who arrives to a big event at a different time, I want to quickly locate my friends using a compass
 
+# Details
+
+**Data Storage**
+
+* Users
+    * Emails
+    * Gmail name
+    * Gmail profile image
+    * Calendar
+    * Groups
+    * Friends (stretch goal)
+    * Custom username (stretch goal)
+* Groups
+    * Name
+    * Icon
+    * Messages
+        * Users
+        * Text
+        * Created At
+    * Users
+    * Available Times
+        * Rankings
+        * Free/Busy times
+            * Up/Down votes
+                * User
+    * Location sharing (stretch goal)
+
+
+**Features**
+
+* Name/Logo
+* Set up Firebase
+* Chat
+* Populate available times
+* Ranking available times 
+* Splash screen/log in with Gmail
+* Home page of groups
+* Group creation
+* Stretch Goals
+    * Share-your-location timed
+    * Profile page to change username/profile picture
+    * Adding photo to group chat
+    * Time intervals
+    * Group chat poll
+
