@@ -17,7 +17,7 @@ The following are **optional** features:
 * [ ] As someone having trouble finding their friends, they can use the location tag to locate them
 * [ ] As someone who arrives to a big event at a different time, I want to quickly locate my friends using a compass
 
-# Details
+## Details
 
 **Data Storage**
 
@@ -62,3 +62,6 @@ The following are **optional** features:
     * Time intervals
     * Group chat poll
 
+## Wireframe
+
+<img src='https://github.com/FBU2k18/SchedulingApp/blob/master/wireframe.pdf' title='Wireframe' width='' alt='Wireframe' />
