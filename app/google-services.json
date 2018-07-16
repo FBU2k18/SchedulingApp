@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "350497883991",
+    "firebase_url": "https://scheduling-app-90072.firebaseio.com",
+    "project_id": "scheduling-app-90072",
+    "storage_bucket": "scheduling-app-90072.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350497883991:android:8748b1c0d85df45a",
+        "android_client_info": {
+          "package_name": "com.emmabr.schedulingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350497883991-9qhkaitti7ndko22oih0finpf6jtb6i9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emmabr.schedulingapp",
+            "certificate_hash": "2c4b4ecc7b5efeadd55e010a2afcd5887584588e"
+          }
+        },
+        {
+          "client_id": "350497883991-slorv9a9m49fqfbik3gd7ls59mpq7jte.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm3Bnt0oR_J3x0ui1js9L_0bAnJ5rHRxQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350497883991-slorv9a9m49fqfbik3gd7ls59mpq7jte.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
