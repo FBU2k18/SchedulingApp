@@ -21,7 +21,7 @@ public class Group {
         this.members = members;
     }
 
-    //use to create new gropu with picture
+    //use to create new group with picture
     public Group(String name, String photoPath, ArrayList<User> members) {
         this.name = name;
         this.photoPath = photoPath;
@@ -70,5 +70,15 @@ public class Group {
 
     public void update() {
         //update group in Firebase
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return toString().equals(obj.toString());
+    }
+
+    @Override
+    public String toString() {
+        return getId();
     }
 }
