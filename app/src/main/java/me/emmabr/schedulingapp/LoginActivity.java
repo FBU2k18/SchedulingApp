@@ -38,7 +38,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        // updateUI(currentUser);
+        // logging in existing user
+        Intent startUser = new Intent(this, MainActivity.class);
+        startActivity(startUser);
     }
 
     @Override
@@ -100,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            // successful log in
                             Intent startApp = new Intent(this, MainActivity.class);
                             startActivity(startApp);
                         } else {
