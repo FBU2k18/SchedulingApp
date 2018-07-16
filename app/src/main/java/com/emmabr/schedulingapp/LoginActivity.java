@@ -26,7 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     Button login;
-    TextView liUsername;
+    Button register;
+    TextView liEmail;
     TextView liPassword;
 
     private ProgressDialog mLoginProgress;
@@ -45,7 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         login = findViewById(R.id.btLogIn);
-        liUsername = findViewById(R.id.tvUsername);
+        register = findViewById(R.id.btRegister);
+        liEmail = findViewById(R.id.tvEmail);
         liPassword = findViewById(R.id.tvPassword);
 
         mAuth = FirebaseAuth.getInstance();
@@ -55,11 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = liUsername.getText().toString();
+                final String email = liEmail.getText().toString();
                 final String password = liPassword.getText().toString();
 
                 //login a user
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
+                if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mLoginProgress.setTitle("Logging In");
                     mLoginProgress.setMessage("Please wait while we check your credentials.");
                     mLoginProgress.setCanceledOnTouchOutside(false);
@@ -67,8 +69,16 @@ public class LoginActivity extends AppCompatActivity {
 
                     loginUser(email, password);
                 }
+            }
+        });
 
-                //registers a user
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String email = liEmail.getText().toString();
+                final String password = liPassword.getText().toString();
+
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -91,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void updateUI(FirebaseUser userInfo) {
@@ -101,13 +110,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loginUser(String email, String password){
+    private void loginUser(String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
 
                     mLoginProgress.dismiss();
 
@@ -116,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(mainIntent);
                     finish();
 
-                }else{
+                } else {
 
                     mLoginProgress.hide();
                     Toast.makeText(LoginActivity.this, "Cannot Sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -21,14 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogout1 = findViewById(R.id.btLogout1);
 
-
-
         btnLogout1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(logBack);
+                Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();
             }
         });
     }
