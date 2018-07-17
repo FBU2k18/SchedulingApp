@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTimes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/flPeeker"
+        android:layout_width="match_parent"
+        android:layout_height="410dp"
+        android:background="@android:color/background_light"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="55dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="top|left"
+            android:gravity="center_vertical"
+            android:text="Messages" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvMessageDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="298dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|left"
+            android:hint="Message" />
+
+        <Button
+            android:id="@+id/bSend"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|right"
+            android:text="SEND" />
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

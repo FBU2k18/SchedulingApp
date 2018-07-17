@@ -1,18 +1,22 @@
+package me.emmabr.schedulingapp;
+
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 
-import me.emmabr.schedulingapp.Group;
-import me.emmabr.schedulingapp.R;
+import java.util.ArrayList;
+
+import me.emmabr.schedulingapp.model.Group;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
@@ -27,7 +31,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder holder, int position) {
         Group group = groups.get(position);
         holder.tvGroupName.setText(group.getName());
-        Glide.
+        if (group.getPhotoPath() != null && !group.getPhotoPath().equals(""))
+            Glide.with(context)
+                    .load(group.getPhotoPath())
+                    .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                    .into(holder.ivGroupLogo);
     }
 
     @NonNull
@@ -60,10 +68,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                Group group = groups.get(position);
-                //intent to go to group screen
+            if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                Group group = groups.get(getAdapterPosition());
+                //replace with intent to go to group screen
+                Log.i("Group",group.getName());
             }
         }
     }

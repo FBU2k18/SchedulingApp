@@ -1,6 +1,8 @@
-package me.emmabr.schedulingapp;
+package me.emmabr.schedulingapp.model;
 
 import java.util.ArrayList;
+
+import me.emmabr.schedulingapp.model.Group;
 
 public class User {
 

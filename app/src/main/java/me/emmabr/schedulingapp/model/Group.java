@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package me.emmabr.schedulingapp.model;
 
 import java.util.ArrayList;
 
@@ -80,5 +80,10 @@ public class Group {
     @Override
     public String toString() {
         return getId();
+    }
+
+    //delete this method later, only for testing
+    public static Group randomGroup() {
+        return new Group("Group " + (int) (Math.random() * 10), new ArrayList<User>());
     }
 }
