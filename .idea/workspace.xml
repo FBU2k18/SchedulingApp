@@ -10,35 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea85bb37-de92-419d-a0e6-4ef2a628f588" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/GroupActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/GroupActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/GroupAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/GroupAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MainActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MessageAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MessageAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/TimeOptionAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/TimeOptionAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/Group.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/Group.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/Message.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/Message.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/TimeOption.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/TimeOption.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/User.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/User.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/customborder.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/customborder.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/in_bubble.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/in_bubble.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/out_bubble.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/out_bubble.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_group.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_group.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_time_option.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_time_option.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_group.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_group.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -61,7 +34,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="292">
@@ -100,7 +73,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider editor-type-id="android-manifest">
             <state />
@@ -2245,13 +2218,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/TimeOption.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/model/Message.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/GroupActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_time_option.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/TimeOptionAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MessageAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_group.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_message.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/emmabr/schedulingapp/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       </list>
     </option>
   </component>
@@ -2522,7 +2495,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1773" y="-479" width="1369" height="1210" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2535,7 +2507,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.45112106" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.45112106" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2731,17 +2703,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="46" lean-forward="false" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_time_option.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -2834,6 +2795,17 @@
             <element signature="e#1331#1488#0" expanded="true" />
             <element signature="e#1487#1488#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="46" lean-forward="false" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
