@@ -45,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getSupportActionBar().hide();
+
         login = findViewById(R.id.btLogIn);
         register = findViewById(R.id.btRegister);
         liEmail = findViewById(R.id.tvEmail);
@@ -126,12 +129,9 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
 
                 } else {
-
                     mLoginProgress.hide();
                     Toast.makeText(LoginActivity.this, "Cannot Sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
-
                 }
-
             }
         });
 
