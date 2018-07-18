@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.emmabr.schedulingapp.model.TimeOption;
+import com.emmabr.schedulingapp.model.User;
+
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.model.TimeOption;
-import me.emmabr.schedulingapp.model.User;
+import me.emmabr.schedulingapp.R;
 
 public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.ViewHolder> {
 

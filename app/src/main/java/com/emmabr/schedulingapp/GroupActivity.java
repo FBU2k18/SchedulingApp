@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,20 +6,20 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+
+import com.emmabr.schedulingapp.model.Message;
+import com.emmabr.schedulingapp.model.TimeOption;
+import com.emmabr.schedulingapp.model.User;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.model.Message;
-import me.emmabr.schedulingapp.model.TimeOption;
-import me.emmabr.schedulingapp.model.User;
+import me.emmabr.schedulingapp.R;
+
 
 public class GroupActivity extends AppCompatActivity {
 

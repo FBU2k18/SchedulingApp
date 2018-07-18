@@ -1,26 +1,20 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
+import com.emmabr.schedulingapp.model.Message;
+import com.emmabr.schedulingapp.model.User;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.model.Group;
-import me.emmabr.schedulingapp.model.Message;
-import me.emmabr.schedulingapp.model.User;
+import me.emmabr.schedulingapp.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 

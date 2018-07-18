@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,10 +13,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.emmabr.schedulingapp.model.Group;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.model.Group;
+import me.emmabr.schedulingapp.R;
+
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 

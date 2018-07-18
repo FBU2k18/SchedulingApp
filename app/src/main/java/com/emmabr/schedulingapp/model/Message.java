@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp.model;
+package com.emmabr.schedulingapp.model;
 
 public class Message {
 

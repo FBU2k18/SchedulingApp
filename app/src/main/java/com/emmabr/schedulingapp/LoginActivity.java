@@ -1,7 +1,9 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import me.emmabr.schedulingapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.model.Group;
+import me.emmabr.schedulingapp.R;
+
+import com.emmabr.schedulingapp.model.Group;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
