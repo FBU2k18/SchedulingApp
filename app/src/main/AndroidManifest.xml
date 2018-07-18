@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.emmabr.schedulingapp.MainActivity"></activity>
+        <activity android:name="com.emmabr.schedulingapp.GroupActivity"></activity>
     </application>
 
 </manifest>
