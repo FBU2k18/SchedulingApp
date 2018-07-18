@@ -71,6 +71,5 @@ public class Groups {
             FirebaseDatabase.getInstance().getReference("groups").child("available_times").setValue(availableTime);
         }
 
-
     }
 }
