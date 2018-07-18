@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class User {
 
     // data in schema
-    //public String uid;
     public FirebaseUser user;
     public String personName;
     public String calendar;
@@ -26,7 +25,6 @@ public class User {
         this.personName = personName;
         this.calendar = calendar;
         this.group = group;
-        //uid = FirebaseDatabase.getInstance().getReference("appUsers").push().getKey();
     }
 
     public static void addUser(User inputUser) {
