@@ -7,26 +7,46 @@
     tools:context="com.emmabr.schedulingapp.LoginActivity">
 
     <EditText
-        android:id="@+id/tvUsername"
-        android:layout_width="103dp"
+        android:id="@+id/tvEmail"
+        android:layout_width="198dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="183dp" />
+        android:layout_marginTop="170dp"
+        android:hint="@string/email" />
 
     <EditText
         android:id="@+id/tvPassword"
-        android:layout_width="106dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:hint="@string/password"/>
 
     <Button
         android:id="@+id/btLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvUsername"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="173dp"
-        android:text="Log In" />
+        android:text="@string/login_btn" />
+
+    <Button
+        android:id="@+id/btRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="117dp"
+        android:text="@string/register_btn" />
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="99dp"
+        android:layout_height="87dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="62dp"
+        app:srcCompat="@android:color/holo_green_light" />
 
 </RelativeLayout>

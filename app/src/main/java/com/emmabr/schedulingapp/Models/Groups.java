@@ -1,6 +1,5 @@
 package com.emmabr.schedulingapp.Models;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.ArrayList;
 public class Groups {
 
     // data stored in schema
+    public String groupId;
     public String groupName;
     public String imageURL;
     public ArrayList<User> users;
@@ -16,6 +16,7 @@ public class Groups {
 
     public Groups (String groupName, String imageURL, ArrayList<User> users,
                    ArrayList<Messages> messagesList, ArrayList<AvailableTimes> availableTimes) {
+        groupId = FirebaseDatabase.getInstance().getReference("groups").push().getKey();
         this.groupName = groupName;
         this.imageURL = imageURL;
         this.users = users;
@@ -33,8 +34,6 @@ public class Groups {
 
     // subclass for keeping track of messages
     public static class Messages {
-
-        DatabaseReference messagesDatabase;
         User sentUser;
         String messageSent;
         String sentAt;
