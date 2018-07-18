@@ -4,4 +4,8 @@
     <string name="password">Enter your password</string>
     <string name="login_btn">login</string>
     <string name="register_btn">register</string>
+    <string name="group_name">Enter group name</string>
+    <string name="search_user">Search for a user</string>
+    <string name="add_btn">Add</string>
+    <string name="create_btn">Create</string>
 </resources>
