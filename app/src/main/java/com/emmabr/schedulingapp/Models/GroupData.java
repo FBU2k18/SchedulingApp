@@ -3,7 +3,7 @@ package com.emmabr.schedulingapp.Models;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Group {
+public class GroupData {
 
     // data stored in schema
     public String groupId;
@@ -14,8 +14,8 @@ public class Group {
     //public ArrayList<AvailableTimes> availableTimes;
 
     // create new group
-    public Group(String groupName, String imageURL) {
-        groupId = "";
+    public GroupData(String groupName, String imageURL) {
+        //groupId = "";
         this.groupName = groupName;
         this.imageURL = imageURL;
     }
@@ -25,8 +25,13 @@ public class Group {
         this.groupId = groupId;
     }
 
+    // get groupID
+    public String getGroupId() {
+        return groupId;
+    }
+
     // save group to Firebase
-    public void saveGroup(Group inputGroup) {
+    public static void saveGroup(GroupData inputGroup) {
         DatabaseReference tempHolder = FirebaseDatabase.getInstance().getReference("groups").push();
         tempHolder.setValue(inputGroup);
         String groupTempID = tempHolder.getKey();

@@ -1,9 +1,10 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,19 +13,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.emmabr.schedulingapp.Models.GroupData;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
 
-import com.emmabr.schedulingapp.model.Group;
-import com.google.firebase.auth.FirebaseAuth;
-
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Group> groups;
+    ArrayList<GroupData> groups;
     GroupAdapter adapter;
     RecyclerView rvGroups;
     SwipeRefreshLayout srlMain;
+
+    private String mCurrentUser;
+    private DatabaseReference currUserGroupsData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.miCreateGroup:
                 //replace with intent
-                Log.i("Menu","Create Group");
+                Log.i("Menu","Create GroupData");
                 break;
             case R.id.miEditProfile:
                 //replace with intent
@@ -76,16 +86,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getGroups() {
-        if (groups.size() != 0) {
-            groups.clear();
-            adapter.notifyDataSetChanged();
-            srlMain.setRefreshing(false);
-        }
-        //will get groups from Firebase, but test for now
-        for (int i = 0; i < 10; i++) {
-            groups.add(Group.randomGroup());
-        }
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            // current userID
+            mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            // groups for current user
+            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser).child("Groups");
+            currUserGroupsData.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                        String name = childData.child("groupName").getValue().toString();
+                        String imgURL = childData.child("imgURL").getValue().toString();
+                        GroupData tempGroup = new GroupData(name, imgURL);
+                        groups.add(tempGroup);
+                    }
+                    adapter.notifyDataSetChanged();
+                    srlMain.setRefreshing(false);
+                    rvGroups.scrollToPosition(0);
+                }
 
-        rvGroups.scrollToPosition(0);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("MainActivity", "Assigning groups failed");
+                }
+            });
+
+        }
     }
 }
