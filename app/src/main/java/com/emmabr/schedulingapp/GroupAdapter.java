@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -26,12 +25,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     ArrayList<GroupData> groups;
     Context context;
 
-    private ArrayList<String> groupNameAdapter;
-    private ArrayList<String> imgURLs;
-
-    private String mCurrentUser;
-    private DatabaseReference currUserGroupsData;
-    private DatabaseReference groupsData;
 
     public GroupAdapter(ArrayList<GroupData> groups) {
         this.groups = groups;
