@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             // current userID
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             // groups for current user
-            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser).child("Groups");
+            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser).child("userGroup");
             currUserGroupsData.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
