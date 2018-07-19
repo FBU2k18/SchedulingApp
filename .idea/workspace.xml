@@ -10,7 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa88d833-0a3c-423c-b694-e1cba7240ef6" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/RegisterActivity.java" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" />
@@ -20,12 +19,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/LoginActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/LoginActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/UserNameActivity.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/PeopleClient.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_user_name.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -89,19 +85,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_login.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="activity_login.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml">
           <provider selected="true" editor-type-id="android-designer2">
             <state />
           </provider>
           <provider editor-type-id="text-editor">
             <state relative-caret-position="388">
-              <caret line="52" column="46" lean-forward="false" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
+              <caret line="51" column="46" lean-forward="false" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
               <folding>
                 <element signature="e#695#710#0" expanded="true" />
-                <element signature="e#1008#1026#0" expanded="true" />
-                <element signature="e#1405#1424#0" expanded="true" />
-                <element signature="e#2039#2061#0" expanded="true" />
+                <element signature="e#960#978#0" expanded="true" />
+                <element signature="e#1357#1376#0" expanded="true" />
+                <element signature="e#1991#2013#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_register.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="7" column="31" lean-forward="false" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+              <folding>
+                <element signature="e#2557#2575#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -122,6 +133,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
               <caret line="5" column="73" lean-forward="false" selection-start-line="5" selection-start-column="73" selection-end-line="5" selection-end-column="73" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -2198,13 +2219,13 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/gradient_2.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_user_name.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/UserNameActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/RegisterActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/emmabr/schedulingapp/LoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/color_selector.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/animator/color_selector.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" />
       </list>
     </option>
   </component>
@@ -2537,7 +2558,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1939#1954#0" expanded="false" />
+            <element signature="e#1970#1985#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2572,9 +2593,9 @@
           <caret line="33" column="46" lean-forward="false" selection-start-line="33" selection-start-column="46" selection-end-line="33" selection-end-column="46" />
           <folding>
             <element signature="e#695#710#0" expanded="true" />
-            <element signature="e#1008#1026#0" expanded="true" />
-            <element signature="e#1405#1424#0" expanded="true" />
-            <element signature="e#2039#2061#0" expanded="true" />
+            <element signature="e#960#978#0" expanded="true" />
+            <element signature="e#1357#1376#0" expanded="true" />
+            <element signature="e#1991#2013#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2695,9 +2716,9 @@
           <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
           <folding>
             <element signature="e#695#710#0" expanded="true" />
-            <element signature="e#1008#1026#0" expanded="true" />
-            <element signature="e#1405#1424#0" expanded="true" />
-            <element signature="e#2039#2061#0" expanded="true" />
+            <element signature="e#960#978#0" expanded="true" />
+            <element signature="e#1357#1376#0" expanded="true" />
+            <element signature="e#1991#2013#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2748,9 +2769,9 @@
           <caret line="88" column="57" lean-forward="false" selection-start-line="88" selection-start-column="57" selection-end-line="88" selection-end-column="57" />
           <folding>
             <element signature="e#695#710#0" expanded="true" />
-            <element signature="e#1008#1026#0" expanded="true" />
-            <element signature="e#1405#1424#0" expanded="true" />
-            <element signature="e#2039#2061#0" expanded="true" />
+            <element signature="e#960#978#0" expanded="true" />
+            <element signature="e#1357#1376#0" expanded="true" />
+            <element signature="e#1991#2013#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2900,32 +2921,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="45" lean-forward="false" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="73" lean-forward="false" selection-start-line="5" selection-start-column="73" selection-end-line="5" selection-end-column="73" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="62" column="38" lean-forward="false" selection-start-line="62" selection-start-column="38" selection-end-line="62" selection-end-column="38" />
-          <folding>
-            <element signature="e#1939#1954#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2967,12 +2967,33 @@
       </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="388">
-          <caret line="52" column="46" lean-forward="false" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
+          <caret line="51" column="46" lean-forward="false" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
           <folding>
             <element signature="e#695#710#0" expanded="true" />
-            <element signature="e#1008#1026#0" expanded="true" />
-            <element signature="e#1405#1424#0" expanded="true" />
-            <element signature="e#2039#2061#0" expanded="true" />
+            <element signature="e#960#978#0" expanded="true" />
+            <element signature="e#1357#1376#0" expanded="true" />
+            <element signature="e#1991#2013#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="7" column="31" lean-forward="false" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+          <folding>
+            <element signature="e#2557#2575#0" expanded="true" />
           </folding>
         </state>
       </provider>
