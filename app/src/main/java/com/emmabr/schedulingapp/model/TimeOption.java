@@ -1,8 +1,10 @@
 package com.emmabr.schedulingapp.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
-public class TimeOption {
+public class TimeOption implements Comparable{
 
     String id;
     String time;
@@ -57,6 +59,16 @@ public class TimeOption {
         } else
             downVoters.remove(user);
         setVotes();
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        return Integer.parseInt(o.toString()) - Integer.parseInt(toString());
+    }
+
+    @Override
+    public String toString() {
+        return Integer.toString(getVotes());
     }
 
     //just for testing, will be removed later

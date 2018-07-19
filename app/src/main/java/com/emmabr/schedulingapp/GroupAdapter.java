@@ -1,6 +1,7 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -72,8 +73,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         public void onClick(View view) {
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                 Group group = groups.get(getAdapterPosition());
-                //replace with intent to go to group screen
-                Log.i("Group",group.getName());
+                Intent intent = new Intent(context, GroupActivity.class);
+                //pass group id or whole group as extra
+                context.startActivity(intent);
             }
         }
     }
