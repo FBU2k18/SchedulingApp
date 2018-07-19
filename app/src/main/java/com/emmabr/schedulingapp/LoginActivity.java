@@ -42,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currUser = mAuth.getCurrentUser();
         updateUI(currUser);
+
+        //start the gradient animation
+        animationDrawable.start();
     }
 
 

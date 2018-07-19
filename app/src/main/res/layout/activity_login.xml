@@ -12,17 +12,9 @@
         android:id="@+id/tvEmail"
         android:layout_width="261dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/tvPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:hint="@string/email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLogo"
-        />
+        android:hint="@string/email" />
 
     <EditText
         android:id="@+id/tvPassword"
@@ -30,31 +22,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:inputType="textPassword"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="201dp"
         android:hint="@string/password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btLogIn"
-        android:layout_width="115dp"
-        android:layout_height="32dp"
+        android:layout_width="111dp"
+        android:layout_height="36dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="158dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/login_btn"
-        android:textColor="@color/lightText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
+        android:textColor="@color/lightText" />
 
     <Button
         android:id="@+id/btRegister"
@@ -62,33 +43,17 @@
         android:layout_height="36dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="114dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/register_btn"
-        android:textColor="@color/lightText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btLogIn"
-        app:layout_constraintVertical_bias="0.0" />
+        android:textColor="@color/lightText" />
 
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="99dp"
         android:layout_height="118dp"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/tvEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="132dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/background_dark" />
 
 </RelativeLayout>
