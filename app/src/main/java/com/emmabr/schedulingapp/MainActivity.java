@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getGroups() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            groups.clear();
             // current userID
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             // groups for current user

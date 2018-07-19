@@ -30,7 +30,5 @@ public class User {
         ArrayList<String> userListTemp = new ArrayList<>();
         userListTemp.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
         GroupData.saveGroup(hardCodedGroup, userListTemp);
-        //String key = hardCodedGroup.getGroupId();
-        //ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userGroup").child(key).setValue(hardCodedGroup);
     }
 }
