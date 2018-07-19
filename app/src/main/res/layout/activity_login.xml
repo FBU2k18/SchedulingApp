@@ -37,17 +37,6 @@
         android:text="@string/login_btn"
         android:textColor="@color/lightText" />
 
-    <Button
-        android:id="@+id/btRegister"
-        android:layout_width="111dp"
-        android:layout_height="36dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="114dp"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/register_btn"
-        android:textColor="@color/lightText" />
-
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="99dp"
@@ -55,5 +44,16 @@
         android:layout_above="@+id/tvEmail"
         android:layout_centerHorizontal="true"
         app:srcCompat="@android:color/background_dark" />
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="226dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="116dp"
+        android:text="@string/register_btn"
+        android:textAlignment="center"
+        android:textColor="@animator/color_selector" />
 
 </RelativeLayout>

@@ -3,10 +3,12 @@
     <string name="email">Enter your email</string>
     <string name="password">Enter your password</string>
     <string name="login_btn">login</string>
-    <string name="register_btn">register</string>
+    <string name="register_btn">Don\'t Have an Account? \n Register here.</string>
     <string name="group_name">Enter group name</string>
     <string name="search_user">Search for a user</string>
     <string name="add_btn">Add</string>
     <string name="create_btn">Create</string>
     <string name="display_name">Display Name</string>
+    <string name="username_creation">Enter your username</string>
+    <string name="btn_next">Next</string>
 </resources>

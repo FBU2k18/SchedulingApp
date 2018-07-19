@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -27,12 +26,12 @@ public class LoginActivity extends AppCompatActivity {
     // shared Firebase object
     private FirebaseAuth mAuth;
 
-    Button login;
-    Button register;
-    TextView liEmail;
-    TextView liPassword;
-    AnimationDrawable animationDrawable;
-    RelativeLayout relativeLayout;
+    private Button login;
+    private TextView tvRegister;
+    private TextView liEmail;
+    private TextView liPassword;
+    private AnimationDrawable animationDrawable;
+    private RelativeLayout relativeLayout;
 
     private ProgressDialog mLoginProgress;
 
@@ -62,9 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(2000);
 
         login = findViewById(R.id.btLogIn);
-        register = findViewById(R.id.btRegister);
         liEmail = findViewById(R.id.tvEmail);
         liPassword = findViewById(R.id.tvPassword);
+        tvRegister = findViewById(R.id.tvRegister);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -88,37 +87,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        register.setOnClickListener(new View.OnClickListener() {
+        tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = liEmail.getText().toString();
-                final String password = liPassword.getText().toString();
-
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d("login", "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("login", "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                                }
-
-                            }
-                        });
-
-                // send to another activity to create a username
-                Intent intent = new Intent(LoginActivity.this, UserNameActivity.class);
+                // send to another activity to create an account
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
-
             }
         });
     }
