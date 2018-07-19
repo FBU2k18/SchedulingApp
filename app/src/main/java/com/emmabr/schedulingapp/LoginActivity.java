@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     Button register;
     TextView liEmail;
     TextView liPassword;
+    AnimationDrawable animationDrawable;
+    RelativeLayout relativeLayout;
 
     private ProgressDialog mLoginProgress;
 
@@ -47,6 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
+
+        // gradient stuff
+        relativeLayout = findViewById(R.id.relativeLayout);
+        animationDrawable =(AnimationDrawable) relativeLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(5000);
+        animationDrawable.setExitFadeDuration(2000);
 
         login = findViewById(R.id.btLogIn);
         register = findViewById(R.id.btRegister);
