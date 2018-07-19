@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emmabr.schedulingapp.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import me.emmabr.schedulingapp.R;
+
+import static com.emmabr.schedulingapp.Models.User.addUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -90,9 +93,38 @@ public class LoginActivity extends AppCompatActivity {
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 // send to another activity to create an account
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
+=======
+                final String email = liEmail.getText().toString();
+                final String password = liPassword.getText().toString();
+
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d("login", "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    //User newUser = new User(user, "", new ArrayList<GroupData>());
+                                    User newUser = new User(user, "");
+                                    addUser(mAuth.getCurrentUser(), newUser);
+                                    updateUI(user);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w("login", "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
+
+                            }
+                        });
+
+>>>>>>> ea7d8b8b3d2edc8fe8657d0f210c77a8634d6cae
             }
         });
     }
@@ -113,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     mLoginProgress.dismiss();
-
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(mainIntent);
@@ -127,5 +158,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
 }
 

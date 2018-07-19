@@ -20,8 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name="com.emmabr.schedulingapp.GroupCreationActivity" />
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity"></activity>
+=======
+        <activity android:name="com.emmabr.schedulingapp.MainActivity"></activity>
+        <activity android:name="com.emmabr.schedulingapp.GroupActivity"></activity>
+>>>>>>> ea7d8b8b3d2edc8fe8657d0f210c77a8634d6cae
     </application>
 
 </manifest>
