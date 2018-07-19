@@ -115,6 +115,10 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
 
+                // send to another activity to create a username
+                Intent intent = new Intent(LoginActivity.this, UserNameActivity.class);
+                startActivity(intent);
+
             }
         });
     }
