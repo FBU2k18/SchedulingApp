@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.miCreateGroup:
                 //replace with intent
                 Log.i("Menu","Create GroupData");
+                Intent intent = new Intent(MainActivity.this, GroupCreationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.miEditProfile:
                 //replace with intent
