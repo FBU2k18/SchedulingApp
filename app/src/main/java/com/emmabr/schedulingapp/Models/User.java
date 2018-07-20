@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class User {
 
     // data in schema
@@ -34,9 +36,10 @@ public class User {
         inputUser.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
-        GroupData hardCodedGroup = new GroupData("It works!!!", "");
-        GroupData.saveGroup(hardCodedGroup);
-        String key = hardCodedGroup.getGroupId();
-        ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userGroup").child(key).setValue(hardCodedGroup);
+        // TODO - remove hardcoded group data
+        GroupData hardCodedGroup = new GroupData("It works!!!", "","");
+        ArrayList<String> userListTemp = new ArrayList<>();
+        userListTemp.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        GroupData.saveGroup(hardCodedGroup, userListTemp);
     }
 }
