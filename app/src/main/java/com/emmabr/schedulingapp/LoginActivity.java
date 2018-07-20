@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         liPassword = findViewById(R.id.tvPassword);
         tvRegister = findViewById(R.id.tvRegister);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance().getInstance();
 
         mLoginProgress = new ProgressDialog(this);
 

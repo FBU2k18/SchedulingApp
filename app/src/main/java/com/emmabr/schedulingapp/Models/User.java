@@ -13,27 +13,27 @@ public class User {
     public String email;
     public String nickName;
     public String calendar;
-    private String userId;
+    //private String userId;
 
     // create a new User
     public User(FirebaseUser user, String nickName) {
         email = user.getEmail();
         this.calendar = "";
         this.nickName = nickName;
-        this.userId = "";
+        //this.userId = "";
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    //public void setUserId(String userId) {
+       // this.userId = userId;
+    //}
 
-    public String getUserId() {
-        return userId;
-    }
+    //public String getUserId() {
+        //return userId;
+   // }
 
     // add user to database
     public static void saveUser(User inputUser) {
-        inputUser.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //inputUser.setUserId(currUser.getUid());
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
         // TODO - remove hardcoded group data
