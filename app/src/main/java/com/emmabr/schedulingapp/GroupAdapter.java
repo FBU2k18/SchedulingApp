@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.emmabr.schedulingapp.model.Group;
+import com.emmabr.schedulingapp.Models.GroupData;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -23,20 +24,27 @@ import me.emmabr.schedulingapp.R;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
-    ArrayList<Group> groups;
+    ArrayList<GroupData> groups;
     Context context;
 
-    public GroupAdapter(ArrayList<Group> groups) {
+    private ArrayList<String> groupNameAdapter;
+    private ArrayList<String> imgURLs;
+
+    private String mCurrentUser;
+    private DatabaseReference currUserGroupsData;
+    private DatabaseReference groupsData;
+
+    public GroupAdapter(ArrayList<GroupData> groups) {
         this.groups = groups;
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder holder, int position) {
-        Group group = groups.get(position);
-        holder.tvGroupName.setText(group.getName());
-        if (group.getPhotoPath() != null && !group.getPhotoPath().equals(""))
+        GroupData currGroup = groups.get(position);
+        holder.tvGroupName.setText(currGroup.getGroupName());
+        if (currGroup.getImageURL() != null && !currGroup.getImageURL().equals(""))
             Glide.with(context)
-                    .load(group.getPhotoPath())
+                    .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(holder.ivGroupLogo);
     }
@@ -72,10 +80,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                Group group = groups.get(getAdapterPosition());
-                Intent intent = new Intent(context, GroupActivity.class);
-                //pass group id or whole group as extra
-                context.startActivity(intent);
+                GroupData group = groups.get(getAdapterPosition());
+                //replace with intent to go to group screen
+                Log.i("GroupData",group.getGroupName());
             }
         }
     }
