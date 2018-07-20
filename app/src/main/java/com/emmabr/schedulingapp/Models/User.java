@@ -22,7 +22,7 @@ public class User {
     }
 
     // add user to database
-    public static void addUser(FirebaseUser userCurr, User inputUser) {
+    public static void saveUser(User inputUser) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
         // TODO - remove hardcoded group data
