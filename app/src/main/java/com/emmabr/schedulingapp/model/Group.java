@@ -84,6 +84,6 @@ public class Group {
 
     //delete this method later, only for testing
     public static Group randomGroup() {
-        return new Group("GroupData " + (int) (Math.random() * 10), new ArrayList<User>());
+        return new Group("Group " + (int) (Math.random() * 10), new ArrayList<User>());
     }
 }
