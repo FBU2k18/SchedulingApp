@@ -1,6 +1,7 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emmabr.schedulingapp.model.Message;
@@ -37,6 +40,8 @@ public class GroupActivity extends AppCompatActivity {
     EditText etMessage;
     FrameLayout flPeeker;
     BottomSheetBehavior behavior;
+    ImageView ivAddOther;
+    boolean addOtherIsPlus;
     TextView tvTitle;
     Button bSend;
 
@@ -61,6 +66,19 @@ public class GroupActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         flPeeker = findViewById(R.id.flPeeker);
         behavior = BottomSheetBehavior.from(flPeeker);
+        ivAddOther = findViewById(R.id.ivAddOther);
+        ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+        addOtherIsPlus = true;
+        ivAddOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (addOtherIsPlus)
+                    ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_delete));
+                else
+                    ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+                addOtherIsPlus = !addOtherIsPlus;
+            }
+        });
         tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override

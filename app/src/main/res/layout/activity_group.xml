@@ -36,10 +36,18 @@
 
         <EditText
             android:id="@+id/etMessage"
-            android:layout_width="298dp"
+            android:layout_width="243dp"
             android:layout_height="55dp"
             android:layout_gravity="bottom|left"
+            android:layout_marginLeft="55dp"
             android:hint="Message" />
+
+        <ImageView
+            android:id="@+id/ivAddOther"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|left"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
         <Button
             android:id="@+id/bSend"

@@ -77,6 +77,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                 GroupData group = groups.get(getAdapterPosition());
                 //replace with intent to go to group screen
+                Intent intent = new Intent(context, GroupActivity.class);
+                context.startActivity(intent);
                 Log.i("GroupData",group.getGroupName());
             }
         }
