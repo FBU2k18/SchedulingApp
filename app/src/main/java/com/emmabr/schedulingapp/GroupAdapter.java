@@ -15,10 +15,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
 import me.emmabr.schedulingapp.R;
 
 
@@ -27,12 +27,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     ArrayList<GroupData> groups;
     Context context;
 
-    private ArrayList<String> groupNameAdapter;
-    private ArrayList<String> imgURLs;
-
-    private String mCurrentUser;
-    private DatabaseReference currUserGroupsData;
-    private DatabaseReference groupsData;
 
     public GroupAdapter(ArrayList<GroupData> groups) {
         this.groups = groups;
@@ -70,6 +64,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             ivGroupLogo = itemView.findViewById(R.id.ivGroupLogo);
             tvGroupName = itemView.findViewById(R.id.tvGroupName);

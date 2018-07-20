@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.miCreateGroup:
                 //replace with intent
                 Log.i("Menu","Create GroupData");
+                Intent intent = new Intent(MainActivity.this, GroupCreationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.miEditProfile:
                 //replace with intent
@@ -87,16 +89,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void getGroups() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            groups.clear();
             // current userID
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             // groups for current user
-            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser).child("userGroup");
+            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("users").child(mCurrentUser).child("userGroup");
             currUserGroupsData.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                         String name = childData.child("groupName").getValue().toString();
-                        String imgURL = childData.child("imgURL").getValue().toString();
+                        String imgURL = childData.child("imageURL").getValue().toString();
                         GroupData tempGroup = new GroupData(name, imgURL);
                         groups.add(tempGroup);
                     }
