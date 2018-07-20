@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             // create a new User to put in the Firebase users schema
                             User tempNewUser = new User(user, etUsername.getText().toString());
-                            saveUser(tempNewUser);
+                            User.saveUser(user, tempNewUser);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

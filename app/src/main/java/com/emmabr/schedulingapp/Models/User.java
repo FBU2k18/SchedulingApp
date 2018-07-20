@@ -32,8 +32,8 @@ public class User {
     }
 
     // add user to database
-    public static void saveUser(User inputUser) {
-        inputUser.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    public static void saveUser(FirebaseUser currUser, User inputUser) {
+        inputUser.setUserId(currUser.getUid());
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
         // TODO - remove hardcoded group data
