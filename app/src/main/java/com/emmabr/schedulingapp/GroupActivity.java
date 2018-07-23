@@ -1,8 +1,8 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,62 +30,73 @@ import me.emmabr.schedulingapp.R;
 
 public class GroupActivity extends AppCompatActivity {
 
-    ArrayList<TimeOption> times;
-    TimeOptionAdapter timeAdapter;
-    RecyclerView rvTimes;
-    ArrayList<Message> messages;
-    MessageAdapter messsageAdapter;
-    RecyclerView rvMessageDisplay;
-    EditText etMessage;
-    FrameLayout flPeeker;
-    BottomSheetBehavior behavior;
-    ImageView ivAddOther;
-    boolean addOtherIsPlus;
-    TextView tvTitle;
-    Button bSend;
+    private ArrayList<TimeOption> mTimes;
+    private TimeOptionAdapter mTimeAdapter;
+    private RecyclerView rvTimes;
+
+    private ArrayList<Message> mMessages;
+    private MessageAdapter mMesssageAdapter;
+    private RecyclerView rvMessageDisplay;
+
+    private EditText etMessage;
+    private FrameLayout flPeeker;
+    private BottomSheetBehavior peekerBehavior;
+    private ImageView ivAddOther;
+    private boolean mAddOtherIsPlus;
+    private TextView tvTitle;
+    private Button bSend;
+
+    private CoordinatorLayout clOtherTypes;
+    private BottomSheetBehavior miniPeekerBehavior;
+    private Button bAddPoll;
+    private Button bTakePic;
+    private Button bAddPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        times = new ArrayList<>();
-        timeAdapter = new TimeOptionAdapter(times, this);
+        mTimes = new ArrayList<>();
+        mTimeAdapter = new TimeOptionAdapter(mTimes, this);
         rvTimes = findViewById(R.id.rvTimes);
-        rvTimes.setAdapter(timeAdapter);
+        rvTimes.setAdapter(mTimeAdapter);
         rvTimes.setLayoutManager(new LinearLayoutManager(this));
         rvTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        messages = new ArrayList<>();
-        messsageAdapter = new MessageAdapter(messages);
+        mMessages = new ArrayList<>();
+        mMesssageAdapter = new MessageAdapter(mMessages);
         rvMessageDisplay = findViewById(R.id.rvMessageDisplay);
-        rvMessageDisplay.setAdapter(messsageAdapter);
+        rvMessageDisplay.setAdapter(mMesssageAdapter);
         rvMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
 
         etMessage = findViewById(R.id.etMessage);
         flPeeker = findViewById(R.id.flPeeker);
-        behavior = BottomSheetBehavior.from(flPeeker);
+        peekerBehavior = BottomSheetBehavior.from(flPeeker);
         ivAddOther = findViewById(R.id.ivAddOther);
         ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
-        addOtherIsPlus = true;
+        mAddOtherIsPlus = true;
         ivAddOther.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (addOtherIsPlus)
+                if (mAddOtherIsPlus) {
                     ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_delete));
-                else
+                    miniPeekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
                     ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
-                addOtherIsPlus = !addOtherIsPlus;
+                    miniPeekerBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+                mAddOtherIsPlus = !mAddOtherIsPlus;
             }
         });
         tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (peekerBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    peekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                else if (peekerBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    peekerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         bSend = findViewById(R.id.bSend);
@@ -95,6 +105,31 @@ public class GroupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //send message from etMessage.getText().toString()
                 Log.i("Message", "Message Sent");
+            }
+        });
+
+        clOtherTypes = findViewById(R.id.clOtherTypes);
+        miniPeekerBehavior = BottomSheetBehavior.from(clOtherTypes);
+        miniPeekerBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bAddPoll = findViewById(R.id.bAddPoll);
+        bAddPoll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        bTakePic = findViewById(R.id.bTakePic);
+        bTakePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        bAddPic = findViewById(R.id.bAddPic);
+        bAddPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -108,22 +143,22 @@ public class GroupActivity extends AppCompatActivity {
     public void getTimes() {
         //will pull times from Firebase, but testing for now
         for (int i = 0; i < 10; i++)
-            times.add(TimeOption.newTime());
-        Collections.sort(times);
-        timeAdapter.notifyDataSetChanged();
+            mTimes.add(TimeOption.newTime());
+        Collections.sort(mTimes);
+        mTimeAdapter.notifyDataSetChanged();
     }
 
     public void getMessages() {
         //will pull messages from Firebase, but testing for now
         for (int i = 0; i < 3; i++) {
-            messages.add(new Message(new User("123abc"), "Not Me"));
-            messsageAdapter.notifyItemInserted(messages.size() - 1);
+            mMessages.add(new Message(new User("123abc"), "Not Me"));
+            mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
         }
-        messages.add(new Message(new User("abc123"), "Me"));
-        messsageAdapter.notifyItemInserted(messages.size() - 1);
+        mMessages.add(new Message(new User("abc123"), "Me"));
+        mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
         for (int i = 0; i < 3; i++) {
-            messages.add(new Message(new User("123abc"), "Not Me"));
-            messsageAdapter.notifyItemInserted(messages.size() - 1);
+            mMessages.add(new Message(new User("123abc"), "Not Me"));
+            mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
         }
     }
 
