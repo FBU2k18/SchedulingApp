@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.emmabr.schedulingapp.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -87,13 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("login", "createUserWithEmail:success");
-<<<<<<< HEAD
-                            FirebaseUser user = mAuth.getCurrentUser();
                             // create a new User to put in the Firebase users schema
-                            User tempNewUser = new User(user, etUsername.getText().toString());
-                            User.saveUser(user, tempNewUser);
-                            updateUI(user);
-=======
 
                             FirebaseUser user = mAuth.getInstance().getCurrentUser();
                             String uid = user.getUid();
@@ -117,7 +112,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 }
                             });
->>>>>>> 65111fc5846f696c10eefda487422179d3c1a095
                         } else {
                             // If sign in fails, display a message to the user.
                             mRegProgress.hide();

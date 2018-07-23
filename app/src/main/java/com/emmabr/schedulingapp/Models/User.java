@@ -13,13 +13,15 @@ public class User {
     public String email;
     public String nickName;
     public String calendar;
+    public String imgURL;
     //private String userId;
 
     // create a new User
-    public User(FirebaseUser user, String nickName) {
+    public User(FirebaseUser user, String nickName, String imgURL) {
         email = user.getEmail();
         this.calendar = "";
         this.nickName = nickName;
+        this.imgURL = imgURL;
         //this.userId = "";
     }
 
@@ -31,20 +33,4 @@ public class User {
         //return userId;
    // }
 
-    // add user to database
-<<<<<<< HEAD
-    public static void saveUser(FirebaseUser currUser, User inputUser) {
-        inputUser.setUserId(currUser.getUid());
-=======
-    public static void saveUser(User inputUser) {
-        //inputUser.setUserId(currUser.getUid());
->>>>>>> 65111fc5846f696c10eefda487422179d3c1a095
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
-        ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
-        // TODO - remove hardcoded group data
-        GroupData hardCodedGroup = new GroupData("It works!!!", "","");
-        ArrayList<String> userListTemp = new ArrayList<>();
-        userListTemp.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        GroupData.saveGroup(hardCodedGroup, userListTemp);
-    }
 }
