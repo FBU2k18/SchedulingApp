@@ -13,27 +13,54 @@ public class User {
     public String email;
     public String nickName;
     public String calendar;
-    //private String userId;
+    public String image;
+    public String userId;
 
+
+    //TODO: add third parameter for an image
     // create a new User
     public User(FirebaseUser user, String nickName) {
-        email = user.getEmail();
+        this.email = user.getEmail();
         this.calendar = "";
         this.nickName = nickName;
-        //this.userId = "";
+        this.image = "default";
+
+        this.userId = "";
     }
 
-    //public void setUserId(String userId) {
-       // this.userId = userId;
-    //}
+    //getters
+    public String getName() {
+        return nickName;
+    }
 
-    //public String getUserId() {
-        //return userId;
-   // }
+    public String getCalendar() {
+        return calendar;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    //setters
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
 
     // add user to database
     public static void saveUser(User inputUser) {
-        //inputUser.setUserId(currUser.getUid());
+        inputUser.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
         // TODO - remove hardcoded group data

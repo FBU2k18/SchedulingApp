@@ -46,6 +46,7 @@ public class GroupData {
         GroupData userGroupHolder = new GroupData(inputGroup.getGroupName(), inputGroup.getImageURL());
         for (String oneUser : usersInChat) {
             FirebaseDatabase.getInstance().getReference().child("users").child(oneUser).child("userGroup").child(groupTempID).setValue(userGroupHolder);
+            FirebaseDatabase.getInstance().getReference().child("groups").child(groupTempID).child("Recipients").child(oneUser).setValue(oneUser);
         }
     }
 
