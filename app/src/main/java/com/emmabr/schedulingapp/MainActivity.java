@@ -98,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
-                        String name = childData.child("groupName").getValue().toString();
-                        String imgURL = childData.child("imageURL").getValue().toString();
-                        GroupData tempGroup = new GroupData(name, imgURL);
-                        groups.add(tempGroup);
+                        if (childData.child("groupName").getValue() != null && childData.child("imageURL").getValue() != null) {
+                            String name = childData.child("groupName").getValue().toString();
+                            String imgURL = childData.child("imageURL").getValue().toString();
+                            GroupData tempGroup = new GroupData(name, imgURL);
+                            groups.add(tempGroup);
+                        }
                     }
                     adapter.notifyDataSetChanged();
                     srlMain.setRefreshing(false);
