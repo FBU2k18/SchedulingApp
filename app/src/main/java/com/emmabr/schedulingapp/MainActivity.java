@@ -28,7 +28,7 @@ import me.emmabr.schedulingapp.R;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<GroupData> groups;
-    GroupAdapter adapter;
+    MainActivityAdapter adapter;
     RecyclerView rvGroups;
     SwipeRefreshLayout srlMain;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         groups = new ArrayList<>();
-        adapter = new GroupAdapter(groups);
+        adapter = new MainActivityAdapter(groups);
         rvGroups = findViewById(R.id.rvGroups);
         rvGroups.setLayoutManager(new LinearLayoutManager(this));
         rvGroups.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
