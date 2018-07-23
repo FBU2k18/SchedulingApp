@@ -65,3 +65,7 @@ The following are **optional** features:
 ## Wireframe
 
 <img src='https://github.com/FBU2k18/SchedulingApp/blob/master/wireframe.pdf' title='Wireframe' width='' alt='Wireframe' />
+
+## Walkthroughs
+
+<img src='https://github.com/FBU2k18/SchedulingApp/blob/master/ScheduleMeGIF-Week1.gif' title='Week 1 GIF' width='' alt='Week 1 GIF' />

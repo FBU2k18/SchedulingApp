@@ -98,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                             usersMap.put("email", email);
                             usersMap.put("image", "default");
                             usersMap.put("calendar", "");
-
+                            usersMap.put("id", uid);
 
                             mDatabase.setValue(usersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
