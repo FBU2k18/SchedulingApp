@@ -1,7 +1,6 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,18 +21,18 @@ import butterknife.ButterKnife;
 import me.emmabr.schedulingapp.R;
 
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
+public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {
 
     ArrayList<GroupData> groups;
     Context context;
 
 
-    public GroupAdapter(ArrayList<GroupData> groups) {
+    public MainActivityAdapter(ArrayList<GroupData> groups) {
         this.groups = groups;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
         GroupData currGroup = groups.get(position);
         holder.tvGroupName.setText(currGroup.getGroupName());
         if (currGroup.getImageURL() != null && !currGroup.getImageURL().equals(""))
@@ -45,11 +44,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public GroupAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MainActivityAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View groupView = inflater.inflate(R.layout.item_group, viewGroup, false);
-        return new GroupAdapter.ViewHolder(groupView);
+        return new MainActivityAdapter.ViewHolder(groupView);
     }
 
     @Override
