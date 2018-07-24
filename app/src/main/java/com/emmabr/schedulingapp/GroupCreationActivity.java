@@ -113,7 +113,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                 String groupName = etGroupName.getText().toString();
                 ArrayList<String> userUids = new ArrayList<>();
                 GroupData groupData = new GroupData(groupName, "", "");
-                userUids.add("t1gu3PIqTpSZwlXmkpsfTKjdWYg1");
+                userUids.add(mCurrentUserId);
 
 
                 if (alUsers != null) {

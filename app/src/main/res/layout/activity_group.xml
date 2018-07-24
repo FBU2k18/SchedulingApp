@@ -56,39 +56,42 @@
             android:layout_gravity="bottom|right"
             android:text="SEND" />
 
-
         <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/clOtherTypes"
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_gravity="bottom|left"
-            android:layout_marginBottom="55dp"
-            app:behavior_hideable="false"
-            app:behavior_peekHeight="150dp"
-            app:layout_behavior="@string/bottom_sheet_behavior">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="55dp">
 
-            <Button
-                android:id="@+id/bAddPoll"
+            <FrameLayout
+                android:id="@+id/flOtherTypes"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="top"
-                android:text="Add a Poll" />
+                android:layout_height="150dp"
+                android:layout_gravity="bottom|left"
+                app:behavior_hideable="true"
+                app:behavior_peekHeight="150dp"
+                app:layout_behavior="@string/bottom_sheet_behavior">
 
-            <Button
-                android:id="@+id/bTakePic"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:text="Take a Picture" />
+                <Button
+                    android:id="@+id/bAddPoll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="top"
+                    android:text="Add a Poll" />
 
-            <Button
-                android:id="@+id/bAddPic"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:text="Add from Photos" />
+                <Button
+                    android:id="@+id/bTakePic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Take a Picture" />
+
+                <Button
+                    android:id="@+id/bAddPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:text="Add from Photos" />
+            </FrameLayout>
         </android.support.design.widget.CoordinatorLayout>
-
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +47,8 @@ public class GroupActivity extends AppCompatActivity {
     private TextView tvTitle;
     private Button bSend;
 
-    private CoordinatorLayout clOtherTypes;
-    private BottomSheetBehavior miniPeekerBehavior;
+    private FrameLayout flOtherTypes;
+    private BottomSheetBehavior otherTypesBehavior;
     private Button bAddPoll;
     private Button bTakePic;
     private Button bAddPic;
@@ -81,10 +82,10 @@ public class GroupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (mAddOtherIsPlus) {
                     ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_delete));
-                    miniPeekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
                     ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
-                    miniPeekerBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
                 mAddOtherIsPlus = !mAddOtherIsPlus;
             }
@@ -108,9 +109,19 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
-        clOtherTypes = findViewById(R.id.clOtherTypes);
-        miniPeekerBehavior = BottomSheetBehavior.from(clOtherTypes);
-        miniPeekerBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        flOtherTypes = findViewById(R.id.flOtherTypes);
+        otherTypesBehavior = BottomSheetBehavior.from(flOtherTypes);
+        otherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        otherTypesBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+                if (otherTypesBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING)
+                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {}
+        });
         bAddPoll = findViewById(R.id.bAddPoll);
         bAddPoll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,10 +167,14 @@ public class GroupActivity extends AppCompatActivity {
         }
         mMessages.add(new Message(new User("abc123"), "Me"));
         mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
-        for (int i = 0; i < 3; i++) {
+        //try picture message after doing message pushing
+        for (int i = 0; i < 2; i++) {
             mMessages.add(new Message(new User("123abc"), "Not Me"));
             mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
         }
+
+        //keep this line, scrolls to most recent message after messages are retrieved
+        rvMessageDisplay.scrollToPosition(mMessages.size() - 1);
     }
 
     @Override

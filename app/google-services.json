@@ -15,6 +15,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "262311386436-pmrn46crr3l1cdtbve6mfql2sonpmbsj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emmabr.schedulingapp",
+            "certificate_hash": "2c4b4ecc7b5efeadd55e010a2afcd5887584588e"
+          }
+        },
+        {
+          "client_id": "262311386436-g9j1u2ndgj5hgq42p7k0taggs626551p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emmabr.schedulingapp",
+            "certificate_hash": "572ee4b4bbac63bbad3fe30cf73b506c7dd25520"
+          }
+        },
+        {
+          "client_id": "262311386436-dmn8ku048ieukcjhqo3rc26j63pa9c04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emmabr.schedulingapp",
+            "certificate_hash": "9e29dd69b0f424c560a9c145566e81a12a858de0"
+          }
+        },
+        {
           "client_id": "262311386436-mknrs0b5ol1sj504pegotgvoqgpnb4ns.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +53,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262311386436-mknrs0b5ol1sj504pegotgvoqgpnb4ns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
