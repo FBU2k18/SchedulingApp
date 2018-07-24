@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,13 @@ import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
 import com.emmabr.schedulingapp.Models.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +37,9 @@ import me.emmabr.schedulingapp.R;
 import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
 
 public class GroupCreationActivity extends AppCompatActivity {
+
+    private final static int RC_SIGN_IN = 34;
+    GoogleSignInClient mGoogleSignInClient;
 
     //firebase variables
     private DatabaseReference userDatabase;
@@ -113,7 +124,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                 String groupName = etGroupName.getText().toString();
                 ArrayList<String> userUids = new ArrayList<>();
                 GroupData groupData = new GroupData(groupName, "", "");
-                userUids.add("t1gu3PIqTpSZwlXmkpsfTKjdWYg1");
+                userUids.add("yh7zw9cNlWN3yPzp1qfe88DfOjF3");
 
 
                 if (alUsers != null) {
@@ -123,6 +134,14 @@ public class GroupCreationActivity extends AppCompatActivity {
                     }
                 }
                 saveGroup(groupData, userUids);
+                // OAuth confirmation when user creates group (in order to access calendar)
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
+                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
+                        .build();
+                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                signIn();
+
             }
         });
 
@@ -143,5 +162,29 @@ public class GroupCreationActivity extends AppCompatActivity {
         Intent intent = new Intent(GroupCreationActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                // Google Sign In was successful
+                Log.d("Google Authentication", "Google email successfully authenticated!");
+
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("GoogleLogIn", "Google sign in failed", e);
+            }
+        }
     }
 }
