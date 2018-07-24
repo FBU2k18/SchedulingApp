@@ -32,9 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     // shared Firebase object
     private FirebaseAuth mAuth;
 
-    private final static int RC_SIGN_IN = 34;
-//    GoogleSignInClient mGoogleSignInClient;
-
     private Button login;
     private TextView tvRegister;
     private TextView liEmail;
@@ -116,13 +113,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
 
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                .requestEmail()
-//                .build();
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-//        signIn();
-
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -144,28 +134,5 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-//    private void signIn() {
-//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-//        startActivityForResult(signInIntent, RC_SIGN_IN);
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            try {
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                // Google Sign In was successful
-//                Log.d("Google Authentication", "Google email successfully authenticated!");
-//
-//            } catch (ApiException e) {
-//                // Google Sign In failed, update UI appropriately
-//                Log.w("GoogleLogIn", "Google sign in failed", e);
-//            }
-//        }
-//    }
 }
 
