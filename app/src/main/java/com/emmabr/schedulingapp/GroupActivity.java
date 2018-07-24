@@ -40,6 +40,7 @@ public class GroupActivity extends AppCompatActivity {
     TextView tvTitle;
     Button bSend;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

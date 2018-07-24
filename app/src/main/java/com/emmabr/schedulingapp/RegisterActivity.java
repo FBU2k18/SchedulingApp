@@ -14,6 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +33,9 @@ import java.util.HashMap;
 import me.emmabr.schedulingapp.R;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private final static int RC_SIGN_IN = 34;
+    GoogleSignInClient mGoogleSignInClient;
 
     //android variables
     private Button btnNext;
@@ -86,6 +95,13 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // OAuth confirmation when user creates group (in order to access calendar)
+                            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
+                                    .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                                    .build();
+                            mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                            signIn();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("login", "createUserWithEmail:success");
                             // create a new User to put in the Firebase users schema
@@ -121,6 +137,30 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                // Google Sign In was successful
+                Toast.makeText(getApplicationContext(), "Sign in Worked!", Toast.LENGTH_SHORT).show();
+
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("GoogleLogIn", "Google sign in failed", e);
+            }
+        }
     }
 
 }
