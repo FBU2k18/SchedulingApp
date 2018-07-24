@@ -19,13 +19,12 @@ public class User {
     //neccessary no arg const
     public User() {
     }
-    //TODO: add third parameter for an image
     // create a new User
-    public User(FirebaseUser user, String nickName) {
+    public User(FirebaseUser user, String nickName, String image) {
         this.email = user.getEmail();
         this.calendar = "";
         this.nickName = nickName;
-        this.image = "default";
+        this.image = image;
 
         this.userId = "";
     }

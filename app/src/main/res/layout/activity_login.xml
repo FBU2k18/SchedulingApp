@@ -17,9 +17,13 @@
         android:layout_marginBottom="167dp" android:background="@color/colorPrimaryDark"
         android:text="@string/login_btn" android:textColor="@color/lightText" />
 
-    <ImageView android:id="@+id/ivLogo" android:layout_width="99dp" android:layout_height="118dp"
-        android:layout_above="@+id/tvEmail" android:layout_centerHorizontal="true"
-        app:srcCompat="@android:color/background_dark" />
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="99dp"
+        android:layout_height="118dp"
+        android:layout_above="@+id/tvEmail"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/whitelogo" />
 
     <TextView android:id="@+id/tvRegister" android:layout_width="226dp" android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"

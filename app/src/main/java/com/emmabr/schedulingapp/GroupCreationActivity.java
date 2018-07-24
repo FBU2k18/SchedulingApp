@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -130,6 +131,7 @@ public class GroupCreationActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull User model) {
+
                 holder.setDetails(getApplicationContext(), model.getName(), model.getImage());
 
                 final String user_id = getRef(position).getKey();
@@ -146,28 +148,7 @@ public class GroupCreationActivity extends AppCompatActivity {
 
         rvUsers.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
-
-
-//        userDatabase.orderByChild("email").equalTo(etSearchUser.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
-//                    alUsers.add(userId);
-//                    Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(GroupCreationActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
-
-    // View Holder Class
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder {
 
@@ -186,7 +167,12 @@ public class GroupCreationActivity extends AppCompatActivity {
 
             user_name.setText(userName);
 
-            Glide.with(ctx).load(userImage).into(user_image);
+            Glide.with(ctx)
+                    .load(userImage)
+                    .apply(new RequestOptions()
+                                    .placeholder(R.drawable.default_pic)
+                                    .fitCenter())
+                    .into(user_image);
         }
     }
     private void signIn() {
@@ -213,3 +199,24 @@ public class GroupCreationActivity extends AppCompatActivity {
         }
     }
 }
+
+
+
+
+//        userDatabase.orderByChild("email").equalTo(etSearchUser.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
+//                    alUsers.add(userId);
+//                    Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(GroupCreationActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
