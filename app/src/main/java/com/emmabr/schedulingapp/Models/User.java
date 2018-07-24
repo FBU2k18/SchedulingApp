@@ -16,7 +16,9 @@ public class User {
     public String image;
     public String userId;
 
-
+    //neccessary no arg const
+    public User() {
+    }
     //TODO: add third parameter for an image
     // create a new User
     public User(FirebaseUser user, String nickName) {
