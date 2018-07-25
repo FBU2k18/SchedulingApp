@@ -2,9 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,14 +21,13 @@ import android.widget.TextView;
 
 import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
-import com.emmabr.schedulingapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -82,7 +79,7 @@ public class GroupActivity extends AppCompatActivity {
         rvTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         mMessages = new ArrayList<>();
-        mMesssageAdapter = new MessageAdapter(mMessages);
+        mMesssageAdapter = new MessageAdapter(mMessages, groupID);
         rvMessageDisplay = findViewById(R.id.rvMessageDisplay);
         rvMessageDisplay.setAdapter(mMesssageAdapter);
         rvMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
@@ -163,14 +160,20 @@ public class GroupActivity extends AppCompatActivity {
         bTakePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(GroupActivity.this, PostPhotoActivity.class);
+                intent.putExtra("Taking a new picture?", true);
+                intent.putExtra("groupID", groupID);
+                startActivity(intent);
             }
         });
         bAddPic = findViewById(R.id.bAddPic);
         bAddPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(GroupActivity.this, PostPhotoActivity.class);
+                intent.putExtra("Taking a new picture?", false);
+                intent.putExtra("groupID", groupID);
+                startActivity(intent);
             }
         });
 
@@ -219,8 +222,10 @@ public class GroupActivity extends AppCompatActivity {
                                 optionThree = childData.child("optionThree").getValue().toString();
                                 try {
                                     optionFour = childData.child("optionFour").getValue().toString();
-                                } catch (Exception noFourthOption) {}
-                            } catch (Exception noThirdOption) {}
+                                } catch (Exception noFourthOption) {
+                                }
+                            } catch (Exception noThirdOption) {
+                            }
                         }
                     }
                     Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, optionOne, optionTwo, optionThree, optionFour, createdAt);

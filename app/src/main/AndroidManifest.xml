@@ -3,6 +3,8 @@
     package="me.emmabr.schedulingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +15,11 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.vision"
-            android:value="@integer/google_play_services_version"
-            />
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/API_KEY"
-            />
+            android:value="@string/API_KEY" />
+
         <activity android:name="com.emmabr.schedulingapp.LoginActivity" />
         <activity android:name="com.emmabr.schedulingapp.MainActivity" />
         <activity android:name="com.emmabr.schedulingapp.SplashActivity">
@@ -30,7 +31,20 @@
         </activity>
         <activity android:name="com.emmabr.schedulingapp.GroupCreationActivity" />
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity" />
-        <activity android:name="com.emmabr.schedulingapp.GroupActivity"/>
+        <activity android:name="com.emmabr.schedulingapp.GroupActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.codepath.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
+
+        <activity android:name="com.emmabr.schedulingapp.PostPhotoActivity" />
+        <activity android:name="com.emmabr.schedulingapp.ViewPhotoActivity"></activity>
     </application>
 
 </manifest>
