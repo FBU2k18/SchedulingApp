@@ -13,12 +13,11 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.vision"
-            android:value="@integer/google_play_services_version"
-            />
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/API_KEY"
-            />
+            android:value="@string/API_KEY" />
+
         <activity android:name="com.emmabr.schedulingapp.LoginActivity" />
         <activity android:name="com.emmabr.schedulingapp.MainActivity" />
         <activity android:name="com.emmabr.schedulingapp.SplashActivity">
@@ -31,6 +30,7 @@
         <activity android:name="com.emmabr.schedulingapp.GroupCreationActivity" />
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity" />
         <activity android:name="com.emmabr.schedulingapp.GroupActivity" />
+        <activity android:name="com.emmabr.schedulingapp.UserProfile"></activity>
     </application>
 
 </manifest>
