@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +54,6 @@ public class GroupCreationActivity extends AppCompatActivity {
     private RecyclerView rvUsers;
     private EditText etGroupName;
     private EditText etSearchUser;
-    private Button btnAddUser;
     private Button btnCreate;
 
 
@@ -67,20 +68,26 @@ public class GroupCreationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         rvUsers = findViewById(R.id.rvUsers);
-        //rvUsers.setHasFixedSize(true);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
         etGroupName = findViewById(R.id.etGroupName);
         etSearchUser = findViewById(R.id.etSearchUser);
-        btnAddUser = findViewById(R.id.btnAdd);
         btnCreate = findViewById(R.id.btnCreate);
 
-        btnAddUser.setOnClickListener(new View.OnClickListener() {
+        //TODO: on edit text changed
+        etSearchUser.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+               // do what you want with your edit text here
                 String searchText = etSearchUser.getText().toString();
                 firebaseUserSearch(searchText);
             }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
         });
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
