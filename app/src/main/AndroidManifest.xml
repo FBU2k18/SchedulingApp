@@ -30,7 +30,7 @@
         </activity>
         <activity android:name="com.emmabr.schedulingapp.GroupCreationActivity" />
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity" />
-        <activity android:name="com.emmabr.schedulingapp.GroupActivity" />
+        <activity android:name="com.emmabr.schedulingapp.GroupActivity"/>
     </application>
 
 </manifest>

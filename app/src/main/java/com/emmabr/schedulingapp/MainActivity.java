@@ -99,9 +99,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                         if (childData.child("groupName").getValue() != null && childData.child("imageURL").getValue() != null) {
+                            String groupID = childData.getKey().toString();
                             String name = childData.child("groupName").getValue().toString();
                             String imgURL = childData.child("imageURL").getValue().toString();
-                            GroupData tempGroup = new GroupData(name, imgURL);
+                            GroupData tempGroup = new GroupData(name, imgURL, groupID);
                             groups.add(tempGroup);
                         }
                     }

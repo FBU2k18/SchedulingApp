@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,23 +14,35 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.emmabr.schedulingapp.model.Message;
+import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
 import com.emmabr.schedulingapp.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import me.emmabr.schedulingapp.R;
 
+import static com.emmabr.schedulingapp.Models.Message.saveMessage;
+
 
 public class GroupActivity extends AppCompatActivity {
+
+    private String groupID;
 
     private ArrayList<TimeOption> mTimes;
     private TimeOptionAdapter mTimeAdapter;
@@ -57,6 +70,9 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        groupID = getIntent().getStringExtra("groupID");
 
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);
@@ -104,8 +120,21 @@ public class GroupActivity extends AppCompatActivity {
         bSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //send message from etMessage.getText().toString()
-                Log.i("Message", "Message Sent");
+                if (!etMessage.getText().toString().equals("")) {
+                    FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Date date = new Date();
+                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), etMessage.getText().toString(), null, null, null, null, null, null, Long.toString(date.getTime()));
+                            saveMessage(message, groupID);
+                            etMessage.setText("");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }
             }
         });
 
@@ -120,7 +149,8 @@ public class GroupActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSlide(@NonNull View view, float v) {}
+            public void onSlide(@NonNull View view, float v) {
+            }
         });
         bAddPoll = findViewById(R.id.bAddPoll);
         bAddPoll.setOnClickListener(new View.OnClickListener() {
@@ -160,21 +190,50 @@ public class GroupActivity extends AppCompatActivity {
     }
 
     public void getMessages() {
-        //will pull messages from Firebase, but testing for now
-        for (int i = 0; i < 3; i++) {
-            mMessages.add(new Message(new User("123abc"), "Not Me"));
-            mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
-        }
-        mMessages.add(new Message(new User("abc123"), "Me"));
-        mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
-        //try picture message after doing message pushing
-        for (int i = 0; i < 2; i++) {
-            mMessages.add(new Message(new User("123abc"), "Not Me"));
-            mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
-        }
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mMessages.clear();
+                mMesssageAdapter.notifyDataSetChanged();
+                for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                    String userID = childData.child("userID").getValue().toString();
+                    String nickName = childData.child("nickName").getValue().toString();
+                    String messageText = null;
+                    String imageURL = null;
+                    String pollTitle = null;
+                    String optionOne = null;
+                    String optionTwo = null;
+                    String optionThree = null;
+                    String optionFour = null;
+                    String createdAt = childData.child("createdAt").getValue().toString();
+                    try {
+                        messageText = childData.child("messageText").getValue().toString();
+                    } catch (Exception noMessage) {
+                        try {
+                            imageURL = childData.child("imageURL").getValue().toString();
+                        } catch (Exception noPicture) {
+                            pollTitle = childData.child("pollTitle").getValue().toString();
+                            optionOne = childData.child("optionOne").getValue().toString();
+                            optionTwo = childData.child("optionTwo").getValue().toString();
+                            try {
+                                optionThree = childData.child("optionThree").getValue().toString();
+                                try {
+                                    optionFour = childData.child("optionFour").getValue().toString();
+                                } catch (Exception noFourthOption) {}
+                            } catch (Exception noThirdOption) {}
+                        }
+                    }
+                    Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, optionOne, optionTwo, optionThree, optionFour, createdAt);
+                    mMessages.add(message);
+                    mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
+                    rvMessageDisplay.scrollToPosition(mMessages.size() - 1);
+                }
+            }
 
-        //keep this line, scrolls to most recent message after messages are retrieved
-        rvMessageDisplay.scrollToPosition(mMessages.size() - 1);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override

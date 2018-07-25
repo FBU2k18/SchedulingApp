@@ -78,6 +78,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                 GroupData group = groups.get(getAdapterPosition());
                 //replace with intent to go to group screen
                 Intent intent = new Intent(context, GroupActivity.class);
+                intent.putExtra("groupID", group.getGroupId());
                 context.startActivity(intent);
                 Log.i("GroupData",group.getGroupName());
             }

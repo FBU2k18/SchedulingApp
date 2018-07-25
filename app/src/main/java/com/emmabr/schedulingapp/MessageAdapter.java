@@ -4,13 +4,20 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.emmabr.schedulingapp.model.Message;
+import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -30,16 +37,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = messages.get(position);
 
         //use method to determine who the current user is and use to replace currentUser
-        if (message.getSender().equals(new User("abc123"))) {
+        if (message.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
             //make look like from self
-            holder.tvTextMe.setText(message.getText());
+            holder.tvTextMe.setText(message.getMessageText());
             holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
         } else {
-            //will replace .toString() with .getName()
-            holder.tvFrom.setText(message.getSender().toString());
-
             //make look like from someone else
-            holder.tvTextYou.setText(message.getText());
+            holder.tvFrom.setText(message.getNickName());
+            holder.tvTextYou.setText(message.getMessageText());
             holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
         }
     }
@@ -63,6 +68,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         TextView tvFrom;
         TextView tvTextMe;
         TextView tvTextYou;
+        ImageView ivPicMe;
+        ImageView ivPicYou;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -70,6 +77,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             tvFrom = itemView.findViewById(R.id.tvFrom);
             tvTextMe = itemView.findViewById(R.id.tvTextMe);
             tvTextYou = itemView.findViewById(R.id.tvTextYou);
+            ivPicMe = itemView.findViewById(R.id.ivPicMe);
+            ivPicYou = itemView.findViewById(R.id.ivPicYou);
         }
     }
 }
