@@ -92,8 +92,7 @@ public class UserProfile extends AppCompatActivity {
 
             }
         });
-
-
+        
         mImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,12 +127,6 @@ public class UserProfile extends AppCompatActivity {
                 mProgressDialog.setCanceledOnTouchOutside(false);
                 mProgressDialog.show();
 
-                ///
-//                DatabaseReference user_image_push = mUserDatabase.child("image").push();
-//                final String push_id = user_image_push.getKey();
-//                final StorageReference file_path = mImageStorage.child("user_profile_images").child(push_id);
-
-                ///
                 Uri resultUri = result.getUri();
 
                 String current_user_id = mCurrentUser.getUid();
@@ -143,24 +136,7 @@ public class UserProfile extends AppCompatActivity {
                             @Override
                             public Task<Uri> then(@NonNull final Task<UploadTask.TaskSnapshot> task) {
                                 if (task.isSuccessful()) {
-
-                                    ////
                                     return filepath.getDownloadUrl();
-//                            mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if (task.isSuccessful()){
-//                                        mProgressDialog.dismiss();
-//                                        Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
-//                                    }
-//                                }
-//                            });
-//
-//                        }else{
-//                            Toast.makeText(UserProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
-//                            mProgressDialog.dismiss();
-//                        }
-//                        return null;
                                 }
                                 return null;
 
