@@ -13,39 +13,169 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
-        android:text="Poll Title" />
+        android:text="Poll Title"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tvOneOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitlePoll"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="Option One" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="200dp"
+        android:layout_toEndOf="@+id/ivOneVote"
+        android:layout_toStartOf="@+id/tvOneCount"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="Option One"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvTwoOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvOneOption"
         android:layout_below="@+id/tvOneOption"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Option Two" />
+        android:layout_toLeftOf="@+id/tvTwoCount"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="Option Two"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvThreeOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvOneOption"
         android:layout_below="@+id/tvTwoOption"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_toLeftOf="@+id/tvThreeCount"
+        android:padding="5dp"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvFourOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvOneOption"
         android:layout_below="@+id/tvThreeOption"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_toLeftOf="@+id/tvFourCount"
+        android:padding="5dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvOneCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvOneOption"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvOneOption"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="0"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvTwoCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvTwoOption"
+        android:layout_alignEnd="@+id/tvOneCount"
+        android:layout_alignTop="@+id/tvTwoOption"
+        android:layout_below="@+id/tvOneOption"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="0"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvThreeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvThreeOption"
+        android:layout_alignEnd="@+id/tvOneCount"
+        android:layout_alignTop="@+id/tvThreeOption"
+        android:layout_below="@+id/tvTwoOption"
+        android:padding="5dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvFourCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvFourOption"
+        android:layout_alignEnd="@+id/tvOneCount"
+        android:layout_alignTop="@+id/tvFourOption"
+        android:layout_below="@+id/tvThreeOption"
+        android:padding="5dp"
+        android:textColor="@color/colorAccent" />
+
+    <ImageView
+        android:id="@+id/ivOneVote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvOneOption"
+        android:layout_marginLeft="30dp"
+        android:src="@android:drawable/checkbox_off_background" />
+
+    <ImageView
+        android:id="@+id/ivTwoVote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvTwoOption"
+        android:layout_marginLeft="30dp"
+        android:src="@android:drawable/checkbox_off_background" />
+
+    <ImageView
+        android:id="@+id/ivThreeVote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvThreeOption"
+        android:layout_marginLeft="30dp" />
+
+    <ImageView
+        android:id="@+id/ivFourVote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvFourOption"
+        android:layout_marginLeft="30dp" />
+
+    <ImageView
+        android:id="@+id/ivOneMedal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvOneOption"
+        android:layout_marginRight="30dp" />
+
+    <ImageView
+        android:id="@+id/ivTwoMedal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvTwoOption"
+        android:layout_marginRight="30dp" />
+
+    <ImageView
+        android:id="@+id/ivThreeMedal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvThreeOption"
+        android:layout_marginRight="30dp" />
+
+    <ImageView
+        android:id="@+id/ivFourMedal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvFourOption"
+        android:layout_marginRight="30dp" />
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,9 +27,21 @@ public class ViewPollActivity extends AppCompatActivity {
 
     TextView tvTitlePoll;
     TextView tvOneOption;
+    TextView tvOneCount;
+    ImageView ivOneVote;
+    ImageView ivOneMedal;
     TextView tvTwoOption;
+    TextView tvTwoCount;
+    ImageView ivTwoVote;
+    ImageView ivTwoMedal;
     TextView tvThreeOption;
+    TextView tvThreeCount;
+    ImageView ivThreeVote;
+    ImageView ivThreeMedal;
     TextView tvFourOption;
+    TextView tvFourCount;
+    ImageView ivFourVote;
+    ImageView ivFourMedal;
 
     ArrayList<String> votesForOne;
     ArrayList<String> votesForTwo;
@@ -45,9 +58,21 @@ public class ViewPollActivity extends AppCompatActivity {
 
         tvTitlePoll = findViewById(R.id.tvTitlePoll);
         tvOneOption = findViewById(R.id.tvOneOption);
+        tvOneCount = findViewById(R.id.tvOneCount);
+        ivOneVote = findViewById(R.id.ivOneVote);
+        ivOneMedal = findViewById(R.id.ivOneMedal);
         tvTwoOption = findViewById(R.id.tvTwoOption);
+        tvTwoCount = findViewById(R.id.tvTwoCount);
+        ivTwoVote = findViewById(R.id.ivTwoVote);
+        ivTwoMedal = findViewById(R.id.ivTwoMedal);
         tvThreeOption = findViewById(R.id.tvThreeOption);
+        tvThreeCount = findViewById(R.id.tvThreeCount);
+        ivThreeVote = findViewById(R.id.ivThreeVote);
+        ivThreeMedal = findViewById(R.id.ivThreeMedal);
         tvFourOption = findViewById(R.id.tvFourOption);
+        tvFourCount = findViewById(R.id.tvFourCount);
+        ivFourVote = findViewById(R.id.ivFourVote);
+        ivFourMedal = findViewById(R.id.ivFourMedal);
 
         votesForOne = new ArrayList<>();
         votesForTwo = new ArrayList<>();
@@ -71,14 +96,15 @@ public class ViewPollActivity extends AppCompatActivity {
                         votesForOne.clear();
                         for (DataSnapshot babyData : childData.getChildren())
                             if (babyData.getKey().toString().equals("text"))
-                            text1 = babyData.getValue().toString();
+                                text1 = babyData.getValue().toString();
                             else
                                 votesForOne.add(babyData.getKey().toString());
-                        tvOneOption.setText(text1 + ": " + votesForOne.size());
+                        tvOneOption.setText(text1);
+                        tvOneCount.setText(Integer.toString(votesForOne.size()));
                         if (votesForOne.contains(FirebaseAuth.getInstance().getUid()))
-                            tvOneOption.setTextColor(Color.GREEN);
+                            ivOneVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
                         else
-                            tvOneOption.setTextColor(Color.BLACK);
+                            ivOneVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_off_background));
                         tvOneOption.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -102,14 +128,15 @@ public class ViewPollActivity extends AppCompatActivity {
                         votesForTwo.clear();
                         for (DataSnapshot babyData : childData.getChildren())
                             if (babyData.getKey().toString().equals("text"))
-                            text2 = babyData.getValue().toString();
+                                text2 = babyData.getValue().toString();
                             else
                                 votesForTwo.add(babyData.getKey().toString());
-                        tvTwoOption.setText(text2 + ": " + votesForTwo.size());
+                        tvTwoOption.setText(text2);
+                        tvTwoCount.setText(Integer.toString(votesForTwo.size()));
                         if (votesForTwo.contains(FirebaseAuth.getInstance().getUid()))
-                            tvTwoOption.setTextColor(Color.GREEN);
+                            ivTwoVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
                         else
-                            tvTwoOption.setTextColor(Color.BLACK);
+                            ivTwoVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_off_background));
                         tvTwoOption.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -133,14 +160,17 @@ public class ViewPollActivity extends AppCompatActivity {
                         votesForThree.clear();
                         for (DataSnapshot babyData : childData.getChildren())
                             if (babyData.getKey().toString().equals("text"))
-                            text3 = babyData.getValue().toString();
+                                text3 = babyData.getValue().toString();
                             else
                                 votesForThree.add(babyData.getKey().toString());
-                        tvThreeOption.setText(text3 + ": " + votesForThree.size());
+                        tvThreeOption.setText(text3);
+                        tvThreeOption.setBackground(getResources().getDrawable(R.drawable.box));
+                        tvThreeCount.setText(Integer.toString(votesForThree.size()));
+                        tvThreeCount.setBackground(getResources().getDrawable(R.drawable.box));
                         if (votesForThree.contains(FirebaseAuth.getInstance().getUid()))
-                            tvThreeOption.setTextColor(getResources().getColor(R.color.colorAccent));
+                            ivThreeVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
                         else
-                            tvThreeOption.setTextColor(Color.BLACK);
+                            ivThreeVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_off_background));
                         tvThreeOption.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -164,14 +194,17 @@ public class ViewPollActivity extends AppCompatActivity {
                         votesForFour.clear();
                         for (DataSnapshot babyData : childData.getChildren())
                             if (babyData.getKey().toString().equals("text"))
-                            text4 = babyData.getValue().toString();
+                                text4 = babyData.getValue().toString();
                             else
                                 votesForFour.add(babyData.getKey().toString());
-                        tvFourOption.setText(text4 + ": " + votesForFour.size());
+                        tvFourOption.setText(text4);
+                        tvFourOption.setBackground(getResources().getDrawable(R.drawable.box));
+                        tvFourCount.setText(Integer.toString(votesForThree.size()));
+                        tvFourCount.setBackground(getResources().getDrawable(R.drawable.box));
                         if (votesForFour.contains(FirebaseAuth.getInstance().getUid()))
-                            tvFourOption.setTextColor(Color.GREEN);
+                            ivFourVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
                         else
-                            tvFourOption.setTextColor(Color.BLACK);
+                            ivFourVote.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_off_background));
                         tvFourOption.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -191,6 +224,32 @@ public class ViewPollActivity extends AppCompatActivity {
                         });
                     }
                 }
+
+                int max = 1;
+                if (votesForOne.size() >= max)
+                    max = votesForOne.size();
+                if (votesForTwo.size() >= max)
+                    max = votesForTwo.size();
+                if (votesForThree.size() >= max)
+                    max = votesForThree.size();
+                if (votesForFour.size() >= max)
+                    max = votesForFour.size();
+                if (votesForOne.size() == max)
+                    ivOneMedal.setImageDrawable(getResources().getDrawable(R.drawable.gold_medal));
+                else
+                    ivOneMedal.setImageDrawable(null);
+                if (votesForTwo.size() == max)
+                    ivTwoMedal.setImageDrawable(getResources().getDrawable(R.drawable.gold_medal));
+                else
+                    ivTwoMedal.setImageDrawable(null);
+                if (votesForThree.size() == max)
+                    ivThreeMedal.setImageDrawable(getResources().getDrawable(R.drawable.gold_medal));
+                else
+                    ivThreeMedal.setImageDrawable(null);
+                if (votesForFour.size() == max)
+                    ivFourMedal.setImageDrawable(getResources().getDrawable(R.drawable.gold_medal));
+                else
+                    ivFourMedal.setImageDrawable(null);
             }
 
             @Override
