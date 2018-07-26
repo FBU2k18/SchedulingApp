@@ -23,7 +23,7 @@ import com.emmabr.schedulingapp.model.User;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 
 public class GroupActivity extends AppCompatActivity {

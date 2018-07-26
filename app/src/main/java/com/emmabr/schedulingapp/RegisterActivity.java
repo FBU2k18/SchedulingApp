@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -97,37 +97,11 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // OAuth confirmation when user creates group (in order to access calendar)
                             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                    .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
+                                    .requestIdToken("698336983204-hntnifsf7pgoaje95ce99d51ruh0j9b4.apps.googleusercontent.com")
                                     .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
                                     .build();
                             mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
                             signIn();
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("login", "createUserWithEmail:success");
-                            // create a new User to put in the Firebase users schema
-
-                            FirebaseUser user = mAuth.getInstance().getCurrentUser();
-                            String uid = user.getUid();
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-                            HashMap<String, String> usersMap = new HashMap<>();
-                            usersMap.put("nickName", username);
-                            usersMap.put("email", email);
-                            usersMap.put("image", "default");
-                            usersMap.put("calendar", "");
-                            usersMap.put("id", uid);
-
-                            mDatabase.setValue(usersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        Toast.makeText(RegisterActivity.this, "Account Created!.",
-                                                Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                }
-                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             mRegProgress.hide();
@@ -153,6 +127,32 @@ public class RegisterActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                // Sign in success, update UI with the signed-in user's information
+                Log.d("login", "createUserWithEmail:success");
+                // create a new User to put in the Firebase users schema
+
+                FirebaseUser user = mAuth.getInstance().getCurrentUser();
+                String uid = user.getUid();
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+                HashMap<String, String> usersMap = new HashMap<>();
+                usersMap.put("nickName", account.getDisplayName());
+                usersMap.put("email", account.getEmail());
+                usersMap.put("image", "default");
+                usersMap.put("calendar", "");
+                usersMap.put("id", uid);
+
+                mDatabase.setValue(usersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(RegisterActivity.this, "Account Created!.",
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                });
                 // Google Sign In was successful
                 Toast.makeText(getApplicationContext(), "Sign in Worked!", Toast.LENGTH_SHORT).show();
 

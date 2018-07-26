@@ -18,19 +18,29 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // Google Auth
+    private static final String TAG = "LogInActivity";
+    private final static int RC_SIGN_IN = 34;
+    private GoogleSignInClient mGoogleSignInClient;
+
     // shared Firebase object
     private FirebaseAuth mAuth;
+
 
     private Button login;
     private TextView tvRegister;
@@ -71,25 +81,35 @@ public class LoginActivity extends AppCompatActivity {
         liPassword = findViewById(R.id.tvPassword);
         tvRegister = findViewById(R.id.tvRegister);
 
-        mAuth = FirebaseAuth.getInstance().getInstance();
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("698336983204-hntnifsf7pgoaje95ce99d51ruh0j9b4.apps.googleusercontent.com")
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                .requestEmail()
+                .build();
 
-        mLoginProgress = new ProgressDialog(this);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mAuth = FirebaseAuth.getInstance();
+
+//        mLoginProgress = new ProgressDialog(this);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+
                 final String email = liEmail.getText().toString();
                 final String password = liPassword.getText().toString();
 
-                //login a user
+//                login a user
                 if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
-                    mLoginProgress.setTitle("Logging In");
-                    mLoginProgress.setMessage("Please wait while we check your credentials.");
-                    mLoginProgress.setCanceledOnTouchOutside(false);
-                    mLoginProgress.show();
-
-                    loginUser(email, password);
+//                    mLoginProgress.setTitle("Logging In");
+//                    mLoginProgress.setMessage("Please wait while we check your credentials.");
+//                    mLoginProgress.setCanceledOnTouchOutside(false);
+//                    mLoginProgress.show();
+                    signIn();
+//                    loginUser(email, password);
                 }
             }
         });
@@ -111,28 +131,62 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loginUser(String email, String password) {
+//    private void loginUser(String email, String password) {
+//
+//        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//
+//                if (task.isSuccessful()) {
+//
+//                    mLoginProgress.dismiss();
+//                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+//                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(mainIntent);
+//                    finish();
+//
+//                } else {
+//                    mLoginProgress.hide();
+//                    Toast.makeText(LoginActivity.this, "Cannot Sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//
+//    }
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-                if (task.isSuccessful()) {
-
-                    mLoginProgress.dismiss();
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(mainIntent);
-                    finish();
-
-                } else {
-                    mLoginProgress.hide();
-                    Toast.makeText(LoginActivity.this, "Cannot Sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+//            try {
+            // Google Sign In was successful, authenticate with Firebase
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//                mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+//                            startActivity(i);
+////                            updateUI(mAuth.getCurrentUser());
+//                        }
+//                    }
+//                });
+//            } catch (ApiException e) {
+//                Log.w(TAG, "Google sign in failed", e);
+//            }
+//        }
+        }
     }
 
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 }
 

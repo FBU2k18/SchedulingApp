@@ -18,7 +18,7 @@ import com.emmabr.schedulingapp.Models.GroupData;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {

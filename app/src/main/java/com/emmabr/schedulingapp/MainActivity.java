@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String mCurrentUser;
     private DatabaseReference currUserGroupsData;
+
+    private GoogleSignInClient mGoogleSignInClient;
 
 
     @Override
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Menu", "Edit Profile");
                 break;
             case R.id.miLogOut:
-                FirebaseAuth.getInstance().signOut();
+                //FirebaseAuth.getInstance().signOut();
                 Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(logBack);
                 Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();

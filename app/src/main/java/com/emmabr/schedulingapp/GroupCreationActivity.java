@@ -29,14 +29,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
 
 public class GroupCreationActivity extends AppCompatActivity {
-
-    private final static int RC_SIGN_IN = 34;
-    GoogleSignInClient mGoogleSignInClient;
 
     //firebase variables
     private DatabaseReference userDatabase;
@@ -46,6 +43,9 @@ public class GroupCreationActivity extends AppCompatActivity {
     private EditText etSearchUser;
     private Button btnAddUser;
     private Button btnCreate;
+
+    // Button to test calendar
+    private Button mCalendarButton;
 
 
     ArrayList<String> alUsers = new ArrayList<>();
@@ -62,6 +62,7 @@ public class GroupCreationActivity extends AppCompatActivity {
         etSearchUser = findViewById(R.id.etSearchUser);
         btnAddUser = findViewById(R.id.btnAdd);
         btnCreate = findViewById(R.id.btnCreate);
+        mCalendarButton = findViewById(R.id.btCalendar);
 
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +72,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
+                            String userId = dataSnapshot.getChildren().iterator().next().getKey().toString();
                             alUsers.add(userId);
                             Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
                         } else {
@@ -106,5 +107,12 @@ public class GroupCreationActivity extends AppCompatActivity {
             }
         });
 
+        mCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent calendarIntent = new Intent(GroupCreationActivity.this, CalendarClient.class);
+                startActivity(calendarIntent);
+            }
+        });
     }
 }

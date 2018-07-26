@@ -14,7 +14,7 @@ import com.emmabr.schedulingapp.model.User;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
