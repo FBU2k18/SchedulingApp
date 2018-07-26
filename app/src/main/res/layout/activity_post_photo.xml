@@ -25,7 +25,7 @@
         android:text="Post Image" />
 
     <Button
-        android:id="@+id/bCancel"
+        android:id="@+id/bCancelPic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

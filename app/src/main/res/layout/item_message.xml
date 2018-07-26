@@ -17,7 +17,8 @@
         android:paddingLeft="25dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:text="" />
+        android:text=""
+        android:maxWidth="270dp"/>
 
     <TextView
         android:id="@+id/tvFrom"
@@ -42,7 +43,8 @@
         android:paddingLeft="5dp"
         android:paddingRight="25dp"
         android:paddingTop="5dp"
-        android:text="" />
+        android:text=""
+        android:maxWidth="270dp"/>
 
     <ImageView
         android:id="@+id/ivPicYou"
@@ -57,4 +59,5 @@
         android:layout_height="50dp"
         android:layout_alignEnd="@+id/tvTextMe"
         android:layout_alignTop="@+id/tvTextYou" />
+
 </RelativeLayout>

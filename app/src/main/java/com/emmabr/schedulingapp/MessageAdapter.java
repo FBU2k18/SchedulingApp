@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
 
+import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
+
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     ArrayList<Message> messages;
@@ -48,8 +50,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 holder.tvTextMe.setText(message.getMessageText());
                 holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
             } else if (message.getImageURL() != null) {
-                BitmapScaler scaler = new BitmapScaler();
-                holder.ivPicMe.setImageBitmap(scaler.scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
+                holder.ivPicMe.setImageBitmap(scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -60,7 +61,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     }
                 });
             } else {
-                //poll
+                holder.tvTextMe.setText(message.getPollTitle());
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
+                holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
+                holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, ViewPollActivity.class);
+                        intent.putExtra("messageID", message.getMessageID());
+                        intent.putExtra("groupID", groupID);
+                        context.startActivity(intent);
+                    }
+                });
             }
         } else {
             //make look like from someone else
@@ -69,8 +81,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 holder.tvTextYou.setText(message.getMessageText());
                 holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
             } else if (message.getImageURL() != null) {
-                BitmapScaler scaler = new BitmapScaler();
-                holder.ivPicYou.setImageBitmap(scaler.scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
+                holder.ivPicYou.setImageBitmap(scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -81,7 +92,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     }
                 });
             } else {
-                //poll
+                holder.tvTextYou.setText(message.getPollTitle());
+                holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
+                holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
+                holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(context, ViewPollActivity.class);
+                        intent.putExtra("messageID", message.getMessageID());
+                        intent.putExtra("groupID", groupID);
+                        context.startActivity(intent);
+                    }
+                });
             }
         }
     }
@@ -117,22 +139,5 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             ivPicMe = itemView.findViewById(R.id.ivPicMe);
             ivPicYou = itemView.findViewById(R.id.ivPicYou);
         }
-    }
-
-    public class BitmapScaler {
-        // Scale and maintain aspect ratio given a desired width
-        // BitmapScaler.scaleToFitWidth(bitmap, 100);
-        public Bitmap scaleToFitWidth(Bitmap b, int width) {
-            float factor = width / (float) b.getWidth();
-            return Bitmap.createScaledBitmap(b, width, (int) (b.getHeight() * factor), true);
-        }
-
-        // Scale and maintain aspect ratio given a desired height
-        // BitmapScaler.scaleToFitHeight(bitmap, 100);
-        public Bitmap scaleToFitHeight(Bitmap b, int height) {
-            float factor = height / (float) b.getHeight();
-            return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factor), height, true);
-        }
-
     }
 }

@@ -40,7 +40,7 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
         holder.tvVotes.setText(Integer.toString(time.getVotes()));
         //get current user
         if (time.getUpVoters().contains(new User("abc123")))
-            holder.rlOption.setBackgroundColor(Color.GREEN);
+            holder.rlOption.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
             //get current user again
         else if (time.getDownVoters().contains(new User("abc123")))
             holder.rlOption.setBackgroundColor(Color.RED);

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.emmabr.schedulingapp.PostPollActivity">
+
+    <TextView
+        android:id="@+id/tvTitlePoll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tvOptionOne"
+        android:layout_marginTop="20dp"
+        android:text="Poll Title:" />
+
+    <TextView
+        android:id="@+id/tvOptionOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etOptionOne"
+        android:layout_below="@+id/etPollTitle"
+        android:layout_marginTop="40dp"
+        android:text="Option One:" />
+
+    <TextView
+        android:id="@+id/tvOptionTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etOptionTwo"
+        android:layout_below="@+id/etOptionOne"
+        android:layout_marginTop="15dp"
+        android:text="Option Two:" />
+
+    <TextView
+        android:id="@+id/tvOptionThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etOptionThree"
+        android:layout_below="@+id/etOptionTwo"
+        android:layout_marginTop="15dp"
+        android:text="Option Three:" />
+
+    <TextView
+        android:id="@+id/tvOptionFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etOptionFour"
+        android:layout_below="@+id/etOptionThree"
+        android:layout_marginTop="15dp"
+        android:text="Option Four:" />
+
+    <EditText
+        android:id="@+id/etPollTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitlePoll"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Required"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etOptionOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOptionOne"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Required"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etOptionTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOptionTwo"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Required"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etOptionThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOptionThree"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Optional"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/etOptionFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOptionFour"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Optional"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/bPostPoll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/etPollTitle"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:text="Post Poll" />
+
+    <Button
+        android:id="@+id/bCancelPoll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvTitlePoll"
+        android:layout_alignTop="@+id/bPostPoll"
+        android:text="Cancel" />
+
+</RelativeLayout>

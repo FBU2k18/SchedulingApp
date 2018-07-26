@@ -13,6 +13,7 @@ public class Message {
     String optionThree;
     String optionFour;
     String createdAt;
+    String messageID;
 
     //unused strings left null
     public Message(String userID, String nickName, String messageText, String imageURL, String pollTitle, String optionOne, String optionTwo, String optionThree, String optionFour, String createdAt) {
@@ -66,6 +67,14 @@ public class Message {
 
     public String getOptionFour() {
         return optionFour;
+    }
+
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
     }
 
     public static void saveMessage(Message inputMessage, String group_id) {

@@ -153,7 +153,9 @@ public class GroupActivity extends AppCompatActivity {
         bAddPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(GroupActivity.this, PostPollActivity.class);
+                intent.putExtra("groupID", groupID);
+                startActivity(intent);
             }
         });
         bTakePic = findViewById(R.id.bTakePic);
@@ -228,7 +230,9 @@ public class GroupActivity extends AppCompatActivity {
                             }
                         }
                     }
+                    String messageID = childData.getKey().toString();
                     Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, optionOne, optionTwo, optionThree, optionFour, createdAt);
+                    message.setMessageID(messageID);
                     mMessages.add(message);
                     mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
                     rvMessageDisplay.scrollToPosition(mMessages.size() - 1);

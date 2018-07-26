@@ -28,6 +28,7 @@ import java.util.Date;
 
 import me.emmabr.schedulingapp.R;
 
+import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPhotoActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class PostPhotoActivity extends AppCompatActivity {
 
     ImageView ivNewPic;
     Button bPostImage;
-    Button bCancel;
+    Button bCancelPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class PostPhotoActivity extends AppCompatActivity {
 
         ivNewPic = findViewById(R.id.ivNewPic);
         bPostImage = findViewById(R.id.bPostImage);
-        bCancel = findViewById(R.id.bCancel);
+        bCancelPic = findViewById(R.id.bCancelPic);
         bPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +77,7 @@ public class PostPhotoActivity extends AppCompatActivity {
                 });
             }
         });
-        bCancel.setOnClickListener(new View.OnClickListener() {
+        bCancelPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
@@ -154,35 +155,17 @@ public class PostPhotoActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        BitmapScaler scaler = new BitmapScaler();
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_PHOTO_CODE) {
             if (resultCode == RESULT_OK) {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
-                Bitmap resizedBitmap = scaler.scaleToFitWidth(takenImage, 200);
+                Bitmap resizedBitmap = scaleToFitWidth(takenImage, 200);
                 // Load the taken image into a preview
                 ivNewPic.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    public class BitmapScaler {
-        // Scale and maintain aspect ratio given a desired width
-        // BitmapScaler.scaleToFitWidth(bitmap, 100);
-        public Bitmap scaleToFitWidth(Bitmap b, int width) {
-            float factor = width / (float) b.getWidth();
-            return Bitmap.createScaledBitmap(b, width, (int) (b.getHeight() * factor), true);
-        }
-
-        // Scale and maintain aspect ratio given a desired height
-        // BitmapScaler.scaleToFitHeight(bitmap, 100);
-        public Bitmap scaleToFitHeight(Bitmap b, int height) {
-            float factor = height / (float) b.getHeight();
-            return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factor), height, true);
-        }
-
     }
 }

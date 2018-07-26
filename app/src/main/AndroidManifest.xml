@@ -44,7 +44,9 @@
         </provider>
 
         <activity android:name="com.emmabr.schedulingapp.PostPhotoActivity" />
-        <activity android:name="com.emmabr.schedulingapp.ViewPhotoActivity"></activity>
+        <activity android:name="com.emmabr.schedulingapp.ViewPhotoActivity" />
+        <activity android:name="com.emmabr.schedulingapp.PostPollActivity" />
+        <activity android:name="com.emmabr.schedulingapp.ViewPollActivity"></activity>
     </application>
 
 </manifest>
