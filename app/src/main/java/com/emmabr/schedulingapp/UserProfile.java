@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +50,7 @@ public class UserProfile extends AppCompatActivity {
     //Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,7 @@ public class UserProfile extends AppCompatActivity {
 
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settingsName);
-        mImageBtn =(Button) findViewById(R.id.settingsImageBtn);
+        mImageBtn = (Button) findViewById(R.id.settingsImageBtn);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mImageStorage = FirebaseStorage.getInstance().getReference();
@@ -75,12 +77,12 @@ public class UserProfile extends AppCompatActivity {
 
                 mName.setText(name);
 
-                if(!image.equals("default")){
-                    Glide.with(getApplicationContext())
+                if (!image.equals("default")) {
+                    Glide.with(getBaseContext())
                             .load(image)
                             .apply(new RequestOptions()
-                                .placeholder(R.drawable.default_pic)
-                                .fitCenter())
+                                    .placeholder(R.drawable.default_pic)
+                                    .fitCenter())
                             .into(mDisplayImage);
                 }
             }
@@ -106,12 +108,12 @@ public class UserProfile extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
 
-            Uri imageUri= data.getData();
+            Uri imageUri = data.getData();
 
             CropImage.activity(imageUri)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(this);
         }
 
@@ -126,36 +128,65 @@ public class UserProfile extends AppCompatActivity {
                 mProgressDialog.setCanceledOnTouchOutside(false);
                 mProgressDialog.show();
 
+                ///
+//                DatabaseReference user_image_push = mUserDatabase.child("image").push();
+//                final String push_id = user_image_push.getKey();
+//                final StorageReference file_path = mImageStorage.child("user_profile_images").child(push_id);
+
+                ///
                 Uri resultUri = result.getUri();
 
                 String current_user_id = mCurrentUser.getUid();
-                StorageReference filepath = mImageStorage.child("user_profile_images").child("user_profile_images/" + current_user_id + ".jpg");
-                filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()){
-                            String download_url = task.getResult().getStorage().getDownloadUrl().toString();
-                            mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        mProgressDialog.dismiss();
-                                        Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
+                final StorageReference filepath = mImageStorage.child("user_profile_images").child(current_user_id + ".jpg");
+                filepath.putFile(resultUri).continueWithTask(
+                        new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull final Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()) {
 
-                        }else{
+                                    ////
+                                    return filepath.getDownloadUrl();
+//                            mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if (task.isSuccessful()){
+//                                        mProgressDialog.dismiss();
+//                                        Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
+//                                    }
+//                                }
+//                            });
+//
+//                        }else{
+//                            Toast.makeText(UserProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
+//                            mProgressDialog.dismiss();
+//                        }
+//                        return null;
+                                }
+                                return null;
+
+                            }
+                        }
+                ).continueWithTask(new Continuation<Uri, Task<Void>>() {
+                    @Override
+                    public Task<Void> then(@NonNull Task<Uri> task) {
+                        return mUserDatabase.child("image").setValue(task.getResult().toString());
+                    }
+
+                }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            mProgressDialog.dismiss();
+                            Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
+                        } else {
                             Toast.makeText(UserProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
                         }
                     }
-
                 });
-
             }
         }
-    }
 
+    }
 }
 
