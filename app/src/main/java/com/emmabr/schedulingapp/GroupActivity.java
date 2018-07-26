@@ -37,7 +37,7 @@ import me.emmabr.schedulingapp.R;
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 
-public class GroupActivity extends AppCompatActivity {
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
 
     private String groupID;
 
@@ -255,8 +255,8 @@ public class GroupActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                Intent intentHome = new Intent(this, MainActivity.class);
+                startActivity(intentHome);
                 finish();
                 break;
             case R.id.miAddMember:
@@ -268,11 +268,20 @@ public class GroupActivity extends AppCompatActivity {
                 Log.i("Menu", "Refresh");
                 break;
             case R.id.miLeaveGroup:
-                //replace with log out and intent
-                Log.i("Menu", "Leave Group");
+                LeaveGroupDialogFragment leaveGroup = new LeaveGroupDialogFragment();
+                leaveGroup.show(getSupportFragmentManager(), "LeaveGroup");
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void leaveGroup() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(FirebaseAuth.getInstance().getUid()).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(groupID).removeValue();
+        Intent intentLeave = new Intent(this, MainActivity.class);
+        startActivity(intentLeave);
+        finish();
     }
 
     public void scrollToPosition(int position) {
