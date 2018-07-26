@@ -33,12 +33,15 @@ import me.emmabr.schedulingapp.R;
 
 public class UserProfile extends AppCompatActivity {
 
+
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
 
     // Android Layout Variables
+
     private CircleImageView mDisplayImage;
     private TextView mName;
+
     private Button mImageBtn;
 
     private static final int GALLERY_PICK = 1;
@@ -46,7 +49,6 @@ public class UserProfile extends AppCompatActivity {
     //Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +72,6 @@ public class UserProfile extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("nickName").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
-                //String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
 
@@ -78,8 +79,8 @@ public class UserProfile extends AppCompatActivity {
                     Glide.with(getApplicationContext())
                             .load(image)
                             .apply(new RequestOptions()
-                                    .placeholder(R.drawable.default_pic)
-                                    .fitCenter())
+                                .placeholder(R.drawable.default_pic)
+                                .fitCenter())
                             .into(mDisplayImage);
                 }
             }
@@ -128,7 +129,7 @@ public class UserProfile extends AppCompatActivity {
                 Uri resultUri = result.getUri();
 
                 String current_user_id = mCurrentUser.getUid();
-                StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");
+                StorageReference filepath = mImageStorage.child("user_profile_images").child("user_profile_images/" + current_user_id + ".jpg");
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -140,21 +141,21 @@ public class UserProfile extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         mProgressDialog.dismiss();
                                         Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
-
-
                                     }
                                 }
                             });
+
                         }else{
                             Toast.makeText(UserProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
                         }
                     }
+
                 });
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
             }
         }
     }
+
 }
+
