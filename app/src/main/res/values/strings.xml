@@ -12,8 +12,10 @@
     <string name="username_creation">Enter your username</string>
     <string name="btn_next">Next</string>
     <string name="API_KEY">AIzaSyANQa_zB5i6nWLVk8M2wfooIvV7FeBixNg</string>
+    <string name="set_button">set</string>
 
     <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>
+    <string name="singleDisplayEmail">DisplayEmail</string>
     <string name="change_image">Change Image</string>
 </resources>

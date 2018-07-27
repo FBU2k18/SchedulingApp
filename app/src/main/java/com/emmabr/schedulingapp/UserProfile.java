@@ -44,6 +44,7 @@ public class UserProfile extends AppCompatActivity {
     private TextView mName;
 
     private Button mImageBtn;
+    private Button mNameBtn;
 
     private static final int GALLERY_PICK = 1;
 
@@ -59,6 +60,7 @@ public class UserProfile extends AppCompatActivity {
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settingsName);
         mImageBtn = (Button) findViewById(R.id.settingsImageBtn);
+        mNameBtn = (Button) findViewById(R.id.settingsNameBtn);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mImageStorage = FirebaseStorage.getInstance().getReference();
@@ -99,6 +101,15 @@ public class UserProfile extends AppCompatActivity {
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .start(UserProfile.this);
+            }
+        });
+
+        mNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: send to new activity or have a popup with text input
+                Intent intent = new Intent(UserProfile.this, PopUpActivity.class);
+                startActivity(intent);
             }
         });
     }
