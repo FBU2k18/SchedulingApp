@@ -48,6 +48,7 @@ import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
 public class AddMemberActivity extends AppCompatActivity {
 
     String groupID;
+    ArrayList<String> groupMembers;
 
     private final static int RC_SIGN_IN = 34;
     GoogleSignInClient mGoogleSignInClient;
@@ -69,6 +70,19 @@ public class AddMemberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_member);
 
         groupID = getIntent().getStringExtra("groupID");
+        groupMembers = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childData : dataSnapshot.getChildren())
+                    groupMembers.add(childData.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         userDatabase = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
@@ -163,9 +177,15 @@ public class AddMemberActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        alUsers.add(user_id);
-                        Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-                        //then clear the text in the edit test field
+                        if (!groupMembers.contains(user_id))
+                            if (!alUsers.contains(user_id)) {
+                                alUsers.add(user_id);
+                                Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
+                                //then clear the text in the edit test field
+                            } else
+                                Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(AddMemberActivity.this, "User already in group!", Toast.LENGTH_LONG).show();
                     }
                 });
             }
