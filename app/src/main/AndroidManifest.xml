@@ -32,10 +32,12 @@
         <activity android:name="com.emmabr.schedulingapp.GroupCreationActivity" />
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity" />
         <activity android:name="com.emmabr.schedulingapp.GroupActivity" />
-        <activity android:name="com.emmabr.schedulingapp.UserProfile"/>
+        <activity android:name="com.emmabr.schedulingapp.UserProfile" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name="com.emmabr.schedulingapp.PopUpActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
     </application>
 
 </manifest>
