@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import me.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
@@ -26,7 +28,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
         groupID = getIntent().getStringExtra("groupID");
 
         ivPic = findViewById(R.id.ivPic);
-        ivPic.setImageBitmap(scaleToFitWidth(BitmapFactory.decodeFile(getIntent().getStringExtra("imageURL")), 300));
+        Glide.with(this).load(getIntent().getStringExtra("imageURL")).into(ivPic);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

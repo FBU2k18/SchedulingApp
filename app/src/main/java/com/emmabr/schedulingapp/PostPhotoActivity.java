@@ -17,11 +17,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.Message;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.Date;
@@ -37,6 +43,7 @@ public class PostPhotoActivity extends AppCompatActivity {
     public String photoFileName = "photo.jpg";
     File photoFile;
     public final static int PICK_PHOTO_CODE = 1046;
+    Uri imageUri;
 
     String groupID;
 
@@ -64,6 +71,24 @@ public class PostPhotoActivity extends AppCompatActivity {
                             Date date = new Date();
                             Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, photoFile.getAbsolutePath(), null, Long.toString(date.getTime()));
                             saveMessage(message, groupID);
+
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childData : dataSnapshot.getChildren())
+                                        if (childData.hasChild("imageURL") && childData.child("imageURL").getValue().toString().equals(photoFile.getAbsolutePath())) {
+                                            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("message_images").child(childData.getKey().toString() + ".jpg");
+                                            filepath.putFile(imageUri);
+                                            childData.child("imageURL").getRef().setValue(filepath.getDownloadUrl());
+                                        }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                             Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
                             intent.putExtra("groupID", groupID);
                             startActivity(intent);
@@ -157,6 +182,7 @@ public class PostPhotoActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_PHOTO_CODE) {
             if (resultCode == RESULT_OK) {
+                imageUri = data.getData();
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below

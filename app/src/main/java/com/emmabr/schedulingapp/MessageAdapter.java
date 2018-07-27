@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +51,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 holder.tvTextMe.setText(message.getMessageText());
                 holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
             } else if (message.getImageURL() != null) {
-                holder.ivPicMe.setImageBitmap(scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
+                Glide.with(context).load(message.getImageURL()).into(holder.ivPicMe);
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -81,7 +82,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 holder.tvTextYou.setText(message.getMessageText());
                 holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
             } else if (message.getImageURL() != null) {
-                holder.ivPicYou.setImageBitmap(scaleToFitWidth(BitmapFactory.decodeFile(message.getImageURL()), 50));
+                Glide.with(context).load(message.getImageURL()).into(holder.ivPicYou);
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
