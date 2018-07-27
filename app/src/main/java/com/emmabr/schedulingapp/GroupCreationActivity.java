@@ -139,7 +139,7 @@ public class GroupCreationActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull User model) {
 
-                holder.setDetails(getApplicationContext(), model.getName(), model.getImage());
+                holder.setDetails(getApplicationContext(), model.getName(), model.getImage(), model.getEmail());
 
                 final String user_id = getRef(position).getKey();
                 holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -168,11 +168,13 @@ public class GroupCreationActivity extends AppCompatActivity {
 
         }
 
-        public void setDetails(Context ctx, String userName, String userImage) {
+        public void setDetails(Context ctx, String userName, String userImage, String userEmail) {
             TextView user_name = (TextView) mView.findViewById(R.id.user_single_name);
             ImageView user_image = (ImageView) mView.findViewById(R.id.user_single_image);
+            TextView user_email = (TextView) mView.findViewById(R.id.user_single_email);
 
             user_name.setText(userName);
+            user_email.setText(userEmail);
 
             Glide.with(ctx)
                     .load(userImage)

@@ -15,5 +15,6 @@
 
     <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>
+    <string name="singleDisplayEmail">DisplayEmail</string>
     <string name="change_image">Change Image</string>
 </resources>
