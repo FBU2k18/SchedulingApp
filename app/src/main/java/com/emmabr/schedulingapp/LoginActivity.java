@@ -104,10 +104,10 @@ public class LoginActivity extends AppCompatActivity {
 
 //                login a user
                 if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
-//                    mLoginProgress.setTitle("Logging In");
-//                    mLoginProgress.setMessage("Please wait while we check your credentials.");
-//                    mLoginProgress.setCanceledOnTouchOutside(false);
-//                    mLoginProgress.show();
+                    mLoginProgress.setTitle("Logging In");
+                    mLoginProgress.setMessage("Please wait while we check your credentials.");
+                    mLoginProgress.setCanceledOnTouchOutside(false);
+                    mLoginProgress.show();
                     signIn();
 //                    loginUser(email, password);
                 }

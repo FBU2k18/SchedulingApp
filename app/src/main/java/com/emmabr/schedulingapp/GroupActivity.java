@@ -28,6 +28,7 @@ import com.emmabr.schedulingapp.R;
 
 public class GroupActivity extends AppCompatActivity {
 
+
     ArrayList<TimeOption> times;
     TimeOptionAdapter timeAdapter;
     RecyclerView rvTimes;

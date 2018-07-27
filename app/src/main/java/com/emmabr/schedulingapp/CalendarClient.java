@@ -140,5 +140,14 @@ public class CalendarClient extends AppCompatActivity {
     }
 }
 
-// call getUserCalender once when the user is created and store calendarID
-// feed in an arraylist of userIDs to the findCommon time + connector everytime create group is called
+// TODO list below
+// connect everyone's firebase with correct authentication
+//
+// switch log in and registration to include Google + Firebase Authentication (finish this before lunch)
+//
+// Look into maybe putting everything into one master calendar to find the free busy times? (try to do this tomorrow)
+//
+// Change the findUserCalendar and findFreeTime function by getting a list of emails from the group,
+// for each email, getting the credentials and calling findUserCalendar, adding that calendar as a
+// FreeBusyRequestItem in an array list of FreeBusyRequestItems, adding the FBI array into the FB request,
+// and calling the request (next week task should be populating Available Times)
