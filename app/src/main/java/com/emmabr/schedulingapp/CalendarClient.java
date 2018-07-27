@@ -48,6 +48,8 @@ import com.emmabr.schedulingapp.R;
 
 public class CalendarClient extends AppCompatActivity {
 
+    FreeBusyResponse fbresponse;
+
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     //private final String TOKENS_DIRECTORY_PATH = GoogleSignIn.getLastSignedInAccount(this).getIdToken();
     //ArrayList<com.google.api.services.calendar.model.Calendar> allCalendars;
@@ -62,13 +64,6 @@ public class CalendarClient extends AppCompatActivity {
         setContentView(R.layout.activity_calendar_client);
 
         mCalendarText = findViewById(R.id.tvTestCalendar);
-//        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this,
-//                Collections.singleton("https://www.googleapis.com/auth/calendar"));
-//        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-//        if (accountGoogle != null) {
-//            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
-//        }
-        //accountGoogle.getIdToken();
         try {
             AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
                 String finalCalDetails = null;
@@ -86,8 +81,10 @@ public class CalendarClient extends AppCompatActivity {
                         final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
                                 .setApplicationName("SchedulingApp").build();
                         com.google.api.services.calendar.model.Calendar newCalender = getUserCalendar(service);
-                        finalCalDetails = newCalender.getSummary();
+                        finalCalDetails = findFreeTime(newCalender, service);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return finalCalDetails;
@@ -101,10 +98,6 @@ public class CalendarClient extends AppCompatActivity {
                     }
                 }
 
-                ;
-//            com.google.api.services.calendar.model.Calendar newCalender = getUserCalendar(service);
-//            Log.d("Calendar Details", newCalender.getSummary());
-//            String temp = findFreeTime(newCalender, service);
 //            mCalendarText.setText(temp);
 //        } catch (IOException e) {
 //            e.printStackTrace();
@@ -115,23 +108,6 @@ public class CalendarClient extends AppCompatActivity {
             }
     }
 
-//    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws Exception {
-//        // getting access tokens
-//        //String code_challenger = "Sknd576.354KLN/3anfb67jnbjasd.sjFJLnfsjJksbnga";
-//
-//        // Load client secrets.
-//        InputStream in = Calendar.class.getResourceAsStream("client_secret.json");
-//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-//
-//        // Build flow and trigger user authorization request.
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, Collections.singletonList(CalendarScopes.CALENDAR))
-//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-//                .setAccessType("offline")
-//                .build();
-//        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-//    }
-
     public com.google.api.services.calendar.model.Calendar getUserCalendar(Calendar service) throws IOException {
             com.google.api.services.calendar.model.Calendar calendar =
                     service.calendars().get("primary").execute();
@@ -141,8 +117,8 @@ public class CalendarClient extends AppCompatActivity {
     public String findFreeTime(com.google.api.services.calendar.model.Calendar inputCalender, Calendar service) throws Exception {
         ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
         totalCalendars.add(new FreeBusyRequestItem().setId(inputCalender.getId()));
-        String testStartTime = "2018-04-05 8:00:00";
-        String testEndTime = "2015-04-05 20:00:00";
+        String testStartTime = "2018-04-10 8:00:00";
+        String testEndTime = "2018-04-10 20:00:00";
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = df.parse(testStartTime);
@@ -156,8 +132,7 @@ public class CalendarClient extends AppCompatActivity {
         req.setTimeMin(startTime);
         req.setTimeMax(endTime);
 
-        Calendar.Freebusy.Query fbresponse = service.freebusy().query(req);
-        //System.out.println(fbresponse.toString());
+        fbresponse = service.freebusy().query(req).execute();
         return fbresponse.toString();
 
 
