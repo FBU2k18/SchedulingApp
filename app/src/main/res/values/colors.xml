@@ -8,10 +8,11 @@
     <color name="lightText">#FFFFFF</color>
     <color name="darkText">#546e7a</color>
 
-    <color name="white">#FFFFFF</color>
-    <color name="light_green">#ffff89</color>
-    <color name="medium_green">#d4e157</color>
+    <color name="medium_green">#ffffa6</color>
     <color name="dark_green">#a0af22</color>
-    <color name="light_blue">#8eacbb</color>
-    <color name="dark_blue">#34515e</color>
+    <color name="light_blue">#b0bec5</color>
+    <color name="dark_blue">#546e7a</color>
+    <color name="light_bluegrey">#e5ffff</color>
+    <color name="dark_bluegrey">#81b9bf</color>
+
 </resources>

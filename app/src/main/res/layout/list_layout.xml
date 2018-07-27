@@ -2,24 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content">
+
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivGroupLogo"
+        android:id="@+id/user_single_image"
         android:layout_width="53dp"
-        android:layout_height="53dp"
+        android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/group_default_logo" />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/default_pic" />
 
     <TextView
-        android:id="@+id/tvGroupName"
+        android:id="@+id/user_single_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="false"
-        android:layout_alignTop="@+id/ivGroupLogo"
-        android:layout_marginLeft="40dp"
-        android:layout_toEndOf="@+id/ivGroupLogo"
-        android:text="Group" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/singledisplayname"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

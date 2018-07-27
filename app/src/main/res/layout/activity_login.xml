@@ -42,7 +42,7 @@
         android:layout_height="118dp"
         android:layout_above="@+id/tvEmail"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@android:color/background_dark" />
+        app:srcCompat="@drawable/whitelogo" />
 
     <TextView
         android:id="@+id/tvRegister"
