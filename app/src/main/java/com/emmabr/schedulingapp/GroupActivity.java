@@ -215,13 +215,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                     String messageID = childData.getKey().toString();
                     Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, createdAt);
                     message.setMessageID(messageID);
-                    if (pollTitle != null)
-                        if (!childData.hasChild("options")) {
-                            ArrayList<String> optionsText = getIntent().getStringArrayListExtra("optionsText");
-                            for (String option : optionsText)
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).child("options").child(option).child("text").setValue(option);
-                            getMessages();
-                        }
                     mMessages.add(message);
                     mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
                     rvMessageDisplay.scrollToPosition(mMessages.size() - 1);

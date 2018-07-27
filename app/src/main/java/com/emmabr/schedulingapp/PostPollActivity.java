@@ -98,13 +98,26 @@ public class PostPollActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if ((!etPollTitle.getText().toString().equals("")) && optionsText.size() > 1) {
+                        if ((!etPollTitle.getText().toString().isEmpty()) && optionsText.size() > 1) {
                             Date date = new Date();
                             Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + etPollTitle.getText().toString(), Long.toString(date.getTime()));
                             saveMessage(message, groupID);
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childData : dataSnapshot.getChildren())
+                                        if (childData.hasChild("pollTitle") && !childData.hasChild("options"))
+                                            for (String option : optionsText)
+                                                childData.child("options").child(option).child("text").getRef().setValue(option);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                             Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
                             intent.putExtra("groupID", groupID);
-                            intent.putExtra("optionsText", optionsText);
                             startActivity(intent);
                             finish();
                         }
