@@ -22,9 +22,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,8 +36,10 @@ import com.emmabr.schedulingapp.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    // Google Auth
+    private static final String TAG = "LogInActivity";
     private final static int RC_SIGN_IN = 34;
-    GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
 
     //android variables
     private Button btnNext;
@@ -67,6 +71,14 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("698336983204-hntnifsf7pgoaje95ce99d51ruh0j9b4.apps.googleusercontent.com")
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +93,9 @@ public class RegisterActivity extends AppCompatActivity {
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.show();
 
+                    // OAuth confirmation when user creates group (in order to access calendar)
                     registerUser(username, email, password);
+
                 }
             }
         });
@@ -95,12 +109,16 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // OAuth confirmation when user creates group (in order to access calendar)
-                            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                    .requestIdToken("698336983204-hntnifsf7pgoaje95ce99d51ruh0j9b4.apps.googleusercontent.com")
-                                    .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
-                                    .build();
-                            mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                            FirebaseUser user = mAuth.getInstance().getCurrentUser();
+                            String uid = user.getUid();
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+                            HashMap<String, String> usersMap = new HashMap<>();
+                            usersMap.put("nickName", username);
+                            usersMap.put("email", email);
+                            usersMap.put("image", "default");
+                            usersMap.put("calendar", "");
+                            usersMap.put("uid", uid);
+                            mDatabase.setValue(usersMap);
                             signIn();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -116,51 +134,36 @@ public class RegisterActivity extends AppCompatActivity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                // Sign in success, update UI with the signed-in user's information
-                Log.d("login", "createUserWithEmail:success");
-                // create a new User to put in the Firebase users schema
-
-                FirebaseUser user = mAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
-                mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
-                HashMap<String, String> usersMap = new HashMap<>();
-                usersMap.put("nickName", account.getDisplayName());
-                usersMap.put("email", account.getEmail());
-                usersMap.put("image", "default");
-                usersMap.put("calendar", "");
-                usersMap.put("id", uid);
-
-                mDatabase.setValue(usersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(RegisterActivity.this, "Account Created!.",
-                                    Toast.LENGTH_SHORT).show();
-                            finish();
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                    .addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
+                        @Override
+                        public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                            if (task.isSuccessful()) {
+                                try {
+                                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                                    AuthCredential userCred = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                                    mAuth.getCurrentUser().linkWithCredential(userCred);
+                                    updateUI(mAuth.getCurrentUser());
+                                } catch (ApiException e) {
+                                    Toast.makeText(RegisterActivity.this, "It doesn't work", Toast.LENGTH_SHORT).show();
+                                    //e.printStackTrace();
+                                }
+                            }
                         }
-                    }
-                });
-                // Google Sign In was successful
-                Toast.makeText(getApplicationContext(), "Sign in Worked!", Toast.LENGTH_SHORT).show();
-
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("GoogleLogIn", "Google sign in failed", e);
-            }
+                    });
         }
     }
 
+    private void updateUI(FirebaseUser userInfo) {
+        if (userInfo != null) {
+            Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(i);
+        }
+    }
 }

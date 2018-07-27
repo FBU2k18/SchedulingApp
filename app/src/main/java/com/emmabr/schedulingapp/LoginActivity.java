@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("698336983204-hntnifsf7pgoaje95ce99d51ruh0j9b4.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
                 .requestEmail()
                 .build();
@@ -104,10 +104,10 @@ public class LoginActivity extends AppCompatActivity {
 
 //                login a user
                 if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
-                    mLoginProgress.setTitle("Logging In");
-                    mLoginProgress.setMessage("Please wait while we check your credentials.");
-                    mLoginProgress.setCanceledOnTouchOutside(false);
-                    mLoginProgress.show();
+//                    mLoginProgress.setTitle("Logging In");
+//                    mLoginProgress.setMessage("Please wait while we check your credentials.");
+//                    mLoginProgress.setCanceledOnTouchOutside(false);
+//                    mLoginProgress.show();
                     signIn();
 //                    loginUser(email, password);
                 }
@@ -154,15 +154,31 @@ public class LoginActivity extends AppCompatActivity {
 //
 //    }
 
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
+                @Override
+                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                    try {
+                        if (task.isSuccessful()) {
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            updateTemp();
+                        }
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 //            try {
             // Google Sign In was successful, authenticate with Firebase
 //                GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -184,9 +200,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    private void updateTemp() {
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
     }
-}
 
+}
