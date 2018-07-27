@@ -2,30 +2,24 @@ package com.emmabr.schedulingapp.Models;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class Message {
     String userID;
     String nickName;
     String messageText;
     String imageURL;
     String pollTitle;
-    String optionOne;
-    String optionTwo;
-    String optionThree;
-    String optionFour;
     String createdAt;
     String messageID;
 
     //unused strings left null
-    public Message(String userID, String nickName, String messageText, String imageURL, String pollTitle, String optionOne, String optionTwo, String optionThree, String optionFour, String createdAt) {
+    public Message(String userID, String nickName, String messageText, String imageURL, String pollTitle, String createdAt) {
         this.userID = userID;
         this.nickName = nickName;
         this.messageText = messageText;
         this.imageURL = imageURL;
         this.pollTitle = pollTitle;
-        this.optionOne = optionOne;
-        this.optionTwo = optionTwo;
-        this.optionThree = optionThree;
-        this.optionFour = optionFour;
         this.createdAt = createdAt;
     }
 
@@ -51,22 +45,6 @@ public class Message {
 
     public String getPollTitle() {
         return pollTitle;
-    }
-
-    public String getOptionOne() {
-        return optionOne;
-    }
-
-    public String getOptionTwo() {
-        return optionTwo;
-    }
-
-    public String getOptionThree() {
-        return optionThree;
-    }
-
-    public String getOptionFour() {
-        return optionFour;
     }
 
     public String getMessageID() {

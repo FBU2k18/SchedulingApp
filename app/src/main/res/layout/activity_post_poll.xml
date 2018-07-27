@@ -11,45 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvOptionOne"
+        android:layout_alignStart="@+id/etPollTitle"
         android:layout_marginTop="20dp"
         android:text="Poll Title:" />
-
-    <TextView
-        android:id="@+id/tvOptionOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etOptionOne"
-        android:layout_below="@+id/etPollTitle"
-        android:layout_marginTop="40dp"
-        android:text="Option One:" />
-
-    <TextView
-        android:id="@+id/tvOptionTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etOptionTwo"
-        android:layout_below="@+id/etOptionOne"
-        android:layout_marginTop="15dp"
-        android:text="Option Two:" />
-
-    <TextView
-        android:id="@+id/tvOptionThree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etOptionThree"
-        android:layout_below="@+id/etOptionTwo"
-        android:layout_marginTop="15dp"
-        android:text="Option Three:" />
-
-    <TextView
-        android:id="@+id/tvOptionFour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etOptionFour"
-        android:layout_below="@+id/etOptionThree"
-        android:layout_marginTop="15dp"
-        android:text="Option Four:" />
 
     <EditText
         android:id="@+id/etPollTitle"
@@ -59,46 +23,6 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="Required"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etOptionOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOptionOne"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Required"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etOptionTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOptionTwo"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Required"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etOptionThree"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOptionThree"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Optional"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/etOptionFour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOptionFour"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Optional"
         android:inputType="textPersonName" />
 
     <Button
@@ -117,5 +41,77 @@
         android:layout_alignStart="@+id/tvTitlePoll"
         android:layout_alignTop="@+id/bPostPoll"
         android:text="Cancel" />
+
+    <TextView
+        android:id="@+id/tvPollOptions"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
+        android:id="@+id/etAddOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_marginBottom="137dp"
+        android:layout_toLeftOf="@+id/ivPlus"
+        android:ems="10"
+        android:hint="Add an Option"
+        android:inputType="textPersonName" />
+
+    <ImageView
+        android:id="@+id/ivPlus"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignEnd="@+id/tvPollOptions"
+        android:layout_alignTop="@+id/etAddOption"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/tvRemoveDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivMultiply"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_below="@+id/ivPlus"
+        android:layout_toLeftOf="@+id/etNumber"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:text="Remove an above option by its position in the list."
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/ivMultiply"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignEnd="@+id/tvPollOptions"
+        android:layout_below="@+id/ivPlus"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <EditText
+        android:id="@+id/etNumber"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_below="@+id/ivPlus"
+        android:layout_toLeftOf="@+id/ivMultiply"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="#"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvOptionsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvPollOptions"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_marginBottom="-110dp"
+        android:text="Options" />
 
 </RelativeLayout>

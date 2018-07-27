@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -37,7 +36,7 @@ import me.emmabr.schedulingapp.R;
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 
-public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
 
     private String groupID;
 
@@ -122,7 +121,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Date date = new Date();
-                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), etMessage.getText().toString(), null, null, null, null, null, null, Long.toString(date.getTime()));
+                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), etMessage.getText().toString(), null, null, Long.toString(date.getTime()));
                             saveMessage(message, groupID);
                             etMessage.setText("");
                         }
@@ -206,33 +205,23 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                     String messageText = null;
                     String imageURL = null;
                     String pollTitle = null;
-                    String optionOne = null;
-                    String optionTwo = null;
-                    String optionThree = null;
-                    String optionFour = null;
                     String createdAt = childData.child("createdAt").getValue().toString();
-                    try {
+                    if (childData.child("messageText").getValue() != null)
                         messageText = childData.child("messageText").getValue().toString();
-                    } catch (Exception noMessage) {
-                        try {
-                            imageURL = childData.child("imageURL").getValue().toString();
-                        } catch (Exception noPicture) {
-                            pollTitle = childData.child("pollTitle").getValue().toString();
-                            optionOne = childData.child("optionOne").getValue().toString();
-                            optionTwo = childData.child("optionTwo").getValue().toString();
-                            try {
-                                optionThree = childData.child("optionThree").getValue().toString();
-                                try {
-                                    optionFour = childData.child("optionFour").getValue().toString();
-                                } catch (Exception noFourthOption) {
-                                }
-                            } catch (Exception noThirdOption) {
-                            }
-                        }
-                    }
+                    else if (childData.child("imageURL").getValue() != null)
+                        imageURL = childData.child("imageURL").getValue().toString();
+                    else if (childData.child("pollTitle").getValue() != null)
+                        pollTitle = childData.child("pollTitle").getValue().toString();
                     String messageID = childData.getKey().toString();
-                    Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, optionOne, optionTwo, optionThree, optionFour, createdAt);
+                    Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, createdAt);
                     message.setMessageID(messageID);
+                    if (pollTitle != null)
+                        if (!childData.hasChild("options")) {
+                            ArrayList<String> optionsText = getIntent().getStringArrayListExtra("optionsText");
+                            for (String option : optionsText)
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).child("options").child(option).child("text").setValue(option);
+                            getMessages();
+                        }
                     mMessages.add(message);
                     mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
                     rvMessageDisplay.scrollToPosition(mMessages.size() - 1);

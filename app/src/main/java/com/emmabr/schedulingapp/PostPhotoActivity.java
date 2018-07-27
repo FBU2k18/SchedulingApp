@@ -62,7 +62,7 @@ public class PostPhotoActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (photoFile != null) {
                             Date date = new Date();
-                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, photoFile.getAbsolutePath(), null, null, null, null, null, Long.toString(date.getTime()));
+                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, photoFile.getAbsolutePath(), null, Long.toString(date.getTime()));
                             saveMessage(message, groupID);
                             Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
                             intent.putExtra("groupID", groupID);

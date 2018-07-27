@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        app:srcCompat="@android:drawable/checkbox_off_background" />
+
+    <TextView
+        android:id="@+id/tvOption"
+        android:layout_width="215dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivCheck"
+        android:layout_toEndOf="@+id/ivCheck"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="Option"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvOption"
+        android:layout_alignTop="@+id/ivCheck"
+        android:layout_marginRight="5dp"
+        android:layout_toEndOf="@+id/tvOption"
+        android:background="@drawable/box"
+        android:padding="5dp"
+        android:text="#"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+</RelativeLayout>
