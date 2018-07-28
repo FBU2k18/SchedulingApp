@@ -45,6 +45,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         final Message message = messages.get(position);
 
+        holder.tvTextMe.setText("");
+        holder.tvTextMe.setBackground(null);
+        holder.ivPicMe.setImageDrawable(null);
+        holder.tvFrom.setText("");
+        holder.tvTextYou.setText("");
+        holder.tvTextYou.setBackground(null);
+        holder.ivPicYou.setImageDrawable(null);
+
         if (message.getUserID().equals(FirebaseAuth.getInstance().getUid())) {
             //make look like from self
             if (message.getMessageText() != null) {
@@ -61,7 +69,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         context.startActivity(intent);
                     }
                 });
-            } else {
+            } else if (message.getPollTitle() != null){
                 holder.tvTextMe.setText(message.getPollTitle());
                 holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
                 holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
@@ -92,7 +100,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         context.startActivity(intent);
                     }
                 });
-            } else {
+            } else if (message.getPollTitle() != null){
                 holder.tvTextYou.setText(message.getPollTitle());
                 holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
                 holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));

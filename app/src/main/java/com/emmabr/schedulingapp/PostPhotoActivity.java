@@ -75,11 +75,23 @@ public class PostPhotoActivity extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot childData : dataSnapshot.getChildren())
+                                    for (final DataSnapshot childData : dataSnapshot.getChildren())
                                         if (childData.hasChild("imageURL") && childData.child("imageURL").getValue().toString().equals(photoFile.getAbsolutePath())) {
-                                            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("message_images").child(childData.getKey().toString() + ".jpg");
-                                            filepath.putFile(imageUri);
-                                            childData.child("imageURL").getRef().setValue(filepath.getDownloadUrl());
+                                            final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("message_images").child(childData.getKey().toString() + ".jpg");
+                                            filepath.putFile(FileProvider.getUriForFile(PostPhotoActivity.this, "com.codepath.fileprovider", photoFile)).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                                @Override
+                                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        return filepath.getDownloadUrl();
+                                                    }
+                                                    return null;
+                                                }
+                                            }).continueWithTask(new Continuation<Uri, Task<Void>>() {
+                                                @Override
+                                                public Task<Void> then(@NonNull Task<Uri> task) throws Exception {
+                                                    return childData.child("imageURL").getRef().setValue(task.getResult().toString());
+                                                }
+                                            });
                                         }
                                 }
 
@@ -182,7 +194,6 @@ public class PostPhotoActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_PHOTO_CODE) {
             if (resultCode == RESULT_OK) {
-                imageUri = data.getData();
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below

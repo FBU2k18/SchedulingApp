@@ -26,8 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="top|left"
+            android:background="@drawable/box"
             android:gravity="center_vertical"
-            android:text="Messages" />
+            android:text="Messages"
+            android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvMessageDisplay"
