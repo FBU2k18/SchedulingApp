@@ -86,6 +86,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         etMessage = findViewById(R.id.etMessage);
         flPeeker = findViewById(R.id.flPeeker);
         peekerBehavior = BottomSheetBehavior.from(flPeeker);
+        if (getIntent().getBooleanExtra("up", false))
+            peekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         ivAddOther = findViewById(R.id.ivAddOther);
         ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
         mAddOtherIsPlus = true;

@@ -103,6 +103,7 @@ public class PostPhotoActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
                             intent.putExtra("groupID", groupID);
+                            intent.putExtra("up", true);
                             startActivity(intent);
                             finish();
                         }
@@ -119,6 +120,7 @@ public class PostPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
                 intent.putExtra("groupID", groupID);
+                intent.putExtra("up", true);
                 startActivity(intent);
                 finish();
             }

@@ -126,6 +126,7 @@ public class ViewPollActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent intent = new Intent(this, GroupActivity.class);
                 intent.putExtra("groupID", groupID);
+                intent.putExtra("up", true);
                 startActivity(intent);
                 finish();
                 break;

@@ -119,6 +119,7 @@ public class PostPollActivity extends AppCompatActivity {
                                 });
                                 Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
                                 intent.putExtra("groupID", groupID);
+                                intent.putExtra("up", true);
                                 startActivity(intent);
                                 finish();
                             } else if (optionsText.size() == 0)
@@ -141,6 +142,7 @@ public class PostPollActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
                 intent.putExtra("groupID", groupID);
+                intent.putExtra("up", true);
                 startActivity(intent);
                 finish();
             }
