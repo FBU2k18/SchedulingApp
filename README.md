@@ -51,7 +51,7 @@ The following are **optional** features:
 * Set up Firebase
 * Chat
 * Populate available times
-* Ranking available times 
+* Ranking available times
 * Splash screen/log in with Gmail
 * Home page of groups
 * Group creation
@@ -68,4 +68,12 @@ The following are **optional** features:
 
 ## Walkthroughs
 
+* Week 1:
+
 <img src='https://github.com/FBU2k18/SchedulingApp/blob/master/ScheduleMeGIF-Week1.gif' title='Week 1 GIF' width='' alt='Week 1 GIF' />
+
+* Week 2:
+
+![Walkthrough](walkthrough_week2(1).gif)
+![Walkthrough](walkthrough_week2(2).gif)
+![Walkthrough](walkthrough_week2(2).gif)
