@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "262311386436-pmrn46crr3l1cdtbve6mfql2sonpmbsj.apps.googleusercontent.com",
+          "client_id": "262311386436-dmn8ku048ieukcjhqo3rc26j63pa9c04.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.emmabr.schedulingapp",
-            "certificate_hash": "2c4b4ecc7b5efeadd55e010a2afcd5887584588e"
+            "certificate_hash": "9e29dd69b0f424c560a9c145566e81a12a858de0"
           }
         },
         {
@@ -31,11 +31,19 @@
           }
         },
         {
-          "client_id": "262311386436-dmn8ku048ieukcjhqo3rc26j63pa9c04.apps.googleusercontent.com",
+          "client_id": "262311386436-3pqlfgiern41p5nsvfcrp2a0tgliiqio.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.emmabr.schedulingapp",
-            "certificate_hash": "9e29dd69b0f424c560a9c145566e81a12a858de0"
+            "certificate_hash": "2c4b4ecc7b5efeadd55e010a2afcd5887584588e"
+          }
+        },
+        {
+          "client_id": "262311386436-guibm8e3sm8uvd3c27ke18fa1t71eef0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emmabr.schedulingapp",
+            "certificate_hash": "5312239eb5022049a7b434ccfa9f52e27ab097bb"
           }
         },
         {

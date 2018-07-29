@@ -70,13 +70,14 @@ public class PopUpActivity extends Activity {
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: pass data up to firebase and set new name, finish the popup activity
                 String newName = etUsername.getText().toString();
 
                 mUserDatabase.child("nickName").setValue(newName);
 
                 Toast.makeText(PopUpActivity.this, "Username updated!", Toast.LENGTH_LONG).show();
                 finish();
+//                Intent intent = new Intent(PopUpActivity.this, UserProfile.class);
+//                startActivity(intent);
             }
         });
 

@@ -12,24 +12,30 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="88dp"
         android:src="@android:color/background_light" />
 
     <Button
         android:id="@+id/bPostImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="135dp"
+        android:layout_height="39dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="94dp"
-        android:text="Post Image" />
+        android:layout_marginBottom="140dp"
+        android:background="@drawable/button"
+        android:fontFamily="sans-serif"
+        android:text="Post Image"
+        android:textColor="@color/lightText" />
 
     <Button
         android:id="@+id/bCancelPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="135dp"
+        android:layout_height="39dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="37dp"
-        android:text="Cancel" />
+        android:layout_marginBottom="85dp"
+        android:background="@drawable/button"
+        android:fontFamily="sans-serif"
+        android:text="Cancel"
+        android:textColor="@color/lightText" />
 </RelativeLayout>

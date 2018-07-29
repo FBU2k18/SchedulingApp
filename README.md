@@ -70,10 +70,10 @@ The following are **optional** features:
 
 * Week 1:
 
-<img src='https://github.com/FBU2k18/SchedulingApp/blob/master/ScheduleMeGIF-Week1.gif' title='Week 1 GIF' width='' alt='Week 1 GIF' />
+![Walkthrough](ScheduleMeGIF-Week1.gif)
 
 * Week 2:
 
 ![Walkthrough](walkthrough_week2(1).gif)
 ![Walkthrough](walkthrough_week2(2).gif)
-![Walkthrough](walkthrough_week2(2).gif)
+![Walkthrough](walkthrough_week2(3).gif)
