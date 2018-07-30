@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
+    tools:context="com.emmabr.schedulingapp.SplashActivity"
     android:background="@color/colorPrimaryDark">
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="60dp"
-        android:layout_height="62dp"
+        android:layout_width="114dp"
+        android:layout_height="95dp"
         android:layout_centerInParent="true"
-        android:src="@android:color/holo_green_light"
+        android:src="@drawable/whitelogo"
         tools:layout_editor_absoluteX="162dp"
         tools:layout_editor_absoluteY="147dp" />
 </RelativeLayout>

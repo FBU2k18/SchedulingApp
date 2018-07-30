@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.emmabr.schedulingapp.PostPollActivity">
+
+    <EditText
+        android:id="@+id/etPollTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:ems="10"
+        android:hint="Enter poll title"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/bPostPoll"
+        android:layout_width="135dp"
+        android:layout_height="39dp"
+        android:layout_alignEnd="@+id/tvPollOptions"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="19dp"
+        android:background="@drawable/button"
+        android:fontFamily="sans-serif"
+        android:text="Post Poll"
+        android:textColor="@color/lightText" />
+
+    <Button
+        android:id="@+id/bCancelPoll"
+        android:layout_width="135dp"
+        android:layout_height="39dp"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_alignTop="@+id/bPostPoll"
+        android:background="@drawable/button"
+        android:fontFamily="sans-serif"
+        android:text="Cancel"
+        android:textColor="@color/lightText" />
+
+    <TextView
+        android:id="@+id/tvPollOptions"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:padding="5dp"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
+        android:id="@+id/etAddOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_marginBottom="137dp"
+        android:layout_toLeftOf="@+id/ivPlus"
+        android:ems="10"
+        android:hint="Add an Option"
+        android:inputType="textPersonName" />
+
+    <ImageView
+        android:id="@+id/ivPlus"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignEnd="@+id/tvPollOptions"
+        android:layout_alignTop="@+id/etAddOption"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/tvRemoveDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivMultiply"
+        android:layout_alignStart="@+id/tvPollOptions"
+        android:layout_below="@+id/ivPlus"
+        android:layout_toLeftOf="@+id/etNumber"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:text="Remove an above option by its position in the list."
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/ivMultiply"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_alignEnd="@+id/tvPollOptions"
+        android:layout_below="@+id/ivPlus"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <EditText
+        android:id="@+id/etNumber"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_below="@+id/ivPlus"
+        android:layout_toLeftOf="@+id/ivMultiply"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="#"
+        android:inputType="textPersonName" />
+
+</RelativeLayout>

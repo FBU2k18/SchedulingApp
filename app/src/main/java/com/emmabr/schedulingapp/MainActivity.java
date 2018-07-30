@@ -73,14 +73,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.miCreateGroup:
-                //replace with intent
-                Log.i("Menu","Create GroupData");
                 Intent intent = new Intent(MainActivity.this, GroupCreationActivity.class);
                 startActivity(intent);
                 break;
             case R.id.miEditProfile:
-                //replace with intent
-                Log.i("Menu", "Edit Profile");
+                Intent intent1 = new Intent(MainActivity.this, UserProfile.class);
+                startActivity(intent1);
                 break;
             case R.id.miLogOut:
                 //FirebaseAuth.getInstance().signOut();
@@ -104,9 +102,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                         if (childData.child("groupName").getValue() != null && childData.child("imageURL").getValue() != null) {
+                            String groupID = childData.getKey().toString();
                             String name = childData.child("groupName").getValue().toString();
                             String imgURL = childData.child("imageURL").getValue().toString();
-                            GroupData tempGroup = new GroupData(name, imgURL);
+                            GroupData tempGroup = new GroupData(name, imgURL, groupID);
                             groups.add(tempGroup);
                         }
                     }

@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -50,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
     //android variables
-    private Button btnNext;
+    private ImageView ivNext;
     private EditText etUsername;
     private TextView etEmail;
     private TextView etPassword;
@@ -74,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        btnNext = findViewById(R.id.btnNext);
+        ivNext = findViewById(R.id.ivNext);
         etUsername = findViewById(R.id.etUserName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -86,8 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
 
-
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // send data to firebase
@@ -106,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }
             }
-        });
 
+        });
     }
 
     public void registerUser(final String username, final String email, final String password) {

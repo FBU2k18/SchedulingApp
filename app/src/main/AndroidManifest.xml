@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -19,6 +22,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/API_KEY" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity android:name="com.emmabr.schedulingapp.LoginActivity" />
         <activity android:name="com.emmabr.schedulingapp.MainActivity" />
@@ -33,6 +39,28 @@
         <activity android:name="com.emmabr.schedulingapp.RegisterActivity" />
         <activity android:name="com.emmabr.schedulingapp.GroupActivity" />
         <activity android:name="com.emmabr.schedulingapp.CalendarClient"></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.codepath.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
+
+        <activity android:name="com.emmabr.schedulingapp.PostPhotoActivity" />
+        <activity android:name="com.emmabr.schedulingapp.ViewPhotoActivity" />
+        <activity android:name="com.emmabr.schedulingapp.PostPollActivity" />
+        <activity android:name="com.emmabr.schedulingapp.ViewPollActivity" />
+        <activity android:name="com.emmabr.schedulingapp.UserProfile" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name="com.emmabr.schedulingapp.AddMemberActivity"></activity>
+        <activity android:name="com.emmabr.schedulingapp.PopUpActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
     </application>
 
 </manifest>

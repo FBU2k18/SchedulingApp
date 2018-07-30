@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.emmabr.schedulingapp.GroupActivity">
+    tools:context="com.emmabr.schedulingapp.GroupActivity"
+    android:background="#FFFFFF">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimes"
@@ -25,8 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="top|left"
+            android:background="@drawable/box"
             android:gravity="center_vertical"
-            android:text="Messages" />
+            android:text="Messages"
+            android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvMessageDisplay"
@@ -36,10 +39,18 @@
 
         <EditText
             android:id="@+id/etMessage"
-            android:layout_width="298dp"
+            android:layout_width="243dp"
             android:layout_height="55dp"
             android:layout_gravity="bottom|left"
+            android:layout_marginLeft="55dp"
             android:hint="Message" />
+
+        <ImageView
+            android:id="@+id/ivAddOther"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|left"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
         <Button
             android:id="@+id/bSend"
@@ -48,6 +59,42 @@
             android:layout_gravity="bottom|right"
             android:text="SEND" />
 
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="55dp">
+
+            <FrameLayout
+                android:id="@+id/flOtherTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_gravity="bottom|left"
+                app:behavior_hideable="true"
+                app:behavior_peekHeight="150dp"
+                app:layout_behavior="@string/bottom_sheet_behavior">
+
+                <Button
+                    android:id="@+id/bAddPoll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="top"
+                    android:text="Add a Poll" />
+
+                <Button
+                    android:id="@+id/bTakePic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Take a Picture" />
+
+                <Button
+                    android:id="@+id/bAddPic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:text="Add from Photos" />
+            </FrameLayout>
+        </android.support.design.widget.CoordinatorLayout>
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
