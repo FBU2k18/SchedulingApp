@@ -25,6 +25,8 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -51,7 +53,6 @@ public class CalendarClient extends AppCompatActivity {
     FreeBusyResponse fbresponse;
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    //private final String TOKENS_DIRECTORY_PATH = GoogleSignIn.getLastSignedInAccount(this).getIdToken();
     //ArrayList<com.google.api.services.calendar.model.Calendar> allCalendars;
 
     // calendar Test
@@ -81,7 +82,7 @@ public class CalendarClient extends AppCompatActivity {
                         final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
                                 .setApplicationName("SchedulingApp").build();
                         com.google.api.services.calendar.model.Calendar newCalender = getUserCalendar(service);
-                        finalCalDetails = findFreeTime(newCalender, service);
+                        //finalCalDetails = findFreeTime(newCalender, service);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -91,10 +92,10 @@ public class CalendarClient extends AppCompatActivity {
                 }
 
                 @Override
-                protected void onPostExecute(String s) {
-                    super.onPostExecute(s);
-                    if (s != null) {
-                        mCalendarText.setText(s);
+                protected void onPostExecute(String finalCalDetails) {
+                    super.onPostExecute(finalCalDetails);
+                    if (finalCalDetails != null) {
+                        mCalendarText.setText(finalCalDetails);
                     }
                 }
 
@@ -114,9 +115,11 @@ public class CalendarClient extends AppCompatActivity {
             return calendar;
     }
 
-    public String findFreeTime(com.google.api.services.calendar.model.Calendar inputCalender, Calendar service) throws Exception {
+    public String findFreeTime(ArrayList<String> groupUsersID, Calendar service) throws Exception {
         ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
-        totalCalendars.add(new FreeBusyRequestItem().setId(inputCalender.getId()));
+        for (String uniqueID: groupUsersID) {
+            totalCalendars.add(new FreeBusyRequestItem().setId(uniqueID));
+        }
         String testStartTime = "2018-04-10 8:00:00";
         String testEndTime = "2018-04-10 20:00:00";
 
@@ -134,10 +137,8 @@ public class CalendarClient extends AppCompatActivity {
 
         fbresponse = service.freebusy().query(req).execute();
         return fbresponse.toString();
-
-
-
     }
+
 }
 
 // TODO list below

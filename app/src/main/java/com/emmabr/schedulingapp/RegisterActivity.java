@@ -1,5 +1,6 @@
 package com.emmabr.schedulingapp;
 
+import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,12 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.calendar.Calendar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +37,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 
 import com.emmabr.schedulingapp.R;
@@ -37,7 +46,6 @@ import com.emmabr.schedulingapp.R;
 public class RegisterActivity extends AppCompatActivity {
 
     // Google Auth
-    private static final String TAG = "LogInActivity";
     private final static int RC_SIGN_IN = 34;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -116,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
                             usersMap.put("nickName", username);
                             usersMap.put("email", email);
                             usersMap.put("image", "default");
-                            usersMap.put("calendar", "");
+                            usersMap.put("calendar", email);
                             usersMap.put("uid", uid);
                             mDatabase.setValue(usersMap);
                             signIn();
@@ -148,11 +156,16 @@ public class RegisterActivity extends AppCompatActivity {
                                 try {
                                     GoogleSignInAccount account = task.getResult(ApiException.class);
                                     AuthCredential userCred = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                                    mAuth.getCurrentUser().linkWithCredential(userCred);
-                                    updateUI(mAuth.getCurrentUser());
+                                    mAuth.getCurrentUser().linkWithCredential(userCred).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                updateUI(mAuth.getCurrentUser());
+                                            }
+                                        }
+                                    });
                                 } catch (ApiException e) {
                                     Toast.makeText(RegisterActivity.this, "It doesn't work", Toast.LENGTH_SHORT).show();
-                                    //e.printStackTrace();
                                 }
                             }
                         }
