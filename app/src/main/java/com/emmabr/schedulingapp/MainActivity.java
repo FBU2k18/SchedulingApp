@@ -1,5 +1,7 @@
 package com.emmabr.schedulingapp;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     MainActivityAdapter adapter;
     RecyclerView rvGroups;
     SwipeRefreshLayout srlMain;
+    SearchView svSearch;
 
     private String mCurrentUser;
     private DatabaseReference currUserGroupsData;
@@ -61,6 +65,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        svSearch = (SearchView) menu.findItem(R.id.svSearch).getActionView();
+        svSearch.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        svSearch.setMaxWidth(Integer.MAX_VALUE);
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -83,6 +104,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // close search view on back button pressed
+        if (!svSearch.isIconified()) {
+            svSearch.setIconified(true);
+            return;
+        }
+        super.onBackPressed();
     }
 
     public void getGroups() {
@@ -114,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MainActivity", "Assigning groups failed");
                 }
             });
-
         }
     }
 }

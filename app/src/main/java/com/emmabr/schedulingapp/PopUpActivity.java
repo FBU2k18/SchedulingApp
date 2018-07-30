@@ -70,7 +70,7 @@ public class PopUpActivity extends Activity {
         btnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newName = etUsername.getText().toString();
+                final String newName = etUsername.getText().toString();
 
                 mUserDatabase.child("nickName").setValue(newName);
 
