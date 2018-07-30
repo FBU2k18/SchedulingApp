@@ -100,6 +100,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                 saveGroup(groupData, alUsers);
 
                 Intent intent = new Intent(GroupCreationActivity.this, MainActivity.class);
+                intent.putExtra("user_list", alUsers);
                 startActivity(intent);
                 finish();
 

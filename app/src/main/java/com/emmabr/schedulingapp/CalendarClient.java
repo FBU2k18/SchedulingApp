@@ -65,79 +65,79 @@ public class CalendarClient extends AppCompatActivity {
         setContentView(R.layout.activity_calendar_client);
 
         mCalendarText = findViewById(R.id.tvTestCalendar);
-        try {
-            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-                String finalCalDetails = null;
-
-                @Override
-                protected String doInBackground(Void... voids) {
-                    try {
-                        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
-                                Collections.singleton("https://www.googleapis.com/auth/calendar"));
-                        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                        if (accountGoogle != null) {
-                            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
-                        }
-                        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-                        final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
-                                .setApplicationName("SchedulingApp").build();
-                        com.google.api.services.calendar.model.Calendar newCalender = getUserCalendar(service);
-                        //finalCalDetails = findFreeTime(newCalender, service);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return finalCalDetails;
-                }
-
-                @Override
-                protected void onPostExecute(String finalCalDetails) {
-                    super.onPostExecute(finalCalDetails);
-                    if (finalCalDetails != null) {
-                        mCalendarText.setText(finalCalDetails);
-                    }
-                }
-
-//            mCalendarText.setText(temp);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-            };
-            task.execute();
-        } catch(Exception e){
-                e.printStackTrace();
-            }
+//        try {
+//            AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+//                String finalCalDetails = null;
+//
+//                @Override
+//                protected String doInBackground(Void... voids) {
+//                    try {
+//                        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+//                                Collections.singleton("https://www.googleapis.com/auth/calendar"));
+//                        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+//                        if (accountGoogle != null) {
+//                            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
+//                        }
+//                        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+//                        final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
+//                                .setApplicationName("SchedulingApp").build();
+//                        com.google.api.services.calendar.model.Calendar newCalender = getUserCalendar(service);
+//                        //finalCalDetails = findFreeTime(newCalender, service);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return finalCalDetails;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(String finalCalDetails) {
+//                    super.onPostExecute(finalCalDetails);
+//                    if (finalCalDetails != null) {
+//                        mCalendarText.setText(finalCalDetails);
+//                    }
+//                }
+//
+////            mCalendarText.setText(temp);
+////        } catch (IOException e) {
+////            e.printStackTrace();
+//            };
+//            task.execute();
+//        } catch(Exception e){
+//                e.printStackTrace();
+//            }
     }
 
-    public com.google.api.services.calendar.model.Calendar getUserCalendar(Calendar service) throws IOException {
-            com.google.api.services.calendar.model.Calendar calendar =
-                    service.calendars().get("primary").execute();
-            return calendar;
-    }
-
-    public String findFreeTime(ArrayList<String> groupUsersID, Calendar service) throws Exception {
-        ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
-        for (String uniqueID: groupUsersID) {
-            totalCalendars.add(new FreeBusyRequestItem().setId(uniqueID));
-        }
-        String testStartTime = "2018-04-10 8:00:00";
-        String testEndTime = "2018-04-10 20:00:00";
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d = df.parse(testStartTime);
-        DateTime startTime = new DateTime(d, TimeZone.getDefault());
-
-        Date de = df.parse(testEndTime);
-        DateTime endTime = new DateTime(de, TimeZone.getDefault());
-
-        FreeBusyRequest req = new FreeBusyRequest();
-        req.setItems(totalCalendars);
-        req.setTimeMin(startTime);
-        req.setTimeMax(endTime);
-
-        fbresponse = service.freebusy().query(req).execute();
-        return fbresponse.toString();
-    }
+//    public com.google.api.services.calendar.model.Calendar getUserCalendar(Calendar service) throws IOException {
+//            com.google.api.services.calendar.model.Calendar calendar =
+//                    service.calendars().get("primary").execute();
+//            return calendar;
+//    }
+//
+//    public String findFreeTime(ArrayList<String> groupUsersID, Calendar service) throws Exception {
+//        ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
+//        for (String uniqueID: groupUsersID) {
+//            totalCalendars.add(new FreeBusyRequestItem().setId(uniqueID));
+//        }
+//        String testStartTime = "2018-04-10 8:00:00";
+//        String testEndTime = "2018-04-10 20:00:00";
+//
+//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date d = df.parse(testStartTime);
+//        DateTime startTime = new DateTime(d, TimeZone.getDefault());
+//
+//        Date de = df.parse(testEndTime);
+//        DateTime endTime = new DateTime(de, TimeZone.getDefault());
+//
+//        FreeBusyRequest req = new FreeBusyRequest();
+//        req.setItems(totalCalendars);
+//        req.setTimeMin(startTime);
+//        req.setTimeMax(endTime);
+//
+//        fbresponse = service.freebusy().query(req).execute();
+//        return fbresponse.toString();
+//    }
 
 }
 
