@@ -36,7 +36,7 @@ public class PopUpActivity extends Activity {
         setContentView(R.layout.activity_pop_up);
 
         //variables
-        etUsername = findViewById(R.id.etNewUsername);
+        etUsername = findViewById(R.id.etPollName);
         btnSet = findViewById(R.id.btnSet);
 
         //firebase variables
