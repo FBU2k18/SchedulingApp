@@ -30,8 +30,6 @@ public class ViewPollActivity extends AppCompatActivity {
     TextView tvTitlePoll;
     RecyclerView rvOptions;
 
-    FirebaseDatabase mDatabaseRef;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +58,20 @@ public class ViewPollActivity extends AppCompatActivity {
         rvOptions.setLayoutManager(new LinearLayoutManager(this));
         rvOptions.setAdapter(mPollAdapter);
 
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                    // TODO: set poll title
+                    if (childData.getKey().toString().equals("pollTitle")) {
+                        tvTitlePoll.setText(childData.getValue().toString());
+                    }
+                }
+            }
 
-        //TODO: SET POLL TITLE
-        //mDatabaseRef.getReference().child("groups").child("chatMessages").child("pollTitle").setValue(tvTitlePoll.getText().toString());
-
-        //tvTitlePoll.setText();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
 
         getOptions();
 
