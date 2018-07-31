@@ -76,8 +76,6 @@ public class PopUpActivity extends Activity {
 
                 Toast.makeText(PopUpActivity.this, "Username updated!", Toast.LENGTH_LONG).show();
                 finish();
-//                Intent intent = new Intent(PopUpActivity.this, UserProfile.class);
-//                startActivity(intent);
             }
         });
 
