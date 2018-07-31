@@ -7,8 +7,21 @@
     tools:context="com.emmabr.schedulingapp.AddMemberActivity"
     android:background="#FFFFFF">
 
+    <ImageView
+        android:id="@+id/CHANGME"
+        android:layout_width="209dp"
+        android:layout_height="71dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/create_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:id="@+id/etSearchUser"
+        android:id="@+id/etSearchMember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -20,12 +33,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/CHANGME" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvUsers"
+        android:id="@+id/rvMembers"
         android:layout_width="290dp"
-        android:layout_height="350dp"
+        android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -34,6 +47,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearchUser"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchMember"
         app:layout_constraintVertical_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

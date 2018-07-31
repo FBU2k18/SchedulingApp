@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.PopUpActivity"
+    tools:context="com.emmabr.schedulingapp.GroupPopUp"
     android:background="#FFFFFF">
 
     <EditText
-        android:id="@+id/etNewUsername"
+        android:id="@+id/etNewGroupName"
         android:layout_width="203dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="new username"
+        android:hint="new group name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivEnterUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/ivCHANGEME" />
 
     <Button
-        android:id="@+id/btnSet"
+        android:id="@+id/bSetGroup"
         android:layout_width="76dp"
         android:layout_height="29dp"
         android:layout_marginBottom="8dp"
@@ -36,11 +36,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.746"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNewUsername"
+        app:layout_constraintTop_toBottomOf="@+id/etNewGroupName"
         app:layout_constraintVertical_bias="0.019" />
 
     <ImageView
-        android:id="@+id/ivEnterUserName"
+        android:id="@+id/ivCHANGEME"
         android:layout_width="235dp"
         android:layout_height="46dp"
         android:layout_marginEnd="8dp"

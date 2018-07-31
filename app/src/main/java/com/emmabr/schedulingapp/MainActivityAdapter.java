@@ -44,7 +44,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
         GroupData currGroup = filteredGroups.get(position);
         holder.tvGroupName.setText(currGroup.getGroupName());
-        if (currGroup.getImageURL() != null && !currGroup.getImageURL().equals(""))
+        if (!currGroup.getImageURL().isEmpty())
             Glide.with(context)
                     .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))

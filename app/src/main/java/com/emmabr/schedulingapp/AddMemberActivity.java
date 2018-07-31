@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.emmabr.schedulingapp.Models.GroupData;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -43,23 +41,16 @@ import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
 
-import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
-
 public class AddMemberActivity extends AppCompatActivity {
 
-    String groupID;
+    private String mGroupID;
     ArrayList<String> groupMembers;
 
     private final static int RC_SIGN_IN = 34;
     GoogleSignInClient mGoogleSignInClient;
 
-
-    //firebase variables
-    private DatabaseReference userDatabase;
-    private FirebaseAuth mAuth;
-
-    private RecyclerView rvUsers;
-    private EditText etSearchUser;
+    private RecyclerView rvMembers;
+    private EditText etSearchMember;
 
 
     ArrayList<String> alUsers = new ArrayList<>();
@@ -69,9 +60,9 @@ public class AddMemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_member);
 
-        groupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("groupID");
         groupMembers = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot childData : dataSnapshot.getChildren())
@@ -84,20 +75,17 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
-        userDatabase = FirebaseDatabase.getInstance().getReference("users");
-        mAuth = FirebaseAuth.getInstance();
+        rvMembers = findViewById(R.id.rvMembers);
+        rvMembers.setLayoutManager(new LinearLayoutManager(this));
 
-        rvUsers = findViewById(R.id.rvUsers);
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
-
-        etSearchUser = findViewById(R.id.etSearchUser);
+        etSearchMember = findViewById(R.id.etSearchMember);
 
         //TODO: on edit text changed
-        etSearchUser.addTextChangedListener(new TextWatcher() {
+        etSearchMember.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // do what you want with your edit text here
-                String searchText = etSearchUser.getText().toString();
+                String searchText = etSearchMember.getText().toString();
                 firebaseUserSearch(searchText);
             }
 
@@ -126,13 +114,13 @@ public class AddMemberActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 for (String id : alUsers)
-                    FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(id).setValue(id);
-                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(id).setValue(id);
+                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (String id : alUsers) {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(groupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(groupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
+                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
+                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
                         }
                     }
 
@@ -142,7 +130,7 @@ public class AddMemberActivity extends AppCompatActivity {
                     }
                 });
                 Intent intentHome = new Intent(this, GroupActivity.class);
-                intentHome.putExtra("groupID", groupID);
+                intentHome.putExtra("groupID", mGroupID);
                 startActivity(intentHome);
                 finish();
                 break;
@@ -152,7 +140,7 @@ public class AddMemberActivity extends AppCompatActivity {
 
     private void firebaseUserSearch(String searchText) {
 
-        Query query = userDatabase.orderByChild("email").startAt(searchText).endAt(searchText + "\uf8ff");
+        Query query = FirebaseDatabase.getInstance().getReference("users").orderByChild("email").startAt(searchText).endAt(searchText + "\uf8ff");
 
         FirebaseRecyclerOptions<User> options =
                 new FirebaseRecyclerOptions.Builder<User>()
@@ -191,7 +179,7 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         };
 
-        rvUsers.setAdapter(firebaseRecyclerAdapter);
+        rvMembers.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
     }
 
@@ -207,8 +195,8 @@ public class AddMemberActivity extends AppCompatActivity {
         }
 
         public void setDetails(Context ctx, String userName, String userImage) {
-            TextView user_name = (TextView) mView.findViewById(R.id.user_single_name);
-            ImageView user_image = (ImageView) mView.findViewById(R.id.user_single_image);
+            TextView user_name = mView.findViewById(R.id.user_single_name);
+            ImageView user_image = mView.findViewById(R.id.user_single_image);
 
             user_name.setText(userName);
 

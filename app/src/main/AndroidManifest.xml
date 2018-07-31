@@ -25,14 +25,14 @@
 
         <activity android:name="com.emmabr.schedulingapp.LoginActivity" />
         <activity android:name="com.emmabr.schedulingapp.MainActivity">
-        <meta-data
-            android:name="android.app.searchable"
-            android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
 
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-            </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity android:name="com.emmabr.schedulingapp.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,8 +62,13 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name="com.emmabr.schedulingapp.AddMemberActivity"></activity>
-        <activity android:name="com.emmabr.schedulingapp.PopUpActivity"
+        <activity android:name="com.emmabr.schedulingapp.AddMemberActivity" />
+        <activity
+            android:name="com.emmabr.schedulingapp.PopUpActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name="com.emmabr.schedulingapp.GroupProfile" />
+        <activity
+            android:name="com.emmabr.schedulingapp.GroupPopUp"
             android:theme="@style/AppTheme.CustomTheme" />
     </application>
 
