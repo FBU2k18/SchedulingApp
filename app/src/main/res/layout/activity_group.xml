@@ -28,7 +28,7 @@
             android:layout_gravity="top|left"
             android:background="@drawable/box"
             android:gravity="center_vertical"
-            android:text="Messages"
+            android:text="@string/messages_title"
             android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.RecyclerView
@@ -43,7 +43,7 @@
             android:layout_height="55dp"
             android:layout_gravity="bottom|left"
             android:layout_marginLeft="55dp"
-            android:hint="Message" />
+            android:hint="@string/message_hint" />
 
         <ImageView
             android:id="@+id/ivAddOther"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_gravity="bottom|right"
-            android:text="SEND" />
+            android:text="@string/send_button" />
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -67,10 +67,10 @@
             <FrameLayout
                 android:id="@+id/flOtherTypes"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_gravity="bottom|left"
                 app:behavior_hideable="true"
-                app:behavior_peekHeight="150dp"
+                app:behavior_peekHeight="100dp"
                 app:layout_behavior="@string/bottom_sheet_behavior">
 
                 <Button
@@ -78,21 +78,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="top"
-                    android:text="Add a Poll" />
-
-                <Button
-                    android:id="@+id/bTakePic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="Take a Picture" />
+                    android:text="@string/add_poll" />
 
                 <Button
                     android:id="@+id/bAddPic"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:text="Add from Photos" />
+                    android:text="@string/add_pic" />
             </FrameLayout>
         </android.support.design.widget.CoordinatorLayout>
     </FrameLayout>

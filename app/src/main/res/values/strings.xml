@@ -13,6 +13,11 @@
     <string name="btn_next">Next</string>
     <string name="API_KEY">AIzaSyANQa_zB5i6nWLVk8M2wfooIvV7FeBixNg</string>
     <string name="set_button">set</string>
+    <string name="messages_title">Messages</string>
+    <string name="message_hint">Message</string>
+    <string name="send_button">Send</string>
+    <string name="add_poll">Add a Poll</string>
+    <string name="add_pic">Add a Photo</string>
 
     <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>

@@ -59,7 +59,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     private FrameLayout flOtherTypes;
     private BottomSheetBehavior otherTypesBehavior;
     private Button bAddPoll;
-    private Button bTakePic;
     private Button bAddPic;
 
     @Override
@@ -159,22 +158,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 startActivity(intent);
             }
         });
-        bTakePic = findViewById(R.id.bTakePic);
-        bTakePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GroupActivity.this, PostPhotoActivity.class);
-                intent.putExtra("Taking a new picture?", true);
-                intent.putExtra("groupID", groupID);
-                startActivity(intent);
-            }
-        });
+
         bAddPic = findViewById(R.id.bAddPic);
         bAddPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupActivity.this, PostPhotoActivity.class);
-                intent.putExtra("Taking a new picture?", false);
+//                intent.putExtra("Taking a new picture?", false);
                 intent.putExtra("groupID", groupID);
                 startActivity(intent);
             }
