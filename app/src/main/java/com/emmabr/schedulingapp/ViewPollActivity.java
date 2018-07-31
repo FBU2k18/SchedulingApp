@@ -1,18 +1,15 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,10 +30,24 @@ public class ViewPollActivity extends AppCompatActivity {
     TextView tvTitlePoll;
     RecyclerView rvOptions;
 
+    FirebaseDatabase mDatabaseRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_poll);
+
+        getSupportActionBar().hide();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int)(width * .70), (int)(height * .55));
+
 
         messageID = getIntent().getStringExtra("messageID");
         groupID = getIntent().getStringExtra("groupID");
@@ -48,6 +59,12 @@ public class ViewPollActivity extends AppCompatActivity {
         rvOptions = findViewById(R.id.rvOptions);
         rvOptions.setLayoutManager(new LinearLayoutManager(this));
         rvOptions.setAdapter(mPollAdapter);
+
+
+        //TODO: SET POLL TITLE
+        //mDatabaseRef.getReference().child("groups").child("chatMessages").child("pollTitle").setValue(tvTitlePoll.getText().toString());
+
+        //tvTitlePoll.setText();
 
         getOptions();
 
