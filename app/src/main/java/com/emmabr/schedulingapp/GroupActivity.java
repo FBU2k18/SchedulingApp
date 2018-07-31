@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,6 +85,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
     // getting users ids for email
     ArrayList<String> calendarUserIds;
+    ArrayList<String> calendarUserTokens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,21 +206,26 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         });
 
         // get calendar data
+        calendarUserIds = new ArrayList<>();
+        calendarUserTokens = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients")
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childData : dataSnapshot.getChildren()) {
-                    String tempHolder = childData.getKey();
-                    String email = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("email").getKey();
-                    calendarUserIds.add(email);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("GroupActivity", "Something went wrong");
-            }
-        });
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                            String tempHolder = childData.getKey();
+                            String token = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("token").getKey();
+                            calendarUserTokens.add(token);
+                            String email = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("email").getKey();
+                            calendarUserIds.add(email);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.d("GroupActivity", "Something went wrong");
+                    }
+                });
 
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
                 Collections.singleton("https://www.googleapis.com/auth/calendar"));
@@ -331,7 +338,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
     public String findFreeTime(ArrayList<String> groupUsersID, Calendar service) throws Exception {
         ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
-        for (String uniqueID: groupUsersID) {
+        for (String uniqueID : groupUsersID) {
             totalCalendars.add(new FreeBusyRequestItem().setId(uniqueID));
         }
         String testStartTime = "2018-04-10 8:00:00";
@@ -351,5 +358,17 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         FreeBusyResponse fbresponse = service.freebusy().query(req).execute();
         return fbresponse.toString();
+    }
+
+    public com.google.api.services.calendar.model.Calendar createMasterCal(ArrayList<com.google.api.services.calendar.model.Calendar> userCalendars,
+                                                                           Calendar service) throws IOException {
+        com.google.api.services.calendar.model.Calendar masterCalendar = new com.google.api.services.calendar.model.Calendar();
+        masterCalendar.setSummary("Master Calendar");
+
+        for (com.google.api.services.calendar.model.Calendar uniqCal : userCalendars) {
+            masterCalendar = service.calendars().insert(uniqCal).execute();
+        }
+
+            return masterCalendar;
     }
 }

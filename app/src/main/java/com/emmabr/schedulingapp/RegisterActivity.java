@@ -1,8 +1,10 @@
 package com.emmabr.schedulingapp;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -124,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
                             usersMap.put("nickName", username);
                             usersMap.put("email", email);
                             usersMap.put("image", "default");
-                            usersMap.put("calendar", email);
+                            //usersMap.put("calendar", email);
                             usersMap.put("uid", uid);
                             mDatabase.setValue(usersMap);
                             signIn();
@@ -148,28 +150,51 @@ public class RegisterActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                    .addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
                         @Override
                         public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
                             if (task.isSuccessful()) {
                                 try {
                                     GoogleSignInAccount account = task.getResult(ApiException.class);
-                                    AuthCredential userCred = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                                    mAuth.getCurrentUser().linkWithCredential(userCred).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("token").setValue(account.getIdToken());
+                                    AsyncTask<Void, Void, String> firebaseTask = new AsyncTask<Void, Void, String>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                updateUI(mAuth.getCurrentUser());
+                                        protected String doInBackground(Void... voids) {
+                                            String tempCalHolder = null;
+                                            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+                                                    Collections.singleton("https://www.googleapis.com/auth/calendar"));
+                                            GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                                            if (accountGoogle != null) {
+                                                credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
+                                            }
+                                            HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+                                            final Calendar service = new Calendar.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
+                                                    .setApplicationName("SchedulingApp").build();
+                                            try {
+                                                tempCalHolder = service.calendars().get("primary").execute().toString();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            return tempCalHolder;
+                                        }
+
+                                        @Override
+                                        protected void onPostExecute(String s) {
+                                            super.onPostExecute(s);
+                                            if (s != null) {
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid())
+                                                        .child("calendar").setValue(s);
                                             }
                                         }
-                                    });
+                                    };
+                                    firebaseTask.execute();
                                 } catch (ApiException e) {
                                     Toast.makeText(RegisterActivity.this, "It doesn't work", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
                     });
+            updateUI(mAuth.getCurrentUser());
         }
     }
 

@@ -79,7 +79,6 @@ public class GroupCreationActivity extends AppCompatActivity {
         etGroupName = findViewById(R.id.etGroupName);
         etSearchUser = findViewById(R.id.etSearchUser);
         btnCreate = findViewById(R.id.btnCreate);
-        mCalendarButton = findViewById(R.id.btCalendar);
 
         //TODO: on edit text changed
         etSearchUser.addTextChangedListener(new TextWatcher() {
@@ -113,14 +112,6 @@ public class GroupCreationActivity extends AppCompatActivity {
                 finish();
 
 
-            }
-        });
-
-        mCalendarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent calendarIntent = new Intent(GroupCreationActivity.this, CalendarClient.class);
-                startActivity(calendarIntent);
             }
         });
     }
