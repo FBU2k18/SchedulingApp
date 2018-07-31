@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="#FFFFFF">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -10,9 +10,9 @@
         android:layout_height="53dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         android:src="@drawable/group_default_logo" />
 
     <TextView
@@ -23,5 +23,5 @@
         android:layout_alignTop="@+id/ivGroupLogo"
         android:layout_marginLeft="40dp"
         android:layout_toEndOf="@+id/ivGroupLogo"
-        android:text="Group" />
+        android:text="@string/group" />
 </RelativeLayout>

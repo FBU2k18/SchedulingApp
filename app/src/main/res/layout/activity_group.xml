@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.GroupActivity"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context="com.emmabr.schedulingapp.GroupActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimes"

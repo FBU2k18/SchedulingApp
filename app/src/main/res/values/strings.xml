@@ -18,6 +18,20 @@
     <string name="send_button">Send</string>
     <string name="add_poll">Add a Poll</string>
     <string name="add_pic">Add a Photo</string>
+    <string name="group">Group Name</string>
+    <string name="change_group">Change Group Name</string>
+    <string name="post_pic">Post Image</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_title">Enter Poll Title</string>
+    <string name="post_poll">Post Poll</string>
+    <string name="add_option">Add an Option</string>
+    <string name="instructions">Remove an above option by its position in the list.</string>
+    <string name="pound">#</string>
+    <string name="change_username">Change Username</string>
+    <string name="poll_title">Poll Title</string>
+    <string name="option">Option</string>
+    <string name="time">Time</string>
+    <string name="votes">Votes</string>
 
     <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>

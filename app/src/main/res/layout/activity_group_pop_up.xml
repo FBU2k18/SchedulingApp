@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.GroupPopUp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context="com.emmabr.schedulingapp.GroupPopUp">
 
     <EditText
         android:id="@+id/etNewGroupName"
@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="new group name"
+        android:hint="@string/group_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

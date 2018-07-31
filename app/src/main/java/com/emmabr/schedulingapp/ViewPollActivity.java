@@ -49,6 +49,18 @@ public class ViewPollActivity extends AppCompatActivity {
         rvOptions.setLayoutManager(new LinearLayoutManager(this));
         rvOptions.setAdapter(mPollAdapter);
 
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).child("pollTitle").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tvTitlePoll.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         getOptions();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
