@@ -11,6 +11,7 @@ public class GroupData {
     String groupId;
     String groupName;
     String imageURL;
+    String seenStatus;
 
 
     // create new group
@@ -18,13 +19,14 @@ public class GroupData {
         this.groupId = groupId;
         this.groupName = groupName;
         this.imageURL = imageURL;
+        this.seenStatus = "false";
     }
 
     // creating group to put in user data schema
     public GroupData(String groupName, String imageURL) {
         this.groupName = groupName;
         this.imageURL = imageURL;
-
+        this.seenStatus = "true";
     }
 
     // set groupID
@@ -57,5 +59,9 @@ public class GroupData {
 
     public String getImageURL() {
         return imageURL;
+    }
+
+    public String getSeenStatus() {
+        return seenStatus;
     }
 }

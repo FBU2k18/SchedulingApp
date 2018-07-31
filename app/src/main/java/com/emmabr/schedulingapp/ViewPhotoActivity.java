@@ -1,18 +1,15 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
 import me.emmabr.schedulingapp.R;
-
-import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 
@@ -30,7 +27,19 @@ public class ViewPhotoActivity extends AppCompatActivity {
         ivPic = findViewById(R.id.ivPic);
         Glide.with(this).load(getIntent().getStringExtra("imageURL")).into(ivPic);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //display stuff
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int)(width * .8), (int)(height * .50));
+
+        getSupportActionBar().hide();
+        //setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.emmabr.schedulingapp.Models.GroupData;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -43,8 +42,6 @@ import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
 
-import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
-
 public class AddMemberActivity extends AppCompatActivity {
 
     String groupID;
@@ -60,6 +57,7 @@ public class AddMemberActivity extends AppCompatActivity {
 
     private RecyclerView rvUsers;
     private EditText etSearchUser;
+    private Button btnFinish;
 
 
     ArrayList<String> alUsers = new ArrayList<>();
@@ -91,6 +89,7 @@ public class AddMemberActivity extends AppCompatActivity {
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
         etSearchUser = findViewById(R.id.etSearchUser);
+        btnFinish = findViewById(R.id.btnFinish);
 
         //TODO: on edit text changed
         etSearchUser.addTextChangedListener(new TextWatcher() {
@@ -109,6 +108,13 @@ public class AddMemberActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
+
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         //google auth
         // OAuth confirmation when user creates group (in order to access calendar)
 //                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -118,7 +124,7 @@ public class AddMemberActivity extends AppCompatActivity {
 //                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
         //signIn();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
