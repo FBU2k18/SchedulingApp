@@ -2,12 +2,9 @@ package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +13,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.emmabr.schedulingapp.Models.Message;
-import com.emmabr.schedulingapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
-
-import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
@@ -57,6 +47,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             //make look like from self
             if (message.getMessageText() != null) {
                 holder.tvTextMe.setText(message.getMessageText());
+                //TODO: Change drawable
                 holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
             } else if (message.getImageURL() != null) {
                 Glide.with(context).load(message.getImageURL()).into(holder.ivPicMe);

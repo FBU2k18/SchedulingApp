@@ -17,6 +17,7 @@
         android:paddingLeft="25dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
+        android:textColor="@color/lightText"
         android:text=""
         android:maxWidth="270dp" />
 
@@ -44,6 +45,7 @@
         android:paddingRight="25dp"
         android:paddingTop="5dp"
         android:text=""
+        android:textColor="@color/lightText"
         android:maxWidth="270dp"/>
 
     <ImageView
