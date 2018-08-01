@@ -1,11 +1,11 @@
 package com.emmabr.schedulingapp;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +36,17 @@ public class ViewPollActivity extends AppCompatActivity {
         mMessageID = getIntent().getStringExtra("mMessageID");
         mGroupID = getIntent().getStringExtra("mGroupID");
 
+        getSupportActionBar().hide();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int)(width * .70), (int)(height * .55));
+
         mOptions = new ArrayList<>();
         mPollAdapter = new PollAdapter(mOptions, mGroupID, mMessageID);
 
@@ -57,8 +68,6 @@ public class ViewPollActivity extends AppCompatActivity {
         });
 
         getOptions();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void getOptions() {
@@ -125,15 +134,5 @@ public class ViewPollActivity extends AppCompatActivity {
             mOptions.add(i, temp);
             mPollAdapter.notifyItemInserted(i);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
     }
 }

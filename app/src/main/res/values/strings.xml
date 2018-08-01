@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SchedulingApp</string>
+    <string name="app_name">ScheduleMe</string>
     <string name="email">Enter your email</string>
     <string name="password">Enter your password</string>
     <string name="login_btn">login</string>
@@ -32,6 +32,7 @@
     <string name="option">Option</string>
     <string name="time">Time</string>
     <string name="votes">Votes</string>
+    <string name="finish">Finish</string>
 
     <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>

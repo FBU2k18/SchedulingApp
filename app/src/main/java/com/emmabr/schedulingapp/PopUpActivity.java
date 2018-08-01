@@ -36,7 +36,7 @@ public class PopUpActivity extends Activity {
         setContentView(R.layout.activity_pop_up);
 
         //variables
-        mETUsername = findViewById(R.id.etNewUsername);
+        mETUsername = findViewById(R.id.etPollName);
         mBtnSet = findViewById(R.id.btnSet);
 
         //firebase variables
@@ -76,8 +76,6 @@ public class PopUpActivity extends Activity {
 
                 Toast.makeText(PopUpActivity.this, "Username updated!", Toast.LENGTH_LONG).show();
                 finish();
-//                Intent intent = new Intent(PopUpActivity.this, UserProfile.class);
-//                startActivity(intent);
             }
         });
 

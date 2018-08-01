@@ -8,17 +8,17 @@
     tools:context="com.emmabr.schedulingapp.AddMemberActivity">
 
     <ImageView
-        android:id="@+id/CHANGME"
-        android:layout_width="209dp"
-        android:layout_height="71dp"
+        android:id="@+id/tvTitle"
+        android:layout_width="245dp"
+        android:layout_height="51dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/create_group"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_new_member" />
 
     <EditText
         android:id="@+id/etSearchMember"
@@ -26,27 +26,42 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/search_user"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/CHANGME" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMembers"
         android:layout_width="290dp"
-        android:layout_height="350dp"
+        android:layout_height="308dp"
         android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchMember" />
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="105dp"
+        android:layout_height="37dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/button"
+        android:text="@string/finish"
+        android:textColor="@color/lightText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearchMember"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/rvMembers"
+        app:layout_constraintVertical_bias="1.0" />
 </android.support.constraint.ConstraintLayout>

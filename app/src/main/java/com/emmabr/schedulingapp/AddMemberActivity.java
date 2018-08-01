@@ -1,7 +1,6 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +40,7 @@ public class AddMemberActivity extends AppCompatActivity {
 
     private RecyclerView mRVMembers;
     private EditText mETSearchMember;
+    private Button mBtnFinish;
 
     private ArrayList<String> mALUsers = new ArrayList<>();
 
@@ -67,6 +68,7 @@ public class AddMemberActivity extends AppCompatActivity {
         mRVMembers.setLayoutManager(new LinearLayoutManager(this));
 
         mETSearchMember = findViewById(R.id.etSearchMember);
+        mBtnFinish = findViewById(R.id.btnFinish);
 
         mETSearchMember.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,13 +86,9 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+        mBtnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 for (String id : mALUsers)
                     FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(id).setValue(id);
                 FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
@@ -107,6 +105,27 @@ public class AddMemberActivity extends AppCompatActivity {
 
                     }
                 });
+                finish();
+            }
+        });
+        //google auth
+        // OAuth confirmation when user creates group (in order to access calendar)
+//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
+//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
+//                        .build();
+//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+        //signIn();
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 finish();
                 break;
         }

@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -21,16 +22,17 @@ public class ViewPhotoActivity extends AppCompatActivity {
         mIVPic = findViewById(R.id.ivPic);
         Glide.with(this).load(getIntent().getStringExtra("imageURL")).into(mIVPic);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
+        //display stuff
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int)(width * .8), (int)(height * .50));
+
+        getSupportActionBar().hide();
     }
 }

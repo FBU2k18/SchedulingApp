@@ -55,9 +55,15 @@
         </provider>
 
         <activity android:name="com.emmabr.schedulingapp.PostPhotoActivity" />
-        <activity android:name="com.emmabr.schedulingapp.ViewPhotoActivity" />
-        <activity android:name="com.emmabr.schedulingapp.PostPollActivity" />
-        <activity android:name="com.emmabr.schedulingapp.ViewPollActivity" />
+        <activity
+            android:name="com.emmabr.schedulingapp.ViewPhotoActivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
+            android:name="com.emmabr.schedulingapp.PostPollActivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
+            android:name="com.emmabr.schedulingapp.ViewPollActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name="com.emmabr.schedulingapp.UserProfile" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
