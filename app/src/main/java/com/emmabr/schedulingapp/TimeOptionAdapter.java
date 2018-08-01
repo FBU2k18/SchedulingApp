@@ -1,11 +1,9 @@
 package com.emmabr.schedulingapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,30 +15,29 @@ import com.emmabr.schedulingapp.model.TimeOption;
 import com.emmabr.schedulingapp.model.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import me.emmabr.schedulingapp.R;
 
 public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.ViewHolder> {
 
-    ArrayList<TimeOption> times;
-    Context context;
-    GroupActivity parent;
+    private ArrayList<TimeOption> mTimes;
+    private Context mContext;
+    private GroupActivity mParent;
 
     public TimeOptionAdapter(ArrayList<TimeOption> times, GroupActivity parent) {
-        this.times = times;
-        this.parent = parent;
+        this.mTimes = times;
+        this.mParent = parent;
     }
 
     @Override
     public void onBindViewHolder(@NonNull TimeOptionAdapter.ViewHolder holder, int position) {
-        TimeOption time = times.get(position);
+        TimeOption time = mTimes.get(position);
         time.setVotes();
         holder.tvTime.setText(time.getTime());
         holder.tvVotes.setText(Integer.toString(time.getVotes()));
         //get current user
         if (time.getUpVoters().contains(new User("abc123")))
-            holder.rlOption.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            holder.rlOption.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             //get current user again
         else if (time.getDownVoters().contains(new User("abc123")))
             holder.rlOption.setBackgroundColor(Color.RED);
@@ -51,15 +48,15 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
     @NonNull
     @Override
     public TimeOptionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+        mContext = viewGroup.getContext();
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View groupView = inflater.inflate(R.layout.item_time_option, viewGroup, false);
         return new TimeOptionAdapter.ViewHolder(groupView);
     }
 
     @Override
     public int getItemCount() {
-        return times.size();
+        return mTimes.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,38 +82,38 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
                 public void onClick(View view) {
                     int oldPos = getAdapterPosition();
                     if (oldPos != RecyclerView.NO_POSITION) {
-                        TimeOption time = times.get(oldPos);
+                        TimeOption time = mTimes.get(oldPos);
                         //replace line below
                         time.upVote(new User("abc123"));
                         int newPos;
                         if (time.getVotes() > Integer.parseInt(tvVotes.getText().toString())) {
                             newPos = oldPos - 1;
-                            while (newPos > -1 && time.getVotes() > times.get(newPos).getVotes())
+                            while (newPos > -1 && time.getVotes() > mTimes.get(newPos).getVotes())
                                 newPos--;
                             newPos++;
                             if (newPos == oldPos)
                                 TimeOptionAdapter.this.notifyItemChanged(newPos);
                             else {
-                                times.remove(oldPos);
+                                mTimes.remove(oldPos);
                                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.parent.scrollToPosition(newPos);
+                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
                                 tvVotes.setText(Integer.toString(time.getVotes()));
-                                times.add(newPos, time);
+                                mTimes.add(newPos, time);
                                 TimeOptionAdapter.this.notifyItemInserted(newPos);
                             }
                         } else {
                             newPos = oldPos + 1;
-                            while (newPos < times.size() && time.getVotes() < times.get(newPos).getVotes())
+                            while (newPos < mTimes.size() && time.getVotes() < mTimes.get(newPos).getVotes())
                                 newPos++;
                             newPos--;
                             if (newPos == oldPos)
                                 TimeOptionAdapter.this.notifyItemChanged(newPos);
                             else {
-                                times.remove(oldPos);
+                                mTimes.remove(oldPos);
                                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.parent.scrollToPosition(newPos);
+                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
                                 tvVotes.setText(Integer.toString(time.getVotes()));
-                                times.add(newPos, time);
+                                mTimes.add(newPos, time);
                                 TimeOptionAdapter.this.notifyItemInserted(newPos);
                             }
                         }
@@ -128,38 +125,38 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
                 public void onClick(View view) {
                     int oldPos = getAdapterPosition();
                     if (oldPos != RecyclerView.NO_POSITION) {
-                        TimeOption time = times.get(oldPos);
+                        TimeOption time = mTimes.get(oldPos);
                         //replace line below
                         time.downVote(new User("abc123"));
                         int newPos;
                         if (time.getVotes() > Integer.parseInt(tvVotes.getText().toString())) {
                             newPos = oldPos - 1;
-                            while (newPos > -1 && time.getVotes() > times.get(newPos).getVotes())
+                            while (newPos > -1 && time.getVotes() > mTimes.get(newPos).getVotes())
                                 newPos--;
                             newPos++;
                             if (newPos == oldPos)
                                 TimeOptionAdapter.this.notifyItemChanged(newPos);
                             else {
-                                times.remove(oldPos);
+                                mTimes.remove(oldPos);
                                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.parent.scrollToPosition(newPos);
+                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
                                 tvVotes.setText(Integer.toString(time.getVotes()));
-                                times.add(newPos, time);
+                                mTimes.add(newPos, time);
                                 TimeOptionAdapter.this.notifyItemInserted(newPos);
                             }
                         } else {
                             newPos = oldPos + 1;
-                            while (newPos < times.size() && time.getVotes() < times.get(newPos).getVotes())
+                            while (newPos < mTimes.size() && time.getVotes() < mTimes.get(newPos).getVotes())
                                 newPos++;
                             newPos--;
                             if (newPos == oldPos)
                                 TimeOptionAdapter.this.notifyItemChanged(newPos);
                             else {
-                                times.remove(oldPos);
+                                mTimes.remove(oldPos);
                                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.parent.scrollToPosition(newPos);
+                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
                                 tvVotes.setText(Integer.toString(time.getVotes()));
-                                times.add(newPos, time);
+                                mTimes.add(newPos, time);
                                 TimeOptionAdapter.this.notifyItemInserted(newPos);
                             }
                         }

@@ -30,14 +30,14 @@ import me.emmabr.schedulingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<GroupData> groups;
-    MainActivityAdapter adapter;
-    RecyclerView rvGroups;
-    SwipeRefreshLayout srlMain;
-    SearchView svSearch;
+    private ArrayList<GroupData> mGroups;
+    private MainActivityAdapter mAdapter;
+    private RecyclerView mRVGroups;
+    private SwipeRefreshLayout mSRLMain;
+    private SearchView mSVSearch;
 
     private String mCurrentUser;
-    private DatabaseReference currUserGroupsData;
+    private DatabaseReference mCurrUserGroupsData;
 
 
     @Override
@@ -45,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        groups = new ArrayList<>();
-        adapter = new MainActivityAdapter(groups);
-        rvGroups = findViewById(R.id.rvGroups);
-        rvGroups.setLayoutManager(new LinearLayoutManager(this));
-        rvGroups.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rvGroups.setAdapter(adapter);
-        srlMain = findViewById(R.id.srlMain);
-        srlMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mGroups = new ArrayList<>();
+        mAdapter = new MainActivityAdapter(mGroups);
+        mRVGroups = findViewById(R.id.rvGroups);
+        mRVGroups.setLayoutManager(new LinearLayoutManager(this));
+        mRVGroups.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRVGroups.setAdapter(mAdapter);
+        mSRLMain = findViewById(R.id.srlMain);
+        mSRLMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getGroups();
@@ -66,19 +66,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        svSearch = (SearchView) menu.findItem(R.id.svSearch).getActionView();
-        svSearch.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        svSearch.setMaxWidth(Integer.MAX_VALUE);
-        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSVSearch = (SearchView) menu.findItem(R.id.svSearch).getActionView();
+        mSVSearch.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSVSearch.setMaxWidth(Integer.MAX_VALUE);
+        mSVSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                adapter.getFilter().filter(s);
+                mAdapter.getFilter().filter(s);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+                mAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // close search view on back button pressed
-        if (!svSearch.isIconified()) {
-            svSearch.setIconified(true);
+        if (!mSVSearch.isIconified()) {
+            mSVSearch.setIconified(true);
             return;
         }
         super.onBackPressed();
@@ -118,12 +118,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void getGroups() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            groups.clear();
+            mGroups.clear();
             // current userID
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            // groups for current user
-            currUserGroupsData = FirebaseDatabase.getInstance().getReference().child("users").child(mCurrentUser).child("userGroup");
-            currUserGroupsData.addValueEventListener(new ValueEventListener() {
+            // mGroups for current user
+            mCurrUserGroupsData = FirebaseDatabase.getInstance().getReference().child("users").child(mCurrentUser).child("userGroup");
+            mCurrUserGroupsData.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
@@ -132,17 +132,17 @@ public class MainActivity extends AppCompatActivity {
                             String name = childData.child("groupName").getValue().toString();
                             String imgURL = childData.child("imageURL").getValue().toString();
                             GroupData tempGroup = new GroupData(name, imgURL, groupID);
-                            groups.add(tempGroup);
+                            mGroups.add(tempGroup);
                         }
                     }
-                    adapter.notifyDataSetChanged();
-                    srlMain.setRefreshing(false);
-                    rvGroups.scrollToPosition(0);
+                    mAdapter.notifyDataSetChanged();
+                    mSRLMain.setRefreshing(false);
+                    mRVGroups.scrollToPosition(0);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d("MainActivity", "Assigning groups failed");
+                    Log.d("MainActivity", "Assigning mGroups failed");
                 }
             });
         }

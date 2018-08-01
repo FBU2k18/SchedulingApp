@@ -17,35 +17,30 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import me.emmabr.schedulingapp.R;
 
-
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> implements Filterable {
 
-    ArrayList<GroupData> groups;
-    ArrayList<GroupData> filteredGroups;
-    Context context;
+    private ArrayList<GroupData> mGroups;
+    private ArrayList<GroupData> mFilteredGroups;
+    private Context mContext;
 
 
     public MainActivityAdapter(ArrayList<GroupData> groups) {
-        this.groups = groups;
-        this.filteredGroups = this.groups;
+        this.mGroups = groups;
+        this.mFilteredGroups = this.mGroups;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
-        GroupData currGroup = filteredGroups.get(position);
+        GroupData currGroup = mFilteredGroups.get(position);
         holder.tvGroupName.setText(currGroup.getGroupName());
         if (!currGroup.getImageURL().isEmpty())
-            Glide.with(context)
+            Glide.with(mContext)
                     .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(holder.ivGroupLogo);
@@ -54,15 +49,15 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @NonNull
     @Override
     public MainActivityAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+        mContext = viewGroup.getContext();
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View groupView = inflater.inflate(R.layout.item_group, viewGroup, false);
         return new MainActivityAdapter.ViewHolder(groupView);
     }
 
     @Override
     public int getItemCount() {
-        return filteredGroups.size();
+        return mFilteredGroups.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -83,11 +78,11 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         @Override
         public void onClick(View view) {
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                GroupData group = filteredGroups.get(getAdapterPosition());
+                GroupData group = mFilteredGroups.get(getAdapterPosition());
                 //replace with intent to go to group screen
-                Intent intent = new Intent(context, GroupActivity.class);
-                intent.putExtra("groupID", group.getGroupId());
-                context.startActivity(intent);
+                Intent intent = new Intent(mContext, GroupActivity.class);
+                intent.putExtra("mGroupID", group.getGroupId());
+                mContext.startActivity(intent);
                 Log.i("GroupData", group.getGroupName());
             }
         }
@@ -100,22 +95,22 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString().toLowerCase();
                 if (charString.isEmpty())
-                    filteredGroups = groups;
+                    mFilteredGroups = mGroups;
                 else {
                     ArrayList<GroupData> temp = new ArrayList<>();
-                    for (GroupData group : groups)
+                    for (GroupData group : mGroups)
                         if (group.getGroupName().toLowerCase().contains(charString))
                             temp.add(group);
-                    filteredGroups = temp;
+                    mFilteredGroups = temp;
                 }
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredGroups;
+                filterResults.values = mFilteredGroups;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredGroups = (ArrayList<GroupData>) filterResults.values;
+                mFilteredGroups = (ArrayList<GroupData>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

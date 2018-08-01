@@ -38,28 +38,28 @@ import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
 
-    private String groupID;
+    private String mGroupID;
 
     private ArrayList<TimeOption> mTimes;
     private TimeOptionAdapter mTimeAdapter;
-    private RecyclerView rvTimes;
+    private RecyclerView mRVTimes;
 
     private ArrayList<Message> mMessages;
-    private MessageAdapter mMesssageAdapter;
-    private RecyclerView rvMessageDisplay;
+    private MessageAdapter mMessageAdapter;
+    private RecyclerView mRVMessageDisplay;
 
-    private EditText etMessage;
-    private FrameLayout flPeeker;
-    private BottomSheetBehavior peekerBehavior;
-    private ImageView ivAddOther;
+    private EditText mETMessage;
+    private FrameLayout mFLPeeker;
+    private BottomSheetBehavior mPeekerBehavior;
+    private ImageView mIVAddOther;
     private boolean mAddOtherIsPlus;
-    private TextView tvTitle;
-    private Button bSend;
+    private TextView mTVTitle;
+    private Button mBSend;
 
-    private FrameLayout flOtherTypes;
-    private BottomSheetBehavior otherTypesBehavior;
-    private Button bAddPoll;
-    private Button bAddPic;
+    private FrameLayout mFLOtherTypes;
+    private BottomSheetBehavior mOtherTypesBehavior;
+    private Button mBAddPoll;
+    private Button mBAddPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,64 +67,62 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         setContentView(R.layout.activity_group);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        groupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);
-        rvTimes = findViewById(R.id.rvTimes);
-        rvTimes.setAdapter(mTimeAdapter);
-        rvTimes.setLayoutManager(new LinearLayoutManager(this));
-        rvTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRVTimes = findViewById(R.id.rvTimes);
+        mRVTimes.setAdapter(mTimeAdapter);
+        mRVTimes.setLayoutManager(new LinearLayoutManager(this));
+        mRVTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         mMessages = new ArrayList<>();
-        mMesssageAdapter = new MessageAdapter(mMessages, groupID);
-        rvMessageDisplay = findViewById(R.id.rvMessageDisplay);
-        rvMessageDisplay.setAdapter(mMesssageAdapter);
-        rvMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
+        mMessageAdapter = new MessageAdapter(mMessages, mGroupID);
+        mRVMessageDisplay = findViewById(R.id.rvMessageDisplay);
+        mRVMessageDisplay.setAdapter(mMessageAdapter);
+        mRVMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
 
-        etMessage = findViewById(R.id.etMessage);
-        flPeeker = findViewById(R.id.flPeeker);
-        peekerBehavior = BottomSheetBehavior.from(flPeeker);
-        if (getIntent().getBooleanExtra("up", false))
-            peekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        ivAddOther = findViewById(R.id.ivAddOther);
-        ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+        mETMessage = findViewById(R.id.etMessage);
+        mFLPeeker = findViewById(R.id.flPeeker);
+        mPeekerBehavior = BottomSheetBehavior.from(mFLPeeker);
+        mIVAddOther = findViewById(R.id.ivAddOther);
+        mIVAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
         mAddOtherIsPlus = true;
-        ivAddOther.setOnClickListener(new View.OnClickListener() {
+        mIVAddOther.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mAddOtherIsPlus) {
-                    ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_delete));
-                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    mIVAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_delete));
+                    mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
-                    ivAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
-                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    mIVAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+                    mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
                 mAddOtherIsPlus = !mAddOtherIsPlus;
             }
         });
-        tvTitle = findViewById(R.id.tvTitle);
-        tvTitle.setOnClickListener(new View.OnClickListener() {
+        mTVTitle = findViewById(R.id.tvTitle);
+        mTVTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (peekerBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-                    peekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                else if (peekerBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    peekerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (mPeekerBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    mPeekerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                else if (mPeekerBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    mPeekerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        bSend = findViewById(R.id.bSend);
-        bSend.setOnClickListener(new View.OnClickListener() {
+        mBSend = findViewById(R.id.bSend);
+        mBSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!etMessage.getText().toString().equals("")) {
+                if (!mETMessage.getText().toString().equals("")) {
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Date date = new Date();
-                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), etMessage.getText().toString(), null, null, Long.toString(date.getTime()));
-                            saveMessage(message, groupID);
-                            etMessage.setText("");
+                            Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), mETMessage.getText().toString(), null, null, Long.toString(date.getTime()));
+                            saveMessage(message, mGroupID);
+                            mETMessage.setText("");
                         }
 
                         @Override
@@ -135,37 +133,42 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             }
         });
 
-        flOtherTypes = findViewById(R.id.flOtherTypes);
-        otherTypesBehavior = BottomSheetBehavior.from(flOtherTypes);
-        otherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        otherTypesBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        mFLOtherTypes = findViewById(R.id.flOtherTypes);
+        mOtherTypesBehavior = BottomSheetBehavior.from(mFLOtherTypes);
+        mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        mOtherTypesBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int i) {
-                if (otherTypesBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING)
-                    otherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (mOtherTypesBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING)
+                    mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
 
             @Override
             public void onSlide(@NonNull View view, float v) {
             }
         });
-        bAddPoll = findViewById(R.id.bAddPoll);
-        bAddPoll.setOnClickListener(new View.OnClickListener() {
+        mBAddPoll = findViewById(R.id.bAddPoll);
+        mBAddPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupActivity.this, PostPollActivity.class);
-                intent.putExtra("groupID", groupID);
+                intent.putExtra("mGroupID", mGroupID);
+                mAddOtherIsPlus = true;
+                mIVAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+                mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 startActivity(intent);
             }
         });
 
-        bAddPic = findViewById(R.id.bAddPic);
-        bAddPic.setOnClickListener(new View.OnClickListener() {
+        mBAddPic = findViewById(R.id.bAddPic);
+        mBAddPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupActivity.this, PostPhotoActivity.class);
-//                intent.putExtra("Taking a new picture?", false);
-                intent.putExtra("groupID", groupID);
+                intent.putExtra("mGroupID", mGroupID);
+                mAddOtherIsPlus = true;
+                mIVAddOther.setImageDrawable(getDrawable(android.R.drawable.ic_input_add));
+                mOtherTypesBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 startActivity(intent);
             }
         });
@@ -186,11 +189,11 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     }
 
     public void getMessages() {
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mMessages.clear();
-                mMesssageAdapter.notifyDataSetChanged();
+                mMessageAdapter.notifyDataSetChanged();
                 for (DataSnapshot childData : dataSnapshot.getChildren()) {
                     String userID = childData.child("userID").getValue().toString();
                     String nickName = childData.child("nickName").getValue().toString();
@@ -208,8 +211,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                     Message message = new Message(userID, nickName, messageText, imageURL, pollTitle, createdAt);
                     message.setMessageID(messageID);
                     mMessages.add(message);
-                    mMesssageAdapter.notifyItemInserted(mMessages.size() - 1);
-                    rvMessageDisplay.scrollToPosition(mMessages.size() - 1);
+                    mMessageAdapter.notifyItemInserted(mMessages.size() - 1);
+                    mRVMessageDisplay.scrollToPosition(mMessages.size() - 1);
                 }
             }
 
@@ -229,8 +232,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intentHome = new Intent(this, MainActivity.class);
-                startActivity(intentHome);
                 finish();
                 break;
             case R.id.miRefresh:
@@ -239,12 +240,12 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 break;
             case R.id.miAddMember:
                 Intent intentAdd = new Intent(this, AddMemberActivity.class);
-                intentAdd.putExtra("groupID", groupID);
+                intentAdd.putExtra("mGroupID", mGroupID);
                 startActivity(intentAdd);
                 break;
             case R.id.miEditGroup:
                 Intent intentEdit = new Intent(this, GroupProfile.class);
-                intentEdit.putExtra("groupID", groupID);
+                intentEdit.putExtra("mGroupID", mGroupID);
                 startActivity(intentEdit);
             case R.id.miLeaveGroup:
                 LeaveGroupDialogFragment leaveGroup = new LeaveGroupDialogFragment();
@@ -256,14 +257,14 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
     @Override
     public void leaveGroup() {
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(FirebaseAuth.getInstance().getUid()).removeValue();
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(groupID).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(FirebaseAuth.getInstance().getUid()).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).removeValue();
         Intent intentLeave = new Intent(this, MainActivity.class);
         startActivity(intentLeave);
         finish();
     }
 
     public void scrollToPosition(int position) {
-        rvTimes.scrollToPosition(position);
+        mRVTimes.scrollToPosition(position);
     }
 }

@@ -2,12 +2,9 @@ package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,34 +13,27 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.emmabr.schedulingapp.Models.Message;
-import com.emmabr.schedulingapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import me.emmabr.schedulingapp.R;
 
-import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
-
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
-    ArrayList<Message> messages;
-    Context context;
+    private ArrayList<Message> mMessages;
+    private Context mContext;
 
-    String groupID;
+    private String mGroupID;
 
     public MessageAdapter(ArrayList<Message> messages, String groupID) {
-        this.messages = messages;
-        this.groupID = groupID;
+        this.mMessages = messages;
+        this.mGroupID = groupID;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        final Message message = messages.get(position);
+        final Message message = mMessages.get(position);
 
         holder.tvTextMe.setText("");
         holder.tvTextMe.setBackground(null);
@@ -57,29 +47,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             //make look like from self
             if (message.getMessageText() != null) {
                 holder.tvTextMe.setText(message.getMessageText());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_bubble));
             } else if (message.getImageURL() != null) {
-                Glide.with(context).load(message.getImageURL()).into(holder.ivPicMe);
+                Glide.with(mContext).load(message.getImageURL()).into(holder.ivPicMe);
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ViewPhotoActivity.class);
+                        Intent intent = new Intent(mContext, ViewPhotoActivity.class);
                         intent.putExtra("imageURL", message.getImageURL());
-                        intent.putExtra("groupID", groupID);
-                        context.startActivity(intent);
+                        mContext.startActivity(intent);
                     }
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextMe.setText(message.getPollTitle());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
-                holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_bubble));
+                holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ViewPollActivity.class);
-                        intent.putExtra("messageID", message.getMessageID());
-                        intent.putExtra("groupID", groupID);
-                        context.startActivity(intent);
+                        Intent intent = new Intent(mContext, ViewPollActivity.class);
+                        intent.putExtra("mMessageID", message.getMessageID());
+                        intent.putExtra("mGroupID", mGroupID);
+                        mContext.startActivity(intent);
                     }
                 });
             }
@@ -88,29 +77,29 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.tvFrom.setText(message.getNickName());
             if (message.getMessageText() != null) {
                 holder.tvTextYou.setText(message.getMessageText());
-                holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
+                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_bubble));
             } else if (message.getImageURL() != null) {
-                Glide.with(context).load(message.getImageURL()).into(holder.ivPicYou);
+                Glide.with(mContext).load(message.getImageURL()).into(holder.ivPicYou);
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ViewPhotoActivity.class);
+                        Intent intent = new Intent(mContext, ViewPhotoActivity.class);
                         intent.putExtra("imageURL", message.getImageURL());
-                        intent.putExtra("groupID", groupID);
-                        context.startActivity(intent);
+                        intent.putExtra("mGroupID", mGroupID);
+                        mContext.startActivity(intent);
                     }
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextYou.setText(message.getPollTitle());
-                holder.tvTextYou.setBackground(ContextCompat.getDrawable(context, R.drawable.in_bubble));
-                holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
+                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_bubble));
+                holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, ViewPollActivity.class);
-                        intent.putExtra("messageID", message.getMessageID());
-                        intent.putExtra("groupID", groupID);
-                        context.startActivity(intent);
+                        Intent intent = new Intent(mContext, ViewPollActivity.class);
+                        intent.putExtra("mMessageID", message.getMessageID());
+                        intent.putExtra("mGroupID", mGroupID);
+                        mContext.startActivity(intent);
                     }
                 });
             }
@@ -120,15 +109,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @NonNull
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+        mContext = viewGroup.getContext();
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View groupView = inflater.inflate(R.layout.item_message, viewGroup, false);
         return new MessageAdapter.ViewHolder(groupView);
     }
 
     @Override
     public int getItemCount() {
-        return messages.size();
+        return mMessages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

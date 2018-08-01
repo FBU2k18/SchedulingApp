@@ -17,11 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,11 +32,11 @@ import me.emmabr.schedulingapp.R;
 
 public class GroupProfile extends AppCompatActivity {
 
-    private CircleImageView civGroupLogo;
-    private TextView tvGroup;
+    private CircleImageView mCIVGroupLogo;
+    private TextView mTVGroup;
 
-    private Button bGroupPic;
-    private Button bGroupName;
+    private Button mBGroupPic;
+    private Button mBGroupName;
 
     private String mGroupID;
 
@@ -52,12 +49,12 @@ public class GroupProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
 
-        civGroupLogo = findViewById(R.id.civGroupLogo);
-        tvGroup = findViewById(R.id.tvGroup);
-        bGroupPic = findViewById(R.id.bGroupPic);
-        bGroupName = findViewById(R.id.bGroupName);
+        mCIVGroupLogo = findViewById(R.id.civGroupLogo);
+        mTVGroup = findViewById(R.id.tvGroup);
+        mBGroupPic = findViewById(R.id.bGroupPic);
+        mBGroupName = findViewById(R.id.bGroupName);
 
-        mGroupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,7 +62,7 @@ public class GroupProfile extends AppCompatActivity {
                 String name = dataSnapshot.child("groupName").getValue().toString();
                 String image = dataSnapshot.child("imageURL").getValue().toString();
 
-                tvGroup.setText(name);
+                mTVGroup.setText(name);
 
                 if (!image.isEmpty()) {
                     Glide.with(getBaseContext())
@@ -73,7 +70,7 @@ public class GroupProfile extends AppCompatActivity {
                             .apply(new RequestOptions()
                                     .placeholder(R.drawable.default_pic)
                                     .fitCenter())
-                            .into(civGroupLogo);
+                            .into(mCIVGroupLogo);
                 }
             }
 
@@ -83,7 +80,7 @@ public class GroupProfile extends AppCompatActivity {
             }
         });
 
-        bGroupPic.setOnClickListener(new View.OnClickListener() {
+        mBGroupPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CropImage.activity()
@@ -92,11 +89,11 @@ public class GroupProfile extends AppCompatActivity {
             }
         });
 
-        bGroupName.setOnClickListener(new View.OnClickListener() {
+        mBGroupName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupProfile.this, GroupPopUp.class);
-                intent.putExtra("groupID", mGroupID);
+                intent.putExtra("mGroupID", mGroupID);
                 startActivity(intent);
             }
         });
@@ -182,8 +179,6 @@ public class GroupProfile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intentHome = new Intent(this, MainActivity.class);
-                startActivity(intentHome);
                 finish();
                 break;
         }

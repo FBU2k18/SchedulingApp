@@ -26,12 +26,12 @@ public class LoginActivity extends AppCompatActivity {
     // shared Firebase object
     private FirebaseAuth mAuth;
 
-    private Button login;
-    private TextView tvRegister;
-    private TextView liEmail;
-    private TextView liPassword;
-    private AnimationDrawable animationDrawable;
-    private ConstraintLayout relativeLayout;
+    private Button mLogin;
+    private TextView mTVRegister;
+    private TextView mLIEmail;
+    private TextView mLIPassword;
+    private AnimationDrawable mAnimationDrawable;
+    private ConstraintLayout mRelativeLayout;
 
     private ProgressDialog mLoginProgress;
 
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         updateUI(currUser);
 
         //start the gradient animation
-        animationDrawable.start();
+        mAnimationDrawable.start();
     }
 
 
@@ -55,28 +55,28 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         // gradient stuff
-        relativeLayout = findViewById(R.id.relativeLayout);
-        animationDrawable =(AnimationDrawable) relativeLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(5000);
-        animationDrawable.setExitFadeDuration(2000);
+        mRelativeLayout = findViewById(R.id.relativeLayout);
+        mAnimationDrawable =(AnimationDrawable) mRelativeLayout.getBackground();
+        mAnimationDrawable.setEnterFadeDuration(5000);
+        mAnimationDrawable.setExitFadeDuration(2000);
 
-        login = findViewById(R.id.btLogIn);
-        liEmail = findViewById(R.id.tvEmail);
-        liPassword = findViewById(R.id.tvPassword);
-        tvRegister = findViewById(R.id.tvRegister);
+        mLogin = findViewById(R.id.btLogIn);
+        mLIEmail = findViewById(R.id.tvEmail);
+        mLIPassword = findViewById(R.id.tvPassword);
+        mTVRegister = findViewById(R.id.tvRegister);
 
         mAuth = FirebaseAuth.getInstance().getInstance();
 
         mLoginProgress = new ProgressDialog(this);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final String email = liEmail.getText().toString();
-                final String password = liPassword.getText().toString();
+                final String email = mLIEmail.getText().toString();
+                final String password = mLIPassword.getText().toString();
 
-                //login a user
+                //mLogin a user
                 if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mLoginProgress.setTitle("Logging In");
                     mLoginProgress.setMessage("Please wait while we check your credentials.");
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        tvRegister.setOnClickListener(new View.OnClickListener() {
+        mTVRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // send to another activity to create an account

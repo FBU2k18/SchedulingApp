@@ -183,8 +183,6 @@ public class UserProfile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intentHome = new Intent(this, MainActivity.class);
-                startActivity(intentHome);
                 finish();
                 break;
         }

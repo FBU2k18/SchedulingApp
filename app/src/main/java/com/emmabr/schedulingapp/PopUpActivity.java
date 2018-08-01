@@ -27,8 +27,8 @@ public class PopUpActivity extends Activity {
     private FirebaseUser mCurrentUser;
     private StorageReference mNameStorage;
 
-    Button btnSet;
-    EditText etUsername;
+    private Button mBtnSet;
+    private EditText mETUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,8 @@ public class PopUpActivity extends Activity {
         setContentView(R.layout.activity_pop_up);
 
         //variables
-        etUsername = findViewById(R.id.etNewUsername);
-        btnSet = findViewById(R.id.btnSet);
+        mETUsername = findViewById(R.id.etNewUsername);
+        mBtnSet = findViewById(R.id.btnSet);
 
         //firebase variables
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -67,10 +67,10 @@ public class PopUpActivity extends Activity {
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
-        btnSet.setOnClickListener(new View.OnClickListener() {
+        mBtnSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String newName = etUsername.getText().toString();
+                final String newName = mETUsername.getText().toString();
 
                 mUserDatabase.child("nickName").setValue(newName);
 

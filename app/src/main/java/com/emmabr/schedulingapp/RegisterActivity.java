@@ -28,10 +28,10 @@ import me.emmabr.schedulingapp.R;
 public class RegisterActivity extends AppCompatActivity {
 
     //android variables
-    private ImageView ivNext;
-    private EditText etUsername;
-    private TextView etEmail;
-    private TextView etPassword;
+    private ImageView mIVNext;
+    private EditText mETUsername;
+    private TextView mETEmail;
+    private TextView mETPassword;
 
     //progress bar
     private ProgressDialog mRegProgress;
@@ -52,18 +52,18 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        ivNext = findViewById(R.id.ivNext);
-        etUsername = findViewById(R.id.etUserName);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
+        mIVNext = findViewById(R.id.ivNext);
+        mETUsername = findViewById(R.id.etUserName);
+        mETEmail = findViewById(R.id.etEmail);
+        mETPassword = findViewById(R.id.etPassword);
 
-        ivNext.setOnClickListener(new View.OnClickListener() {
+        mIVNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // send data to firebase
-                String username = etUsername.getText().toString();
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                String username = mETUsername.getText().toString();
+                String email = mETEmail.getText().toString();
+                String password = mETPassword.getText().toString();
 
                 if (!TextUtils.isEmpty(username) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mRegProgress.setTitle("Registering User");

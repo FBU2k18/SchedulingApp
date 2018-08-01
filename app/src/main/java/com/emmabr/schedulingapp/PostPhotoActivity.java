@@ -2,16 +2,10 @@ package com.emmabr.schedulingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,25 +27,23 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
 import java.util.Date;
 
 import me.emmabr.schedulingapp.R;
 
-import static com.emmabr.schedulingapp.BitmapScaler.scaleToFitWidth;
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPhotoActivity extends AppCompatActivity {
 
     private static final int GALLERY_PICK = 1;
 
-    Uri resultUri;
+    private Uri mResultUri;
 
-    String groupID;
+    private String mGroupID;
 
-    ImageView ivNewPic;
-    Button bPostImage;
-    Button bCancelPic;
+    private ImageView mIVNewPic;
+    private Button mBPostImage;
+    private Button mBCancelPic;
 
     private ProgressDialog mProgressDialog;
 
@@ -59,23 +52,19 @@ public class PostPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_photo);
 
-        groupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
-        ivNewPic = findViewById(R.id.ivNewPic);
-        bPostImage = findViewById(R.id.bPostImage);
-        bCancelPic = findViewById(R.id.bCancelPic);
+        mIVNewPic = findViewById(R.id.ivNewPic);
+        mBPostImage = findViewById(R.id.bPostImage);
+        mBCancelPic = findViewById(R.id.bCancelPic);
 
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
 
-        bCancelPic.setOnClickListener(new View.OnClickListener() {
+        mBCancelPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
-                intent.putExtra("groupID", groupID);
-                intent.putExtra("up", true);
-                startActivity(intent);
                 finish();
             }
         });
@@ -98,11 +87,11 @@ public class PostPhotoActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
 
-                resultUri = result.getUri();
+                mResultUri = result.getUri();
 
-                ivNewPic.setImageURI(resultUri);
+                mIVNewPic.setImageURI(mResultUri);
 
-                ivNewPic.setOnClickListener(new View.OnClickListener() {
+                mIVNewPic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CropImage.activity()
@@ -111,20 +100,7 @@ public class PostPhotoActivity extends AppCompatActivity {
                     }
                 });
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Date date = new Date();
-                        saveMessage(new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, resultUri.toString(), null, Long.toString(date.getTime())), groupID);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-                bPostImage.setOnClickListener(new View.OnClickListener() {
+                mBPostImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mProgressDialog = new ProgressDialog(PostPhotoActivity.this);
@@ -133,20 +109,13 @@ public class PostPhotoActivity extends AppCompatActivity {
                         mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
 
-                        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                final String messageID;
-                                String temp = null;
-                                while (temp == null)
-                                    for (DataSnapshot message : dataSnapshot.getChildren())
-                                        if (message.hasChild("imageURL") && message.child("imageURL").getValue().toString().equals(resultUri.toString())) {
-                                            temp = message.getKey().toString();
-                                            break;
-                                        }
-                                messageID = temp;
-                                final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("message_images").child(messageID + ".jpg");
-                                filepath.putFile(resultUri).continueWithTask(
+                                Date date = new Date();
+                                final DatabaseReference ref = saveMessage(new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, mResultUri.toString(), null, Long.toString(date.getTime())), mGroupID);
+                                final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("message_images").child(ref.getKey().toString() + ".jpg");
+                                filepath.putFile(mResultUri).continueWithTask(
                                         new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                             @Override
                                             public Task<Uri> then(@NonNull final Task<UploadTask.TaskSnapshot> task) {
@@ -159,17 +128,17 @@ public class PostPhotoActivity extends AppCompatActivity {
                                 ).continueWithTask(new Continuation<Uri, Task<Void>>() {
                                     @Override
                                     public Task<Void> then(@NonNull Task<Uri> task) {
-                                        return FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).child("imageURL").setValue(task.getResult().toString());
+                                        return FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").child(ref.getKey().toString()).child("imageURL").setValue(task.getResult().toString());
                                     }
 
+                                }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        mProgressDialog.dismiss();
+                                        Toast.makeText(PostPhotoActivity.this, "Success Uploading", Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
                                 });
-                                mProgressDialog.dismiss();
-                                Toast.makeText(PostPhotoActivity.this, "Success Uploading", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(PostPhotoActivity.this, GroupActivity.class);
-                                intent.putExtra("groupID", groupID);
-                                intent.putExtra("up", true);
-                                startActivity(intent);
-                                finish();
                             }
 
                             @Override

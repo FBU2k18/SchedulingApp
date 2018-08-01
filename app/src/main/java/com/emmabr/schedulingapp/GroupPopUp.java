@@ -18,8 +18,8 @@ import me.emmabr.schedulingapp.R;
 
 public class GroupPopUp extends Activity {
 
-    Button bSetGroup;
-    EditText etNewGroupName;
+    private Button mBSetGroup;
+    private EditText mETNewGroupName;
 
     private String mGroupID;
 
@@ -29,10 +29,10 @@ public class GroupPopUp extends Activity {
         setContentView(R.layout.activity_group_pop_up);
 
         //variables
-        etNewGroupName = findViewById(R.id.etNewGroupName);
-        bSetGroup = findViewById(R.id.bSetGroup);
+        mETNewGroupName = findViewById(R.id.etNewGroupName);
+        mBSetGroup = findViewById(R.id.bSetGroup);
 
-        mGroupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
         //display stuff
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -44,15 +44,15 @@ public class GroupPopUp extends Activity {
 
         getWindow().setLayout((int)(width * .8), (int)(height * .28));
 
-        bSetGroup.setOnClickListener(new View.OnClickListener() {
+        mBSetGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("groupName").setValue(etNewGroupName.getText().toString());
+                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("groupName").setValue(mETNewGroupName.getText().toString());
                 FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot recipient : dataSnapshot.getChildren())
-                            FirebaseDatabase.getInstance().getReference().child("users").child(recipient.getKey().toString()).child("userGroup").child(mGroupID).child("groupName").setValue(etNewGroupName.getText().toString());
+                            FirebaseDatabase.getInstance().getReference().child("users").child(recipient.getKey().toString()).child("userGroup").child(mGroupID).child("groupName").setValue(mETNewGroupName.getText().toString());
                     }
 
                     @Override

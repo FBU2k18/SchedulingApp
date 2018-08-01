@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,15 +23,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -44,29 +36,25 @@ import me.emmabr.schedulingapp.R;
 public class AddMemberActivity extends AppCompatActivity {
 
     private String mGroupID;
-    ArrayList<String> groupMembers;
+    private ArrayList<String> mGroupMembers;
 
-    private final static int RC_SIGN_IN = 34;
-    GoogleSignInClient mGoogleSignInClient;
+    private RecyclerView mRVMembers;
+    private EditText mETSearchMember;
 
-    private RecyclerView rvMembers;
-    private EditText etSearchMember;
-
-
-    ArrayList<String> alUsers = new ArrayList<>();
+    private ArrayList<String> mALUsers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_member);
 
-        mGroupID = getIntent().getStringExtra("groupID");
-        groupMembers = new ArrayList<>();
+        mGroupID = getIntent().getStringExtra("mGroupID");
+        mGroupMembers = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot childData : dataSnapshot.getChildren())
-                    groupMembers.add(childData.getValue().toString());
+                    mGroupMembers.add(childData.getValue().toString());
             }
 
             @Override
@@ -75,17 +63,15 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
-        rvMembers = findViewById(R.id.rvMembers);
-        rvMembers.setLayoutManager(new LinearLayoutManager(this));
+        mRVMembers = findViewById(R.id.rvMembers);
+        mRVMembers.setLayoutManager(new LinearLayoutManager(this));
 
-        etSearchMember = findViewById(R.id.etSearchMember);
+        mETSearchMember = findViewById(R.id.etSearchMember);
 
-        //TODO: on edit text changed
-        etSearchMember.addTextChangedListener(new TextWatcher() {
+        mETSearchMember.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do what you want with your edit text here
-                String searchText = etSearchMember.getText().toString();
+                String searchText = mETSearchMember.getText().toString();
                 firebaseUserSearch(searchText);
             }
 
@@ -97,14 +83,6 @@ public class AddMemberActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-        //google auth
-        // OAuth confirmation when user creates group (in order to access calendar)
-//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
-//                        .build();
-//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-        //signIn();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -113,12 +91,12 @@ public class AddMemberActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                for (String id : alUsers)
+                for (String id : mALUsers)
                     FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(id).setValue(id);
                 FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (String id : alUsers) {
+                        for (String id : mALUsers) {
                             FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
                             FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
                         }
@@ -129,9 +107,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
                     }
                 });
-                Intent intentHome = new Intent(this, GroupActivity.class);
-                intentHome.putExtra("groupID", mGroupID);
-                startActivity(intentHome);
                 finish();
                 break;
         }
@@ -159,17 +134,16 @@ public class AddMemberActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull User model) {
 
-                holder.setDetails(getApplicationContext(), model.getName(), model.getImage());
+                holder.setDetails(getApplicationContext(), model.getName(), model.getImage(), model.getEmail());
 
                 final String user_id = getRef(position).getKey();
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!groupMembers.contains(user_id))
-                            if (!alUsers.contains(user_id)) {
-                                alUsers.add(user_id);
+                        if (!mGroupMembers.contains(user_id))
+                            if (!mALUsers.contains(user_id)) {
+                                mALUsers.add(user_id);
                                 Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-                                //then clear the text in the edit test field
                             } else
                                 Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
                         else
@@ -179,7 +153,7 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         };
 
-        rvMembers.setAdapter(firebaseRecyclerAdapter);
+        mRVMembers.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
     }
 
@@ -194,11 +168,13 @@ public class AddMemberActivity extends AppCompatActivity {
 
         }
 
-        public void setDetails(Context ctx, String userName, String userImage) {
+        public void setDetails(Context ctx, String userName, String userImage, String userEmail) {
             TextView user_name = mView.findViewById(R.id.user_single_name);
             ImageView user_image = mView.findViewById(R.id.user_single_image);
+            TextView user_email = mView.findViewById(R.id.user_single_email);
 
             user_name.setText(userName);
+            user_email.setText(userEmail);
 
             Glide.with(ctx)
                     .load(userImage)
@@ -208,47 +184,4 @@ public class AddMemberActivity extends AppCompatActivity {
                     .into(user_image);
         }
     }
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                // Google Sign In was successful
-                Log.d("Google Authentication", "Google email successfully authenticated!");
-
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("GoogleLogIn", "Google sign in failed", e);
-            }
-        }
-    }
 }
-
-
-//        userDatabase.orderByChild("email").equalTo(etSearchUser.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
-//                    alUsers.add(userId);
-//                    Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(GroupCreationActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
