@@ -24,12 +24,23 @@ import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.GenericJson;
+import com.google.api.client.json.Json;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -40,14 +51,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.emmabr.schedulingapp.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
@@ -83,9 +101,16 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     MessageAdapter messsageAdapter;
     BottomSheetBehavior behavior;
 
+    // creating credentials
+    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
+    private static final String CREDENTIALS_FILE_PATH = "credentials.json";
+    private static final String APPLICATION_NAME = "ScheduleMe";
+    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+
     // getting users ids for email
     ArrayList<String> calendarUserIds;
-    ArrayList<String> calendarUserTokens;
+    ArrayList<String> userCalendars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,15 +232,15 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         // get calendar data
         calendarUserIds = new ArrayList<>();
-        calendarUserTokens = new ArrayList<>();
+        userCalendars = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot childData : dataSnapshot.getChildren()) {
                             String tempHolder = childData.getKey();
-                            String token = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("token").getKey();
-                            calendarUserTokens.add(token);
+                            String userCalendar = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("calendar").getKey();
+                            userCalendars.add(userCalendar);
                             String email = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("email").getKey();
                             calendarUserIds.add(email);
                         }
@@ -360,15 +385,32 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         return fbresponse.toString();
     }
 
-    public com.google.api.services.calendar.model.Calendar createMasterCal(ArrayList<com.google.api.services.calendar.model.Calendar> userCalendars,
-                                                                           Calendar service) throws IOException {
+    public com.google.api.services.calendar.model.Calendar createMasterCal(ArrayList<String> allCalendars, Calendar service) throws IOException, JSONException {
         com.google.api.services.calendar.model.Calendar masterCalendar = new com.google.api.services.calendar.model.Calendar();
         masterCalendar.setSummary("Master Calendar");
 
-        for (com.google.api.services.calendar.model.Calendar uniqCal : userCalendars) {
-            masterCalendar = service.calendars().insert(uniqCal).execute();
+        for (String uniqCal : allCalendars) {
+            JSONObject tempCalHolder = new JSONObject(uniqCal);
+            com.google.api.services.calendar.model.Calendar calFromJSON = new com.google.api.services.calendar.model.Calendar();
+            calFromJSON.set("Test Calendar", tempCalHolder);
+//            calFromJSON.putAll(Json.getDefaultInstance().);
+//            masterCalendar = service.calendars().insert(tempCalHolder).execute();
         }
-
             return masterCalendar;
     }
+
+//    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+//        // Load client secrets.
+//        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+//
+//        // Build flow and trigger user authorization request.
+//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+//                .setAccessType("offline")
+//                .build();
+//        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+//    }
+
 }

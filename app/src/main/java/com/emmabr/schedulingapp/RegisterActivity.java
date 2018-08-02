@@ -31,7 +31,11 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.FreeBusyRequest;
+import com.google.api.services.calendar.model.FreeBusyRequestItem;
+import com.google.api.services.calendar.model.FreeBusyResponse;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,8 +45,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import com.emmabr.schedulingapp.R;
 
@@ -157,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 try {
                                     GoogleSignInAccount account = task.getResult(ApiException.class);
                                     FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("token").setValue(account.getIdToken());
-                                    AsyncTask<Void, Void, String> firebaseTask = new AsyncTask<Void, Void, String>() {
+                                    @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> firebaseTask = new AsyncTask<Void, Void, String>() {
                                         @Override
                                         protected String doInBackground(Void... voids) {
                                             String tempCalHolder = null;
@@ -171,8 +180,11 @@ public class RegisterActivity extends AppCompatActivity {
                                             final Calendar service = new Calendar.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
                                                     .setApplicationName("SchedulingApp").build();
                                             try {
-                                                tempCalHolder = service.calendars().get("primary").execute().toString();
+                                                com.google.api.services.calendar.model.Calendar tempCalendar = service.calendars().get("primary").execute();
+                                                tempCalHolder = findFreeTime(tempCalendar, service);
                                             } catch (IOException e) {
+                                                e.printStackTrace();
+                                            } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
                                             return tempCalHolder;
@@ -203,5 +215,28 @@ public class RegisterActivity extends AppCompatActivity {
             Intent i = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(i);
         }
+    }
+
+    public String findFreeTime(com.google.api.services.calendar.model.Calendar userCalendar, Calendar service) throws Exception {
+        ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
+        totalCalendars.add(new FreeBusyRequestItem().setId(userCalendar.getId()));
+        String testStartTime = "2018-04-10 8:00:00";
+        String testEndTime = "2018-04-10 20:00:00";
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d = df.parse(testStartTime);
+        DateTime startTime = new DateTime(d, TimeZone.getDefault());
+
+        Date de = df.parse(testEndTime);
+        DateTime endTime = new DateTime(de, TimeZone.getDefault());
+
+        FreeBusyRequest req = new FreeBusyRequest();
+        req.setItems(totalCalendars);
+        req.setTimeMin(startTime);
+        req.setTimeMax(endTime);
+
+        FreeBusyResponse fbresponse = service.freebusy().query(req).setFields("calendars").execute();
+        String tempResponse = fbresponse.toString();
+        return tempResponse;
     }
 }
