@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -112,25 +111,6 @@ public class AddMemberActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            }
-        });
-        //google auth
-        // OAuth confirmation when user creates group (in order to access calendar)
-//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
-//                        .build();
-//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-        //signIn();
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
                 for (String id : alUsers)
                     FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(id).setValue(id);
                 FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).addValueEventListener(new ValueEventListener() {
@@ -147,13 +127,23 @@ public class AddMemberActivity extends AppCompatActivity {
 
                     }
                 });
-                Intent intentHome = new Intent(this, GroupActivity.class);
+                Intent intentHome = new Intent(AddMemberActivity.this, GroupActivity.class);
                 intentHome.putExtra("groupID", groupID);
                 startActivity(intentHome);
                 finish();
-                break;
-        }
-        return true;
+
+            }
+        });
+        //google auth
+        // OAuth confirmation when user creates group (in order to access calendar)
+//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
+//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
+//                        .build();
+//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+        //signIn();
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void firebaseUserSearch(String searchText) {
@@ -251,22 +241,3 @@ public class AddMemberActivity extends AppCompatActivity {
         }
     }
 }
-
-
-//        userDatabase.orderByChild("email").equalTo(etSearchUser.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
-//                    alUsers.add(userId);
-//                    Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(GroupCreationActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
