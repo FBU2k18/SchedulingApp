@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,8 +55,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
     private RecyclerView rvUsers;
     private EditText etSearchUser;
-    private Button btnFinish;
-
 
     ArrayList<String> alUsers = new ArrayList<>();
 
@@ -88,9 +85,7 @@ public class AddMemberActivity extends AppCompatActivity {
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
         etSearchUser = findViewById(R.id.etSearchUser);
-        btnFinish = findViewById(R.id.btnFinish);
 
-        //TODO: on edit text changed
         etSearchUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -107,43 +102,6 @@ public class AddMemberActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                for (String id : alUsers)
-                    FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(id).setValue(id);
-                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (String id : alUsers) {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(groupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(groupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                Intent intentHome = new Intent(AddMemberActivity.this, GroupActivity.class);
-                intentHome.putExtra("groupID", groupID);
-                startActivity(intentHome);
-                finish();
-
-            }
-        });
-        //google auth
-        // OAuth confirmation when user creates group (in order to access calendar)
-//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
-//                        .build();
-//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-        //signIn();
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void firebaseUserSearch(String searchText) {
@@ -173,15 +131,24 @@ public class AddMemberActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!groupMembers.contains(user_id))
-                            if (!alUsers.contains(user_id)) {
-                                alUsers.add(user_id);
-                                Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-                                //then clear the text in the edit test field
-                            } else
-                                Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
-                        else
+                        if (!groupMembers.contains(user_id)) {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").child(user_id).setValue(user_id);
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(groupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(groupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
+                                    Toast.makeText(AddMemberActivity.this, "User Added to Group!", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        } else {
                             Toast.makeText(AddMemberActivity.this, "User already in group!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }
