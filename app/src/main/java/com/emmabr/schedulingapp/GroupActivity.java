@@ -425,7 +425,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         String finalResponse = fbReponseFinal.toString();
         JSONObject fbResponseFinalObject = new JSONObject(finalResponse);
         for (com.google.api.services.calendar.model.Calendar freeTimeCals : storeCal) {
-            JSONArray tempArray = (JSONArray) (((JSONObject) ((JSONObject) fbReponseFinal.get("calendars")).get(freeTimeCals.getId())).get("busy"));
+            JSONArray tempArray = (JSONArray) (((JSONObject) ((JSONObject) fbResponseFinalObject.get("calendars")).get(freeTimeCals.getId())).get("busy"));
             for (int i = 0; i < tempArray.length(); i++) {
                 totalFreeTimes.add(tempArray.getJSONObject(i));
             }
