@@ -24,23 +24,16 @@ import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.GenericJson;
-import com.google.api.client.json.Json;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -51,10 +44,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,8 +53,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.emmabr.schedulingapp.R;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,6 +101,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     // getting users ids for email
     ArrayList<String> calendarUserIds;
     ArrayList<String> userCalendars;
+    ArrayList<String> userBusyTimes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,43 +221,24 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             }
         });
 
-        // get calendar data
-        calendarUserIds = new ArrayList<>();
-        userCalendars = new ArrayList<>();
+        // get busy times from Firebase
+        userBusyTimes = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot childData : dataSnapshot.getChildren()) {
-                            String tempHolder = childData.getKey();
-                            String userCalendar = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("calendar").getKey();
-                            userCalendars.add(userCalendar);
-                            String email = FirebaseDatabase.getInstance().getReference().child("users").child(tempHolder).child("email").getKey();
-                            calendarUserIds.add(email);
+                            String userUniqID = childData.getKey();
+                            String busyTimes = FirebaseDatabase.getInstance().getReference().child("users")
+                                    .child(userUniqID).child("calendar").toString();
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d("GroupActivity", "Something went wrong");
+                        Log.d("GroupActivity", "User BusyTime could not be retrieved from Firebase");
                     }
                 });
-
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
-                Collections.singleton("https://www.googleapis.com/auth/calendar"));
-        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (accountGoogle != null) {
-            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
-        }
-        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-        final Calendar service = new Calendar.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
-                .setApplicationName("SchedulingApp").build();
-        try {
-            String freetime = findFreeTime(calendarUserIds, service);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -361,56 +333,110 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         rvTimes.scrollToPosition(position);
     }
 
-    public String findFreeTime(ArrayList<String> groupUsersID, Calendar service) throws Exception {
-        ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
-        for (String uniqueID : groupUsersID) {
-            totalCalendars.add(new FreeBusyRequestItem().setId(uniqueID));
+    public ArrayList<JSONObject> getFreeTimes(ArrayList<String> freeBusyTimes) throws JSONException, IOException, ParseException {
+        ArrayList<com.google.api.services.calendar.model.Calendar> storeCal = new ArrayList<>();
+        ArrayList<JSONObject> totalBusyTimes = new ArrayList<>();
+        ArrayList<JSONObject> totalFreeTimes = new ArrayList<>();
+        // adding all users' busy times into an array of JSON objects
+        for (String eachTime : freeBusyTimes) {
+            JSONObject userUniqTime = new JSONObject(eachTime);
+            JSONArray busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
+                    .get("krithikai@gmail.com")).get("busy");
+            for (int i = 0; i < busyTimes.length(); i++) {
+                totalBusyTimes.add(busyTimes.getJSONObject(i));
+            }
         }
-        String testStartTime = "2018-04-10 8:00:00";
-        String testEndTime = "2018-04-10 20:00:00";
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d = df.parse(testStartTime);
-        DateTime startTime = new DateTime(d, TimeZone.getDefault());
-
-        Date de = df.parse(testEndTime);
-        DateTime endTime = new DateTime(de, TimeZone.getDefault());
-
-        FreeBusyRequest req = new FreeBusyRequest();
-        req.setItems(totalCalendars);
-        req.setTimeMin(startTime);
-        req.setTimeMax(endTime);
-
-        FreeBusyResponse fbresponse = service.freebusy().query(req).execute();
-        return fbresponse.toString();
-    }
-
-    public com.google.api.services.calendar.model.Calendar createMasterCal(ArrayList<String> allCalendars, Calendar service) throws IOException, JSONException {
-        com.google.api.services.calendar.model.Calendar masterCalendar = new com.google.api.services.calendar.model.Calendar();
-        masterCalendar.setSummary("Master Calendar");
-
-        for (String uniqCal : allCalendars) {
-            JSONObject tempCalHolder = new JSONObject(uniqCal);
-            com.google.api.services.calendar.model.Calendar calFromJSON = new com.google.api.services.calendar.model.Calendar();
-            calFromJSON.set("Test Calendar", tempCalHolder);
-//            calFromJSON.putAll(Json.getDefaultInstance().);
-//            masterCalendar = service.calendars().insert(tempCalHolder).execute();
+        // creating calendar connection
+        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+                Collections.singleton("https://www.googleapis.com/auth/calendar"));
+        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        if (accountGoogle != null) {
+            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
         }
-            return masterCalendar;
+        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+        final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
+                .setApplicationName("SchedulingApp").build();
+
+        // creating a mini calendar for each day of the week (since calendar only handles one week at a time)
+        for (int i = 0; i < 7; i++) {
+            com.google.api.services.calendar.model.Calendar dayCal = new com.google.api.services.calendar.model.Calendar();
+            storeCal.add(i, dayCal);
+        }
+
+        // adding an event at each minute to the 7 days of calendars
+        for (com.google.api.services.calendar.model.Calendar dayCalendar : storeCal) {
+            for (int i = 0; i < 24; i++) {
+                String iString = Integer.toString(i);
+                String nextString = Integer.toString(i + 1);
+                for (int j = 0; j < 60; j++) {
+                    DateTime endDateTime;
+                    Event event = new Event();
+                    String jString = Integer.toString(j);
+                    String jPlusOne = Integer.toString(j + 1);
+                    // setting start time for each event
+                    DateTime startDateTime = new DateTime("2018-04-10T" + iString + ":" + jString + ":00-07:00");
+                    EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles");
+                    event.setStart(start);
+                    event.setId("2018-04-10T" + iString + ":" + jString + ":00-07:00");
+                    // setting end time for each event
+                    if (j + 1 == 60) {
+                        if (i + 1 == 24) {
+                            endDateTime = new DateTime("2018-04-11T00:00:00-07:00");
+                        } else {
+                            endDateTime = new DateTime("2018-04-10T" + nextString + ":" + "00:00-07:00");
+                        }
+                    } else {
+                        endDateTime = new DateTime("2018-04-10T" + iString + ":" + jPlusOne + ":00-07:00");
+                    }
+                    EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles");
+                    event.setEnd(end);
+                    // adding the event to the calendar
+                    service.events().insert(dayCalendar.getId(), event).execute();
+                }
+            }
+        }
+        // delete an event any time a user is busy
+        for (JSONObject userBusy : totalBusyTimes) {
+            String startTime = (String) userBusy.get("start");
+            service.events().delete(storeCal.get(1).getId(), startTime).execute();
+        }
+
+        String finalStartTime = "2018-04-10 08:00:00";
+        String finalEndTime = "2018-04-17 08:00:00";
+
+        DateFormat dfFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dFinal = dfFinal.parse(finalStartTime);
+        DateTime startTimeFinal = new DateTime(dFinal, TimeZone.getDefault());
+
+        Date deFinal = dfFinal.parse(finalEndTime);
+        DateTime endTimeFinal = new DateTime(deFinal, TimeZone.getDefault());
+
+        FreeBusyRequest fbreq = new FreeBusyRequest();
+        ArrayList<FreeBusyRequestItem> finalFreeTime = new ArrayList<>();
+        for (com.google.api.services.calendar.model.Calendar eachDayCal : storeCal) {
+            finalFreeTime.add(new FreeBusyRequestItem().setId(eachDayCal.getId()));
+        }
+        fbreq.setItems(finalFreeTime);
+        fbreq.setTimeZone("America/Los_Angeles");
+        fbreq.setTimeMin(startTimeFinal);
+        fbreq.setTimeMax(endTimeFinal);
+
+        FreeBusyResponse fbReponseFinal = service.freebusy().query(fbreq).setFields("calendars").execute();
+        String finalResponse = fbReponseFinal.toString();
+        JSONObject fbResponseFinalObject = new JSONObject(finalResponse);
+        for (com.google.api.services.calendar.model.Calendar freeTimeCals : storeCal) {
+            JSONArray tempArray = (JSONArray) (((JSONObject) ((JSONObject) fbReponseFinal.get("calendars")).get(freeTimeCals.getId())).get("busy"));
+            for (int i = 0; i < tempArray.length(); i++) {
+                totalFreeTimes.add(tempArray.getJSONObject(i));
+            }
+        }
+
+        return totalFreeTimes;
     }
-
-//    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-//        // Load client secrets.
-//        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-//
-//        // Build flow and trigger user authorization request.
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-//                .setAccessType("offline")
-//                .build();
-//        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-//    }
-
 }
+
+// TODO - following list
+// edge case testing: if an event is deleted, make sure you are not deleting something that is not there...will cause errors
+// correctly delete from the right calendar
+// hardcode in correct dates
+// test everything works correctly

@@ -55,6 +55,9 @@ import java.util.TimeZone;
 
 import com.emmabr.schedulingapp.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class RegisterActivity extends AppCompatActivity {
 
     // Google Auth
@@ -220,8 +223,8 @@ public class RegisterActivity extends AppCompatActivity {
     public String findFreeTime(com.google.api.services.calendar.model.Calendar userCalendar, Calendar service) throws Exception {
         ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
         totalCalendars.add(new FreeBusyRequestItem().setId(userCalendar.getId()));
-        String testStartTime = "2018-04-10 8:00:00";
-        String testEndTime = "2018-04-10 20:00:00";
+        String testStartTime = "2018-04-10 08:00:00";
+        String testEndTime = "2018-04-17 08:00:00";
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = df.parse(testStartTime);
@@ -232,6 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         FreeBusyRequest req = new FreeBusyRequest();
         req.setItems(totalCalendars);
+        req.setTimeZone("America/Los_Angeles");
         req.setTimeMin(startTime);
         req.setTimeMax(endTime);
 
