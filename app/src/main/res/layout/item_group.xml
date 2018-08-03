@@ -20,8 +20,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="false"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_alignTop="@+id/ivGroupLogo"
         android:layout_marginLeft="40dp"
         android:layout_toEndOf="@+id/ivGroupLogo"
         android:text="Group" />
+
+    <TextView
+        android:id="@+id/tvGroupMembers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvGroupName"
+        android:layout_centerVertical="true"
+        android:text="Members" />
 </RelativeLayout>
