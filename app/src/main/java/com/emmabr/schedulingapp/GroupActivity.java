@@ -34,6 +34,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.Events;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
@@ -357,48 +358,93 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName("SchedulingApp").build();
 
-        // creating a mini calendar for each day of the week (since calendar only handles one week at a time)
-        for (int i = 0; i < 7; i++) {
-            com.google.api.services.calendar.model.Calendar dayCal = new com.google.api.services.calendar.model.Calendar();
-            storeCal.add(i, dayCal);
-        }
+        com.google.api.services.calendar.model.Calendar dayCal = new com.google.api.services.calendar.model.Calendar();
 
         // adding an event at each minute to the 7 days of calendars
-        for (com.google.api.services.calendar.model.Calendar dayCalendar : storeCal) {
-            for (int i = 0; i < 24; i++) {
-                String iString = Integer.toString(i);
-                String nextString = Integer.toString(i + 1);
-                for (int j = 0; j < 60; j++) {
-                    DateTime endDateTime;
-                    Event event = new Event();
-                    String jString = Integer.toString(j);
-                    String jPlusOne = Integer.toString(j + 1);
-                    // setting start time for each event
-                    DateTime startDateTime = new DateTime("2018-04-10T" + iString + ":" + jString + ":00-07:00");
-                    EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles");
-                    event.setStart(start);
-                    event.setId("2018-04-10T" + iString + ":" + jString + ":00-07:00");
-                    // setting end time for each event
-                    if (j + 1 == 60) {
-                        if (i + 1 == 24) {
-                            endDateTime = new DateTime("2018-04-11T00:00:00-07:00");
+            for (int k = 10; k < 18; k++) {
+                String currDate = "2018-04-" + Integer.toString(k) + "T";
+                String currNextDate = "2018-04-" + Integer.toString(k+1) +"T";
+                String iString = null;
+                String nextString = null;
+                String jString = null;
+                String jPlusOne = null;
+                for (int i = 0; i < 24; i++) {
+                    if (i < 10) {
+                        iString = "0" + Integer.toString(i);
+                        if (i + 1 < 10) {
+                            nextString = "0" + Integer.toString(i + 1);
                         } else {
-                            endDateTime = new DateTime("2018-04-10T" + nextString + ":" + "00:00-07:00");
+                            nextString = Integer.toString(i + 1);
                         }
                     } else {
-                        endDateTime = new DateTime("2018-04-10T" + iString + ":" + jPlusOne + ":00-07:00");
+                        iString = Integer.toString(i);
+                        nextString = Integer.toString(i+1);
                     }
-                    EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles");
-                    event.setEnd(end);
-                    // adding the event to the calendar
-                    service.events().insert(dayCalendar.getId(), event).execute();
+                    for (int j = 0; j < 60; j++) {
+                        DateTime endDateTime;
+                        Event event = new Event();
+                        if (j < 10) {
+                            jString = "0" + Integer.toString(j);
+                            if (j+1 < 10) {
+                                jPlusOne = "0" + Integer.toString(j + 1);
+                            } else {
+                                jPlusOne = Integer.toString(j + 1);
+                            }
+                        } else {
+                            jString = Integer.toString(j);
+                            jPlusOne = Integer.toString(j + 1);
+                        }
+                        // setting start time for each event
+                        DateTime startDateTime = new DateTime(currDate + iString + ":" + jString + ":00-07:00");
+                        EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles");
+                        event.setStart(start);
+                        if (i < 10) {
+                            iString = "0" + Integer.toString(i);
+                        }
+
+                        event.setId(currDate + iString + ":" + jString + ":00-07:00");
+                        // setting end time for each event
+                        if (j + 1 == 60) {
+                            if (i + 1 == 24) {
+                                endDateTime = new DateTime(currNextDate + "00:00:00-07:00");
+                            } else {
+                                endDateTime = new DateTime(currDate + nextString + ":" + "00:00-07:00");
+                            }
+                        } else {
+                            endDateTime = new DateTime("2018-04-10T" + iString + ":" + jPlusOne + ":00-07:00");
+                        }
+                        EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles");
+                        event.setEnd(end);
+                        // adding the event to the calendar
+                        service.events().insert(dayCal.getId(), event).execute();
+                    }
                 }
             }
-        }
+
+            // get an arraylist of all the events in the new calendar
+            Events eventList = service.events().list(dayCal.getId()).execute();
+            ArrayList<Event> listEvents = new ArrayList<>();
+            for (Event oneEvent : eventList.getItems()) {
+                listEvents.add(oneEvent);
+            }
+
         // delete an event any time a user is busy
         for (JSONObject userBusy : totalBusyTimes) {
+                int startPlace = 0;
+                int endPlace = 0;
             String startTime = (String) userBusy.get("start");
-            service.events().delete(storeCal.get(1).getId(), startTime).execute();
+            String endTime = (String) userBusy.get("end");
+            for (Event currEvent : listEvents) {
+                if (startTime.contentEquals(currEvent.getId())) {
+                    startPlace = listEvents.indexOf(currEvent);
+                }
+                if (endTime.contentEquals(currEvent.getId())) {
+                    endPlace = listEvents.indexOf(currEvent);
+                }
+                for (int l = startPlace; l < endPlace; l++) {
+                    service.events().delete(dayCal.getId(), listEvents.get(l).getId());
+                }
+            }
         }
 
         String finalStartTime = "2018-04-10 08:00:00";
@@ -436,7 +482,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 }
 
 // TODO - following list
-// edge case testing: if an event is deleted, make sure you are not deleting something that is not there...will cause errors
-// correctly delete from the right calendar
 // hardcode in correct dates
 // test everything works correctly
+// function to delete the 7 calendars at the end of calling the freebusy function
