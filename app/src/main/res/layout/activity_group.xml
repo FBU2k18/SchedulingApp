@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_wrmidth="match_parent"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="top|left"
             android:background="@drawable/messages_bar"
@@ -93,6 +93,14 @@
                     android:layout_gravity="bottom"
                     android:text="Add from Photos" />
             </FrameLayout>
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                app:srcCompat="@drawable/messages_text" />
         </android.support.design.widget.CoordinatorLayout>
     </FrameLayout>
 
