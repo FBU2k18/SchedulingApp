@@ -56,9 +56,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                                 }
 
                                 @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
+                                public void onCancelled(@NonNull DatabaseError databaseError) {}
                             });
                             return null;
                         }

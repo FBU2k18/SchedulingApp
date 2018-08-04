@@ -48,7 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             if (message.getMessageText() != null) {
                 holder.tvTextMe.setText(message.getMessageText());
                 //TODO: Change drawable
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.user_message_text_background));
             } else if (message.getImageURL() != null) {
                 Glide.with(context).load(message.getImageURL()).into(holder.ivPicMe);
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +62,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextMe.setText(message.getPollTitle());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.out_bubble));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(context, R.drawable.message_text_background));
                 holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
