@@ -15,12 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -33,6 +29,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     ArrayList<GroupData> groups;
     Context context;
     ArrayList<String> groupMembers = new ArrayList<>();
+    private DatabaseReference mDatabaseRef;
+    private String userlist = "";
 
     public MainActivityAdapter(ArrayList<GroupData> groups) {
         this.groups = groups;
@@ -41,39 +39,43 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @Override
     public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
         GroupData currGroup = groups.get(position);
+//        mDatabaseRef.child(currGroup.getGroupId()).child("Recipients").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (final DataSnapshot member : dataSnapshot.getChildren()) {
+//                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
+//                        @Override
+//                        public Task<DataSnapshot> then(@NonNull Task<Void> task) {
+//                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                    userlist = userlist + dataSnapshot.getValue().toString() + " ";
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {}
+//                            });
+//                            return null;
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
 
-        FirebaseDatabase.getInstance().getReference().child("groups").child(currGroup.getGroupId()).child("Recipients").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (final DataSnapshot member : dataSnapshot.getChildren()) {
-                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
-                        @Override
-                        public Task<DataSnapshot> then(@NonNull Task<Void> task) {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    groupMembers.add(dataSnapshot.getValue().toString());
-                                }
+        userlist = "";
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {}
-                            });
-                            return null;
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-        String userlist = "";
+        groupMembers = currGroup.getUsers();
         for (int i = 0; i < groupMembers.size() - 1; ++i) {
             userlist = userlist + groupMembers.get(i) + ", ";
         }
-        //userlist = userlist + groupMembers.get(groupMembers.size() - 1);
+        if (groupMembers.size() > 0) {
+            userlist = userlist + groupMembers.get(groupMembers.size() - 1);
+        }
+        groupMembers.clear();
         holder.tvGroupMembers.setText(userlist);
 
         holder.tvGroupName.setText(currGroup.getGroupName());
@@ -90,6 +92,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View groupView = inflater.inflate(R.layout.item_group, viewGroup, false);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("groups");
 
         return new MainActivityAdapter.ViewHolder(groupView);
     }

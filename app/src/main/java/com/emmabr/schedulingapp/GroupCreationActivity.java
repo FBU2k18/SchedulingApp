@@ -95,7 +95,7 @@ public class GroupCreationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //get group name and set
                 String groupName = etGroupName.getText().toString();
-                GroupData groupData = new GroupData(groupName, "", "");
+                GroupData groupData = new GroupData(groupName, "", "", alUsers);
                 alUsers.add(mAuth.getUid());
 
                 saveGroup(groupData, alUsers);

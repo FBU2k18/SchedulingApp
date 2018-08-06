@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String mCurrentUser;
     private DatabaseReference currUserGroupsData;
+    private ArrayList<String> members = new ArrayList<>();
 
 
     @Override
@@ -100,8 +103,34 @@ public class MainActivity extends AppCompatActivity {
                             String groupID = childData.getKey().toString();
                             String name = childData.child("groupName").getValue().toString();
                             String imgURL = childData.child("imageURL").getValue().toString();
-                            GroupData tempGroup = new GroupData(name, imgURL, groupID);
+                            // TODO: set members in group data
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (final DataSnapshot member : dataSnapshot.getChildren()) {
+                                        member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
+                                            @Override
+                                            public Task<DataSnapshot> then(@NonNull Task<Void> task) {
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            members.add(dataSnapshot.getValue().toString());
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                                });
+                                                return null;
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {}
+                            });
+                            GroupData tempGroup = new GroupData(name, imgURL, groupID, members);
                             groups.add(tempGroup);
+                            //members.clear();
                         }
                     }
                     adapter.notifyDataSetChanged();
