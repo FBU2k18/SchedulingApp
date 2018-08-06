@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.emmabr.schedulingapp.Models.AvailableTime;
 import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -59,6 +60,7 @@ import java.util.TimeZone;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
@@ -102,9 +104,10 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     // getting users ids for email
-    ArrayList<String> calendarUserIds;
-    ArrayList<String> userCalendars;
     ArrayList<String> userBusyTimes;
+
+    // populating available times
+    ArrayList<AvailableTime> mAvailTimes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         groupID = getIntent().getStringExtra("groupID");
+        mAvailTimes = new ArrayList<>();
 
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);
@@ -272,7 +276,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getTimes();
+//        getTimes();
 
         getMessages();
 
@@ -288,13 +292,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         }
     }
 
-    public void getTimes() {
-        //will pull times from Firebase, but testing for now
-        for (int i = 0; i < 10; i++)
-            mTimes.add(TimeOption.newTime());
-        Collections.sort(mTimes);
-        mTimeAdapter.notifyDataSetChanged();
-    }
+//    public void getTimes() {
+//        //will pull times from Firebase, but testing for now
+//        for (int i = 0; i < 10; i++)
+//            mTimes.add(TimeOption.newTime());
+//        Collections.sort(mTimes);
+//        mTimeAdapter.notifyDataSetChanged();
+//    }
 
     public void getMessages() {
         FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
@@ -617,6 +621,16 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 //            }
 //        String temp = totalFreeTimes.toString();
 //        return totalFreeTimes;
+    }
+
+    private void updateAvailTimes(ArrayList<JSONObject> times) throws JSONException {
+        for (JSONObject time : times) {
+            String start = time.getString("start");
+            String end = time.getString("end");
+            TimeOption newTime = new TimeOption(start, end);
+            mTimes.add(newTime);
+        }
+        mTimeAdapter.notifyDataSetChanged();
     }
 }
 

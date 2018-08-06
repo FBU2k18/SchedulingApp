@@ -7,14 +7,18 @@ import java.util.ArrayList;
 public class TimeOption implements Comparable{
 
     String id;
-    String time;
+    String startTime;
+    String endTime;
     int votes;
     ArrayList<User> upVoters; //possible way to keep track of who votes up
     ArrayList<User> downVoters; //possible way to keep track of who votes down
 
-    public TimeOption(String id) {
-        this.id = id;
-        //pull time, votes, and voters from Firebase
+    public TimeOption(String startTime, String endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        upVoters = new ArrayList<>();
+        downVoters = new ArrayList<>();
+
     }
 
     public String getId() {
@@ -22,7 +26,8 @@ public class TimeOption implements Comparable{
     }
 
     public String getTime() {
-        return time;
+        String finalTime =  startTime + " - " + endTime;
+        return finalTime;
     }
 
     public int getVotes() {
@@ -72,11 +77,11 @@ public class TimeOption implements Comparable{
     }
 
     //just for testing, will be removed later
-    public static TimeOption newTime() {
-        TimeOption time = new TimeOption("");
-        time.upVoters = new ArrayList<>();
-        time.downVoters = new ArrayList<>();
-        time.time = "TimeOption " + (int) (Math.random()*10);
-        return time;
-    }
+//    public static TimeOption newTime() {
+////        TimeOption time = new TimeOption("");
+////        time.upVoters = new ArrayList<>();
+////        time.downVoters = new ArrayList<>();
+//////        time.time = "TimeOption " + (int) (Math.random()*10);
+////        return time;
+////    }
 }

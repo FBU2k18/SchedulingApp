@@ -35,7 +35,6 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull TimeOptionAdapter.ViewHolder holder, int position) {
         TimeOption time = times.get(position);
-        time.setVotes();
         holder.tvTime.setText(time.getTime());
         holder.tvVotes.setText(Integer.toString(time.getVotes()));
         //get current user
