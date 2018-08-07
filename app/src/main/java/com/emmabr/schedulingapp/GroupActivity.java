@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +36,6 @@ import java.util.Date;
 import me.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
-
 
 public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
 
@@ -174,6 +175,9 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         getTimes();
 
@@ -247,6 +251,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 Intent intentEdit = new Intent(this, GroupProfile.class);
                 intentEdit.putExtra("mGroupID", mGroupID);
                 startActivity(intentEdit);
+                break;
             case R.id.miLeaveGroup:
                 LeaveGroupDialogFragment leaveGroup = new LeaveGroupDialogFragment();
                 leaveGroup.show(getSupportFragmentManager(), "LeaveGroup");
@@ -259,12 +264,44 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     public void leaveGroup() {
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(FirebaseAuth.getInstance().getUid()).removeValue();
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).removeValue();
-        Intent intentLeave = new Intent(this, MainActivity.class);
-        startActivity(intentLeave);
         finish();
     }
 
     public void scrollToPosition(int position) {
         mRVTimes.scrollToPosition(position);
+    }
+
+    //for use in calendar pulling
+    private ArrayList<String> mCalendars;
+    public void test() {
+        mCalendars = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (final DataSnapshot member : dataSnapshot.getChildren())
+                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
+                        @Override
+                        public Task<DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
+                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("calendar").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    mCalendars.add(dataSnapshot.getValue().toString());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                            return null;
+                        }
+                    });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

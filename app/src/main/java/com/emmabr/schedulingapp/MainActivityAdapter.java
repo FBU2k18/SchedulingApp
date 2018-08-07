@@ -28,11 +28,12 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     private ArrayList<GroupData> mGroups;
     private ArrayList<GroupData> mFilteredGroups;
     private Context mContext;
+    private MainActivity mHome;
 
-
-    public MainActivityAdapter(ArrayList<GroupData> groups) {
+    public MainActivityAdapter(ArrayList<GroupData> groups, MainActivity home) {
         this.mGroups = groups;
         this.mFilteredGroups = this.mGroups;
+        this.mHome = home;
     }
 
     @Override
@@ -83,6 +84,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                 Intent intent = new Intent(mContext, GroupActivity.class);
                 intent.putExtra("mGroupID", group.getGroupId());
                 mContext.startActivity(intent);
+                mHome.clearNotifications(getAdapterPosition());
+                mHome.blockNotifications(group.getGroupId());
                 Log.i("GroupData", group.getGroupName());
             }
         }

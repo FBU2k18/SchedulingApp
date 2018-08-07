@@ -76,6 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
     public void registerUser(final String username, final String email, final String password) {

@@ -68,6 +68,10 @@ public class PostPhotoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
     @Override
