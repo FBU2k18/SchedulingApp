@@ -1,6 +1,5 @@
 package com.emmabr.schedulingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,26 +27,28 @@ import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPollActivity extends AppCompatActivity {
 
-    String groupID;
+    private String mGroupID;
 
-    EditText etPollTitle;
-    EditText etAddOption;
-    EditText etNumber;
+    private EditText mETPollTitle;
+    private EditText mETAddOption;
+    private EditText mETNumber;
 
-    ArrayList<String> optionsText;
+    private ArrayList<String> mOptionsText;
 
-    TextView tvPollOptions;
+    private TextView mTVPollOptions;
 
-    ImageView ivPlus;
-    ImageView ivMultiply;
+    private ImageView mIVPlus;
+    private ImageView mIVMultiply;
 
-    Button bPostPoll;
-    Button bCancelPoll;
+    private Button mBPostPoll;
+    private Button mBCancelPoll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_poll);
+
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
         getSupportActionBar().hide();
 
@@ -60,42 +61,39 @@ public class PostPollActivity extends AppCompatActivity {
 
         getWindow().setLayout((int)(width * .85), (int)(height * .66));
 
+        mETPollTitle = findViewById(R.id.etPollTitle);
+        mETAddOption = findViewById(R.id.etAddOption);
+        mETNumber = findViewById(R.id.etNumber);
 
-        groupID = getIntent().getStringExtra("groupID");
+        mOptionsText = new ArrayList<>();
 
-        etPollTitle = findViewById(R.id.etPollTitle);
-        etAddOption = findViewById(R.id.etAddOption);
-        etNumber = findViewById(R.id.etNumber);
+        mTVPollOptions = findViewById(R.id.tvPollOptions);
+        mTVPollOptions.setText(mOptionsText.toString());
 
-        optionsText = new ArrayList<>();
-
-        tvPollOptions = findViewById(R.id.tvPollOptions);
-        tvPollOptions.setText(optionsText.toString());
-
-        ivPlus = findViewById(R.id.ivPlus);
-        ivPlus.setOnClickListener(new View.OnClickListener() {
+        mIVPlus = findViewById(R.id.ivPlus);
+        mIVPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etAddOption.getText().toString().isEmpty())
+                if (mETAddOption.getText().toString().isEmpty())
                     Toast.makeText(PostPollActivity.this, "Option is empty!", Toast.LENGTH_LONG).show();
                 else {
-                    optionsText.add(etAddOption.getText().toString());
-                    tvPollOptions.setText(optionsText.toString());
-                    etAddOption.setText("");
+                    mOptionsText.add(mETAddOption.getText().toString());
+                    mTVPollOptions.setText(mOptionsText.toString());
+                    mETAddOption.setText("");
                 }
             }
         });
-        ivMultiply = findViewById(R.id.ivMultiply);
-        ivMultiply.setOnClickListener(new View.OnClickListener() {
+        mIVMultiply = findViewById(R.id.ivMultiply);
+        mIVMultiply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etNumber.getText().toString().isEmpty())
+                if (mETNumber.getText().toString().isEmpty())
                     Toast.makeText(PostPollActivity.this, "No number entered!", Toast.LENGTH_LONG).show();
                 else
                     try {
-                        optionsText.remove(Integer.parseInt(etNumber.getText().toString()) - 1);
-                        tvPollOptions.setText(optionsText.toString());
-                        etNumber.setText("");
+                        mOptionsText.remove(Integer.parseInt(mETNumber.getText().toString()) - 1);
+                        mTVPollOptions.setText(mOptionsText.toString());
+                        mETNumber.setText("");
                     } catch (IndexOutOfBoundsException badNumber) {
                         Toast.makeText(PostPollActivity.this, "There is no option at that position!", Toast.LENGTH_LONG).show();
                     } catch (NumberFormatException notANumber) {
@@ -104,24 +102,24 @@ public class PostPollActivity extends AppCompatActivity {
             }
         });
 
-        bPostPoll = findViewById(R.id.bPostPoll);
-        bPostPoll.setOnClickListener(new View.OnClickListener() {
+        mBPostPoll = findViewById(R.id.bPostPoll);
+        mBPostPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!etPollTitle.getText().toString().isEmpty())
-                            if (optionsText.size() > 1) {
+                        if (!mETPollTitle.getText().toString().isEmpty())
+                            if (mOptionsText.size() > 1) {
                                 Date date = new Date();
-                                Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + etPollTitle.getText().toString(), Long.toString(date.getTime()));
-                                saveMessage(message, groupID);
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+                                Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + mETPollTitle.getText().toString(), Long.toString(date.getTime()));
+                                saveMessage(message, mGroupID);
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot childData : dataSnapshot.getChildren())
                                             if (childData.hasChild("pollTitle") && !childData.hasChild("options"))
-                                                for (String option : optionsText)
+                                                for (String option : mOptionsText)
                                                     childData.child("options").child(option).child("text").getRef().setValue(option);
                                     }
 
@@ -130,12 +128,8 @@ public class PostPollActivity extends AppCompatActivity {
 
                                     }
                                 });
-                                Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
-                                intent.putExtra("groupID", groupID);
-                                intent.putExtra("up", true);
-                                startActivity(intent);
                                 finish();
-                            } else if (optionsText.size() == 0)
+                            } else if (mOptionsText.size() == 0)
                                 Toast.makeText(PostPollActivity.this, "No options!", Toast.LENGTH_LONG).show();
                             else
                                 Toast.makeText(PostPollActivity.this, "Only one option!", Toast.LENGTH_LONG).show();
@@ -149,14 +143,10 @@ public class PostPollActivity extends AppCompatActivity {
                 });
             }
         });
-        bCancelPoll = findViewById(R.id.bCancelPoll);
-        bCancelPoll.setOnClickListener(new View.OnClickListener() {
+        mBCancelPoll = findViewById(R.id.bCancelPoll);
+        mBCancelPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
-                intent.putExtra("groupID", groupID);
-                intent.putExtra("up", true);
-                startActivity(intent);
                 finish();
             }
         });

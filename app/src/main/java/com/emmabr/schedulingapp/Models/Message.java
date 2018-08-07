@@ -1,5 +1,7 @@
 package com.emmabr.schedulingapp.Models;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -55,8 +57,10 @@ public class Message {
         this.messageID = messageID;
     }
 
-    public static void saveMessage(Message inputMessage, String group_id) {
-        FirebaseDatabase.getInstance().getReference().child("groups").child(group_id).child("chatMessages").push().setValue(inputMessage);
+    public static DatabaseReference saveMessage(Message inputMessage, String group_id) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups").child(group_id).child("chatMessages").push();
+        ref.setValue(inputMessage);
+        return ref;
     }
 
 }

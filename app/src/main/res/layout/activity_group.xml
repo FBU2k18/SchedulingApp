@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.GroupActivity"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context="com.emmabr.schedulingapp.GroupActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimes"
@@ -42,7 +42,7 @@
             android:layout_height="55dp"
             android:layout_gravity="bottom|left"
             android:layout_marginLeft="55dp"
-            android:hint="Message" />
+            android:hint="@string/message_hint" />
 
         <ImageView
             android:id="@+id/ivAddOther"
@@ -66,10 +66,10 @@
             <FrameLayout
                 android:id="@+id/flOtherTypes"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_gravity="bottom|left"
                 app:behavior_hideable="true"
-                app:behavior_peekHeight="150dp"
+                app:behavior_peekHeight="100dp"
                 app:layout_behavior="@string/bottom_sheet_behavior">
 
                 <Button
@@ -77,21 +77,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="top"
-                    android:text="Add a Poll" />
-
-                <Button
-                    android:id="@+id/bTakePic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="Take a Picture" />
+                    android:text="@string/add_poll" />
 
                 <Button
                     android:id="@+id/bAddPic"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:text="Add from Photos" />
+                    android:text="@string/add_pic" />
             </FrameLayout>
 
             <ImageView

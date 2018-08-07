@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,22 +25,27 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import me.emmabr.schedulingapp.R;
 
+public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> implements Filterable {
 
-public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {
+    private ArrayList<GroupData> mGroups;
+    private ArrayList<GroupData> mFilteredGroups;
+    private Context mContext;
+    private MainActivity mHome;
 
-    ArrayList<GroupData> groups;
-    Context context;
-    ArrayList<String> groupMembers = new ArrayList<>();
-    private DatabaseReference mDatabaseRef;
+    private ArrayList<String> groupMembers = new ArrayList<>();
     private String userlist = "";
+    private DatabaseReference mDatabaseRef;
 
-    public MainActivityAdapter(ArrayList<GroupData> groups) {
-        this.groups = groups;
+
+    public MainActivityAdapter(ArrayList<GroupData> groups, MainActivity home) {
+        this.mGroups = groups;
+        this.mFilteredGroups = this.mGroups;
+        this.mHome = home;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
-        GroupData currGroup = groups.get(position);
+        GroupData currGroup = mGroups.get(position);
 
         userlist = "";
 
@@ -51,9 +58,10 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         }
         holder.tvGroupMembers.setText(userlist);
 
+        currGroup = mFilteredGroups.get(position);
         holder.tvGroupName.setText(currGroup.getGroupName());
-        if (currGroup.getImageURL() != null && !currGroup.getImageURL().equals(""))
-            Glide.with(context)
+        if (!currGroup.getImageURL().isEmpty())
+            Glide.with(mContext)
                     .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(holder.ivGroupLogo);
@@ -62,8 +70,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @NonNull
     @Override
     public MainActivityAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+        mContext = viewGroup.getContext();
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View groupView = inflater.inflate(R.layout.item_group, viewGroup, false);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("groups");
 
@@ -72,7 +80,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
     @Override
     public int getItemCount() {
-        return groups.size();
+        return mFilteredGroups.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -95,13 +103,43 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         @Override
         public void onClick(View view) {
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-                GroupData group = groups.get(getAdapterPosition());
+                GroupData group = mFilteredGroups.get(getAdapterPosition());
                 //replace with intent to go to group screen
-                Intent intent = new Intent(context, GroupActivity.class);
-                intent.putExtra("groupID", group.getGroupId());
-                context.startActivity(intent);
-                Log.i("GroupData",group.getGroupName());
+                Intent intent = new Intent(mContext, GroupActivity.class);
+                intent.putExtra("mGroupID", group.getGroupId());
+                mContext.startActivity(intent);
+                mHome.clearNotifications(getAdapterPosition());
+                mHome.blockNotifications(group.getGroupId());
+                Log.i("GroupData", group.getGroupName());
             }
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString().toLowerCase();
+                if (charString.isEmpty())
+                    mFilteredGroups = mGroups;
+                else {
+                    ArrayList<GroupData> temp = new ArrayList<>();
+                    for (GroupData group : mGroups)
+                        if (group.getGroupName().toLowerCase().contains(charString))
+                            temp.add(group);
+                    mFilteredGroups = temp;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredGroups;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mFilteredGroups = (ArrayList<GroupData>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

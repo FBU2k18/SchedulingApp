@@ -17,11 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,60 +30,47 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.emmabr.schedulingapp.R;
 
-public class UserProfile extends AppCompatActivity {
+public class GroupProfile extends AppCompatActivity {
 
+    private CircleImageView mCIVGroupLogo;
+    private TextView mTVGroup;
 
-    private DatabaseReference mUserDatabase;
-    private FirebaseUser mCurrentUser;
+    private Button mBGroupPic;
+    private Button mBGroupName;
 
-    // Android Layout Variables
-
-    private CircleImageView mDisplayImage;
-    private TextView mName;
-
-    private Button mImageBtn;
-    private Button mNameBtn;
+    private String mGroupID;
 
     private static final int GALLERY_PICK = 1;
 
-    //Storage Firebase
-    private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_group_profile);
 
-        mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
-        mName = (TextView) findViewById(R.id.settingsName);
-        mImageBtn = (Button) findViewById(R.id.settingsImageBtn);
-        mNameBtn = (Button) findViewById(R.id.settingsNameBtn);
+        mCIVGroupLogo = findViewById(R.id.civGroupLogo);
+        mTVGroup = findViewById(R.id.tvGroup);
+        mBGroupPic = findViewById(R.id.bGroupPic);
+        mBGroupName = findViewById(R.id.bGroupName);
 
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        mImageStorage = FirebaseStorage.getInstance().getReference();
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
-
-        String current_uid = mCurrentUser.getUid();
-
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(current_uid);
-        mUserDatabase.keepSynced(true);
-
-        mUserDatabase.addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("nickName").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                String name = dataSnapshot.child("groupName").getValue().toString();
+                String image = dataSnapshot.child("imageURL").getValue().toString();
 
-                mName.setText(name);
+                mTVGroup.setText(name);
 
-                if (!image.equals("default")) {
+                if (!image.isEmpty()) {
                     Glide.with(getBaseContext())
                             .load(image)
                             .apply(new RequestOptions()
                                     .placeholder(R.drawable.default_pic)
                                     .fitCenter())
-                            .into(mDisplayImage);
+                            .into(mCIVGroupLogo);
                 }
             }
 
@@ -96,20 +80,20 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
-        mImageBtn.setOnClickListener(new View.OnClickListener() {
+        mBGroupPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(UserProfile.this);
+                        .start(GroupProfile.this);
             }
         });
 
-        mNameBtn.setOnClickListener(new View.OnClickListener() {
+        mBGroupName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: send to new activity or have a popup with text input
-                Intent intent = new Intent(UserProfile.this, PopUpActivity.class);
+                Intent intent = new Intent(GroupProfile.this, GroupPopUp.class);
+                intent.putExtra("mGroupID", mGroupID);
                 startActivity(intent);
             }
         });
@@ -138,7 +122,7 @@ public class UserProfile extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
 
-                mProgressDialog = new ProgressDialog(UserProfile.this);
+                mProgressDialog = new ProgressDialog(GroupProfile.this);
                 mProgressDialog.setTitle("Uploading image...");
                 mProgressDialog.setMessage("Please wait while we upload and process the image");
                 mProgressDialog.setCanceledOnTouchOutside(false);
@@ -146,8 +130,7 @@ public class UserProfile extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
-                String current_user_id = mCurrentUser.getUid();
-                final StorageReference filepath = mImageStorage.child("user_profile_images").child(current_user_id + ".jpg");
+                final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("group_images").child(mGroupID + ".jpg");
                 filepath.putFile(resultUri).continueWithTask(
                         new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                             @Override
@@ -162,7 +145,20 @@ public class UserProfile extends AppCompatActivity {
                 ).continueWithTask(new Continuation<Uri, Task<Void>>() {
                     @Override
                     public Task<Void> then(@NonNull Task<Uri> task) {
-                        return mUserDatabase.child("image").setValue(task.getResult().toString());
+                        final Task t = task;
+                        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot recipient : dataSnapshot.getChildren())
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(recipient.getKey().toString()).child("userGroup").child(mGroupID).child("imageURL").setValue(t.getResult().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        return FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("imageURL").setValue(task.getResult().toString());
                     }
 
                 }).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -170,9 +166,9 @@ public class UserProfile extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             mProgressDialog.dismiss();
-                            Toast.makeText(UserProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
+                            Toast.makeText(GroupProfile.this, "Success Uploading", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(UserProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
+                            Toast.makeText(GroupProfile.this, "Error uploading image", Toast.LENGTH_LONG).show();
                             mProgressDialog.dismiss();
                         }
                     }
@@ -192,4 +188,3 @@ public class UserProfile extends AppCompatActivity {
         return true;
     }
 }
-

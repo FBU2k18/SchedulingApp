@@ -1,8 +1,7 @@
 package com.emmabr.schedulingapp;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -13,19 +12,15 @@ import me.emmabr.schedulingapp.R;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 
-    ImageView ivPic;
-
-    String groupID;
+    private ImageView mIVPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_photo);
 
-        groupID = getIntent().getStringExtra("groupID");
-
-        ivPic = findViewById(R.id.ivPic);
-        Glide.with(this).load(getIntent().getStringExtra("imageURL")).into(ivPic);
+        mIVPic = findViewById(R.id.ivPic);
+        Glide.with(this).load(getIntent().getStringExtra("imageURL")).into(mIVPic);
 
 
         //display stuff
@@ -39,20 +34,5 @@ public class ViewPhotoActivity extends AppCompatActivity {
         getWindow().setLayout((int)(width * .8), (int)(height * .50));
 
         getSupportActionBar().hide();
-        //setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(this, GroupActivity.class);
-                intent.putExtra("groupID", groupID);
-                intent.putExtra("up", true);
-                startActivity(intent);
-                finish();
-                break;
-        }
-        return true;
     }
 }

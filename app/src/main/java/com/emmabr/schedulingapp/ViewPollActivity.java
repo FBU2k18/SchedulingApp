@@ -1,13 +1,11 @@
 package com.emmabr.schedulingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,19 +19,22 @@ import me.emmabr.schedulingapp.R;
 
 public class ViewPollActivity extends AppCompatActivity {
 
-    String messageID;
-    String groupID;
+    private String mMessageID;
+    private String mGroupID;
 
-    ArrayList<ArrayList<String>> mOptions;
-    PollAdapter mPollAdapter;
+    private ArrayList<ArrayList<String>> mOptions;
+    private PollAdapter mPollAdapter;
 
-    TextView tvTitlePoll;
-    RecyclerView rvOptions;
+    private TextView mTVTitlePoll;
+    private RecyclerView mRVOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_poll);
+
+        mMessageID = getIntent().getStringExtra("mMessageID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
         getSupportActionBar().hide();
 
@@ -46,40 +47,31 @@ public class ViewPollActivity extends AppCompatActivity {
 
         getWindow().setLayout((int)(width * .70), (int)(height * .55));
 
-
-        messageID = getIntent().getStringExtra("messageID");
-        groupID = getIntent().getStringExtra("groupID");
-
         mOptions = new ArrayList<>();
-        mPollAdapter = new PollAdapter(mOptions, groupID, messageID);
+        mPollAdapter = new PollAdapter(mOptions, mGroupID, mMessageID);
 
-        tvTitlePoll = findViewById(R.id.tvTitlePoll);
-        rvOptions = findViewById(R.id.rvOptions);
-        rvOptions.setLayoutManager(new LinearLayoutManager(this));
-        rvOptions.setAdapter(mPollAdapter);
+        mTVTitlePoll = findViewById(R.id.tvTitlePoll);
+        mRVOptions = findViewById(R.id.rvOptions);
+        mRVOptions.setLayoutManager(new LinearLayoutManager(this));
+        mRVOptions.setAdapter(mPollAdapter);
 
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").child(mMessageID).child("pollTitle").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childData : dataSnapshot.getChildren()) {
-                    // TODO: set poll title
-                    if (childData.getKey().toString().equals("pollTitle")) {
-                        tvTitlePoll.setText(childData.getValue().toString());
-                    }
-                }
+                mTVTitlePoll.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
 
         getOptions();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void getOptions() {
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").child(messageID).child("options").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").child(mMessageID).child("options").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //set to only change what has changed
@@ -142,19 +134,5 @@ public class ViewPollActivity extends AppCompatActivity {
             mOptions.add(i, temp);
             mPollAdapter.notifyItemInserted(i);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(this, GroupActivity.class);
-                intent.putExtra("groupID", groupID);
-                intent.putExtra("up", true);
-                startActivity(intent);
-                finish();
-                break;
-        }
-        return true;
     }
 }
