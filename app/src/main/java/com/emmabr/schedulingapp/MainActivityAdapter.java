@@ -39,32 +39,6 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @Override
     public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
         GroupData currGroup = groups.get(position);
-//        mDatabaseRef.child(currGroup.getGroupId()).child("Recipients").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (final DataSnapshot member : dataSnapshot.getChildren()) {
-//                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
-//                        @Override
-//                        public Task<DataSnapshot> then(@NonNull Task<Void> task) {
-//                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                    userlist = userlist + dataSnapshot.getValue().toString() + " ";
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(@NonNull DatabaseError databaseError) {}
-//                            });
-//                            return null;
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
 
         userlist = "";
 
@@ -75,7 +49,6 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         if (groupMembers.size() > 0) {
             userlist = userlist + groupMembers.get(groupMembers.size() - 1);
         }
-        groupMembers.clear();
         holder.tvGroupMembers.setText(userlist);
 
         holder.tvGroupName.setText(currGroup.getGroupName());
