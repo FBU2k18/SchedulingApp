@@ -51,6 +51,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                     .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(holder.ivGroupLogo);
+        else
+            holder.ivGroupLogo.setImageDrawable(mHome.getDrawable(R.drawable.group_default_logo));
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(currGroup.getGroupId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

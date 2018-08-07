@@ -1,17 +1,17 @@
 package com.emmabr.schedulingapp;
 
-import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -177,59 +177,61 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(26)
     public void createNotifications() {
-        mNotificationChannel = new NotificationChannel(mCHANNEL_ID, "Messages", NotificationManager.IMPORTANCE_HIGH);
-        mNotificationManager = getSystemService(NotificationManager.class);
-        mNotificationManager.createNotificationChannel(mNotificationChannel);
+        if (Build.VERSION.SDK_INT > 23)
+            mNotificationManager = getSystemService(NotificationManager.class);
+        if (Build.VERSION.SDK_INT > 26) {
+            mNotificationChannel = new NotificationChannel(mCHANNEL_ID, "Messages", NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
     }
 
-    @TargetApi(26)
     public void sendMessageNotification(final DataSnapshot group, final String groupID, final int pos) {
-            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    mDate = new Date();
-                    Long createdAt = Long.parseLong(dataSnapshot.child("createdAt").getValue().toString());
-                    Long difference = mDate.getTime() - createdAt;
-                    if ((!dataSnapshot.child("userID").getValue().toString().equals(FirebaseAuth.getInstance().getUid())) && difference < 1000 && (!mGroupOpen.equals(groupID))) {
-                        String message = dataSnapshot.child("nickName").getValue().toString();
-                        if (dataSnapshot.hasChild("messageText"))
-                            message = message.concat(": " + dataSnapshot.child("messageText").getValue().toString());
-                        else if (dataSnapshot.hasChild("imageURL"))
-                            message = message.concat("has sent an image.");
-                        else
-                            message = message.concat(": " + dataSnapshot.child("pollTitle").getValue().toString());
-                        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroups.get(pos).getGroupId()).child("unreadMessages").setValue("true");
-                        mNotificationManager.notify(s, pos, new Notification.Builder(MainActivity.this, mCHANNEL_ID).setContentTitle(group.child("groupName").getValue().toString()).setContentText(message).setSmallIcon(R.drawable.blacklogo).setSubText(new Date(createdAt).toString().substring(0, 16)).setContentIntent(PendingIntent.getActivity(MainActivity.this, pos, new Intent(MainActivity.this, GroupActivity.class).putExtra("mGroupID", groupID), 0)).setAutoCancel(true).build());
-                    }
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                mDate = new Date();
+                Long createdAt = Long.parseLong(dataSnapshot.child("createdAt").getValue().toString());
+                Long difference = mDate.getTime() - createdAt;
+                if ((!dataSnapshot.child("userID").getValue().toString().equals(FirebaseAuth.getInstance().getUid())) && difference < 1000 && (!mGroupOpen.equals(groupID))) {
+                    String message = dataSnapshot.child("nickName").getValue().toString();
+                    if (dataSnapshot.hasChild("messageText"))
+                        message = message.concat(": " + dataSnapshot.child("messageText").getValue().toString());
+                    else if (dataSnapshot.hasChild("imageURL"))
+                        message = message.concat("has sent an image.");
+                    else
+                        message = message.concat(": " + dataSnapshot.child("pollTitle").getValue().toString());
+                    FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroups.get(pos).getGroupId()).child("unreadMessages").setValue("true");
+                    mNotificationManager.notify(s, pos, new NotificationCompat.Builder(MainActivity.this, mCHANNEL_ID).setContentTitle(group.child("groupName").getValue().toString()).setContentText(message).setSmallIcon(R.drawable.blacklogo).setContentIntent(PendingIntent.getActivity(MainActivity.this, pos, new Intent(MainActivity.this, GroupActivity.class).putExtra("mGroupID", groupID), 0)).setAutoCancel(true).build());
                 }
+            }
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
     }
 
-    @TargetApi(26)
     public void clearNotifications(int pos) {
-        StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
+        StatusBarNotification[] notifications = new StatusBarNotification[0];
+        if (Build.VERSION.SDK_INT > 23)
+            notifications = mNotificationManager.getActiveNotifications();
         for (StatusBarNotification notification : notifications)
             if (notification.getId() == pos)
                 mNotificationManager.cancel(notification.getTag(), pos);
