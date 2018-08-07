@@ -70,6 +70,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mGroupID = getIntent().getStringExtra("mGroupID");
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);

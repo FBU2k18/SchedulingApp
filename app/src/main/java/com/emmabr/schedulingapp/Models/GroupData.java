@@ -18,7 +18,6 @@ public class GroupData {
     String imageURL;
     String seenStatus;
 
-
     // create new group
     public GroupData(String groupName, String imageURL, String groupId) {
         this.groupId = groupId;

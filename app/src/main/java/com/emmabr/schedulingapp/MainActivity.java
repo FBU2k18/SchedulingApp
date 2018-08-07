@@ -144,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void getGroups() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            mGroups.clear();
             // current userID
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             // mGroups for current user
@@ -152,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             mCurrUserGroupsData.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mGroups.clear();
                     int pos = 0;
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                         if (childData.child("groupName").getValue() != null && childData.child("imageURL").getValue() != null) {
@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                             message = message.concat("has sent an image.");
                         else
                             message = message.concat(": " + dataSnapshot.child("pollTitle").getValue().toString());
+                        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroups.get(pos).getGroupId()).child("unreadMessages").setValue("true");
                         mNotificationManager.notify(s, pos, new Notification.Builder(MainActivity.this, mCHANNEL_ID).setContentTitle(group.child("groupName").getValue().toString()).setContentText(message).setSmallIcon(R.drawable.blacklogo).setSubText(new Date(createdAt).toString().substring(0, 16)).setContentIntent(PendingIntent.getActivity(MainActivity.this, pos, new Intent(MainActivity.this, GroupActivity.class).putExtra("mGroupID", groupID), 0)).setAutoCancel(true).build());
                     }
                 }
