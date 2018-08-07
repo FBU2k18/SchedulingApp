@@ -9,10 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +38,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
     private RecyclerView mRVMembers;
     private EditText mETSearchMember;
-    private Button mBtnFinish;
 
     private ArrayList<String> mALUsers = new ArrayList<>();
 
@@ -67,8 +64,8 @@ public class AddMemberActivity extends AppCompatActivity {
         mRVMembers = findViewById(R.id.rvMembers);
         mRVMembers.setLayoutManager(new LinearLayoutManager(this));
 
-        mETSearchMember = findViewById(R.id.etSearchMember);
-        mBtnFinish = findViewById(R.id.btnFinish);
+
+        mETSearchMember = findViewById(R.id.etSearchUser);
 
         mETSearchMember.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,53 +83,9 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
-        mBtnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                for (String id : mALUsers)
-                    FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(id).setValue(id);
-                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (String id : mALUsers) {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
-                            FirebaseDatabase.getInstance().getReference().child("users").child(id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                finish();
-            }
-        });
-        //google auth
-        // OAuth confirmation when user creates group (in order to access calendar)
-//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
-//                        .build();
-//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-        //signIn();
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
     }
 
     private void firebaseUserSearch(String searchText) {
@@ -162,6 +115,25 @@ public class AddMemberActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (!mGroupMembers.contains(user_id)) {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(user_id).setValue(user_id);
+                            ValueEventListener eventListener = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
+                                    FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
+
+                                    //??
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).removeEventListener(eventListener);
+                            Toast.makeText(AddMemberActivity.this, "User Added to Group!", Toast.LENGTH_LONG).show();
+                        } else {
                         if (!mGroupMembers.contains(user_id))
                             if (!mALUsers.contains(user_id)) {
                                 mALUsers.add(user_id);
@@ -170,6 +142,7 @@ public class AddMemberActivity extends AppCompatActivity {
                                 Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(AddMemberActivity.this, "User already in group!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }
@@ -206,4 +179,28 @@ public class AddMemberActivity extends AppCompatActivity {
                     .into(user_image);
         }
     }
+
+//    private void signIn() {
+//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+//    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+//        if (requestCode == RC_SIGN_IN) {
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            try {
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                // Google Sign In was successful
+//                Log.d("Google Authentication", "Google email successfully authenticated!");
+//
+//            } catch (ApiException e) {
+//                // Google Sign In failed, update UI appropriately
+//                Log.w("GoogleLogIn", "Google sign in failed", e);
+//            }
+//        }
+//    }
 }

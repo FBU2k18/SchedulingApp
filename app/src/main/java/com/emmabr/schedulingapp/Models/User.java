@@ -15,6 +15,7 @@ public class User {
     public String calendar;
     public String image;
     public String userId;
+    static public ArrayList<String> users = new ArrayList<>();
 
     //neccessary no arg const
     public User() {
@@ -65,7 +66,7 @@ public class User {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(inputUser);
         // TODO - remove hardcoded group data
-        GroupData hardCodedGroup = new GroupData("It works!!!", "","");
+        GroupData hardCodedGroup = new GroupData("It works!!!", "","",users);
         ArrayList<String> userListTemp = new ArrayList<>();
         userListTemp.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
         GroupData.saveGroup(hardCodedGroup, userListTemp);

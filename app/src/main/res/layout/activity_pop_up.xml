@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.746"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPollName"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/ivNewPoll"
@@ -45,7 +45,7 @@
         android:layout_height="46dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/new_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -54,13 +54,13 @@
 
     <ImageView
         android:id="@+id/border"
-        android:layout_width="445dp"
-        android:layout_height="189dp"
+        android:layout_width="299dp"
+        android:layout_height="177dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/pop_up_border"
+        android:src="@drawable/pop_up_boarder_landscape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />

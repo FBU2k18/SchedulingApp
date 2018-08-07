@@ -159,9 +159,30 @@ public class MainActivity extends AppCompatActivity {
                             sendMessageNotification(childData, groupID, pos);
                             String name = childData.child("groupName").getValue().toString();
                             String imgURL = childData.child("imageURL").getValue().toString();
-                            GroupData tempGroup = new GroupData(name, imgURL, groupID);
+                            final ArrayList<String> members = new ArrayList<>();
+                            GroupData tempGroup = new GroupData(name, imgURL, groupID, members);
                             mGroups.add(tempGroup);
-                            pos++;
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (final DataSnapshot member : dataSnapshot.getChildren()) {
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.getValue() == null)
+                                                            return;
+                                                        members.add(dataSnapshot.getValue().toString());
+                                                        mAdapter.notifyDataSetChanged();
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {}
+                            });
                         }
                     }
                     mAdapter.notifyDataSetChanged();

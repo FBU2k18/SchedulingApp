@@ -95,7 +95,7 @@ public class GroupCreationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //get group name and set
                 String groupName = mETGroupName.getText().toString();
-                GroupData groupData = new GroupData(groupName, "", "");
+                GroupData groupData = new GroupData(groupName, "", "", mALUsers);
                 mALUsers.add(mAuth.getUid());
 
                 saveGroup(groupData, mALUsers);
@@ -103,16 +103,6 @@ public class GroupCreationActivity extends AppCompatActivity {
                 Intent intent = new Intent(GroupCreationActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
-                //google auth
-                // OAuth confirmation when user creates group (in order to access calendar)
-//                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken("698336983204-ub3hu1l4c71jrh1ktere8ntuf15m60b0.apps.googleusercontent.com")
-//                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.readonly"))
-//                        .build();
-//                mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-                //signIn();
-
             }
         });
 
@@ -224,23 +214,3 @@ public class GroupCreationActivity extends AppCompatActivity {
     }
 }
 
-
-
-
-//        mUserDatabase.orderByChild("email").equalTo(mETSearchUser.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    String userId =  dataSnapshot.getChildren().iterator().next().getKey().toString();
-//                    mALUsers.add(userId);
-//                    Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(GroupCreationActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });

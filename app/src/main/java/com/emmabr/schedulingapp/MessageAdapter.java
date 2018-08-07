@@ -32,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Message message = mMessages.get(position);
 
         holder.tvTextMe.setText("");
@@ -47,7 +47,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             //make look like from self
             if (message.getMessageText() != null) {
                 holder.tvTextMe.setText(message.getMessageText());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_bubble));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.user_message_text_background));
             } else if (message.getImageURL() != null) {
                 Glide.with(mContext).load(message.getImageURL()).into(holder.ivPicMe);
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextMe.setText(message.getPollTitle());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.out_bubble));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.message_text_background));
                 holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override

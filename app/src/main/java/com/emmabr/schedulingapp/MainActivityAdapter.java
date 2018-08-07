@@ -23,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,11 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     private Context mContext;
     private MainActivity mHome;
 
+    private ArrayList<String> groupMembers = new ArrayList<>();
+    private String userlist = "";
+    private DatabaseReference mDatabaseRef;
+
+
     public MainActivityAdapter(ArrayList<GroupData> groups, MainActivity home) {
         this.mGroups = groups;
         this.mFilteredGroups = this.mGroups;
@@ -45,6 +51,19 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @Override
     public void onBindViewHolder(@NonNull final MainActivityAdapter.ViewHolder holder, final int position) {
         GroupData currGroup = mFilteredGroups.get(position);
+
+        userlist = "";
+
+        groupMembers = currGroup.getUsers();
+        for (int i = 0; i < groupMembers.size() - 1; ++i) {
+            userlist = userlist + groupMembers.get(i) + ", ";
+        }
+        if (groupMembers.size() > 0) {
+            userlist = userlist + groupMembers.get(groupMembers.size() - 1);
+        }
+        holder.tvGroupMembers.setText(userlist);
+
+        currGroup = mFilteredGroups.get(position);
         holder.tvGroupName.setText(currGroup.getGroupName());
         if (!currGroup.getImageURL().isEmpty())
             Glide.with(mContext)
@@ -77,6 +96,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         mContext = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View groupView = inflater.inflate(R.layout.item_group, viewGroup, false);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("groups");
+
         return new MainActivityAdapter.ViewHolder(groupView);
     }
 
@@ -90,6 +111,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         ImageView ivGroupLogo;
         TextView tvGroupName;
         ImageView ivNotification;
+        TextView tvGroupMembers;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +120,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
             ivGroupLogo = itemView.findViewById(R.id.ivGroupLogo);
             tvGroupName = itemView.findViewById(R.id.tvGroupName);
             ivNotification = itemView.findViewById(R.id.ivNotification);
+            tvGroupMembers = itemView.findViewById(R.id.tvGroupMembers);
 
             itemView.setOnClickListener(this);
         }
