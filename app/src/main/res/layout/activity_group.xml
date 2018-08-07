@@ -7,10 +7,20 @@
     android:background="#FFFFFF"
     tools:context="com.emmabr.schedulingapp.GroupActivity">
 
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:text="@string/group"
+        android:textColor="@color/colorPrimaryDark" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimes"
         android:layout_width="match_parent"
-        android:layout_height="555dp" />
+        android:layout_height="535dp"
+        android:layout_marginTop="20dp" />
 
     <FrameLayout
         android:id="@+id/flPeeker"
