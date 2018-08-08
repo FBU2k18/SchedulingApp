@@ -48,7 +48,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -230,8 +229,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         // get busy times from Firebase
         userBusyTimes = new ArrayList<>();
-        userBusyTimes.add("{\"calendars\":{\"e2.cornish@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T13:00:00.000-07:00\",\"start\":\"2018-04-10T12:00:00.000-07:00\"},{\"end\":\"2018-04-10T16:00:00.000-07:00\",\"start\":\"2018-04-10T14:00:00.000-07:00\"},{\"end\":\"2018-04-11T13:00:00.000-07:00\",\"start\":\"2018-04-11T12:00:00.000-07:00\"},{\"end\":\"2018-04-12T13:00:00.000-07:00\",\"start\":\"2018-04-12T12:00:00.000-07:00\"},{\"end\":\"2018-04-13T13:00:00.000-07:00\",\"start\":\"2018-04-13T12:00:00.000-07:00\"},{\"end\":\"2018-04-13T15:30:00.000-07:00\",\"start\":\"2018-04-13T14:00:00.000-07:00\"},{\"end\":\"2018-04-14T13:00:00.000-07:00\",\"start\":\"2018-04-14T12:00:00.000-07:00\"},{\"end\":\"2018-04-14T22:00:00.000-07:00\",\"start\":\"2018-04-14T18:00:00.000-07:00\"},{\"end\":\"2018-04-15T13:00:00.000-07:00\",\"start\":\"2018-04-15T12:00:00.000-07:00\"},{\"end\":\"2018-04-15T18:00:00.000-07:00\",\"start\":\"2018-04-15T17:00:00.000-07:00\"},{\"end\":\"2018-04-16T13:00:00.000-07:00\",\"start\":\"2018-04-16T11:30:00.000-07:00\"}]}}}");
-        userBusyTimes.add("{\"calendars\":{\"krithikai@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T19:00:00.000-07:00\",\"start\":\"2018-04-10T17:00:00.000-07:00\"},{\"end\":\"2018-04-11T22:00:00.000-07:00\",\"start\":\"2018-04-11T20:00:00.000-07:00\"},{\"end\":\"2018-04-13T23:30:00.000-07:00\",\"start\":\"2018-04-13T17:00:00.000-07:00\"},{\"end\":\"2018-04-15T22:00:00.000-07:00\",\"start\":\"2018-04-15T15:00:00.000-07:00\"},{\"end\":\"2018-04-16T17:00:00.000-07:00\",\"start\":\"2018-04-16T14:00:00.000-07:00\"}]}}}");
+        userBusyTimes.add("{\"calendars\":{\"e2.cornish@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T13:00:00.000-07:00\",\"start\":\"2018-04-10T12:00:00.000-07:00\"},{\"end\":\"2018-04-10T16:00:00.000-07:00\",\"start\":\"2018-04-10T14:00:00.000-07:00\"}]}}}");
+        userBusyTimes.add("{\"calendars\":{\"krithikai@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T19:00:00.000-07:00\",\"start\":\"2018-04-10T17:00:00.000-07:00\"}]}}}");
 
         // creating calendar connection
         GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
@@ -250,10 +249,16 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         getMessages();
 
-        // getting the free times
-        callCalFB(userBusyTimes, service);
+        ArrayList<JSONObject> tempCal = new ArrayList<>();
+        ArrayList<JSONObject> updatedCal = new ArrayList<>();
+        try {
+            tempCal = createCalendar();
+            updatedCal = deleteBusyTimes(tempCal, userBusyTimes);
+            updateAvailTimes(updatedCal);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-
 
 
     public void getMessages() {
@@ -344,237 +349,85 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         }
         mTimeAdapter.notifyDataSetChanged();
     }
-    // creating the calendar to be "busy" at all times and delete when users are actually busy
-    public void addCalEvents(com.google.api.services.calendar.model.Calendar calendar, Calendar service, ArrayList<JSONObject> totalBusyTimes)
-            throws IOException, JSONException, ParseException {
-        for (int k = 0; k < 18; k++) {
-            String currDate = "2018-04-" + Integer.toString(k) + "T";
-            String currNextDate = "2018-04-" + Integer.toString(k + 1) + "T";
-            String iString = null;
-            String nextString = null;
-            String jString = null;
-            String jPlusOne = null;
-            for (int i = 0; i < 24; i++) {
-                if (i < 10) {
-                    iString = "0" + Integer.toString(i);
-                    if (i + 1 < 10) {
-                        nextString = "0" + Integer.toString(i + 1);
-                    } else {
-                        nextString = Integer.toString(i + 1);
-                    }
+
+
+    public ArrayList<JSONObject> createCalendar() throws JSONException {
+        ArrayList<JSONObject> calendar = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            JSONObject singleHour = new JSONObject();
+            String time = null;
+            String nextTime = null;
+            String dateTime = null;
+            String startTime = null;
+            String endTime = null;
+            String currDate = "2018-04-10T";
+            String currNext = "2018-04-11T";
+            if (i < 10) {
+                time = "0" + Integer.toString(i);
+                if (i+1 == 10) {
+                    nextTime = Integer.toString(i+1);
+                    endTime = currDate + nextTime + ":00:00.000-07:00";
+
                 } else {
-                    iString = Integer.toString(i);
-                    nextString = Integer.toString(i + 1);
+                    nextTime = "0" + Integer.toString(i+1);
+                    endTime = currDate + nextTime + ":00:00.000-07:00";
                 }
-                for (int j = 0; j < 60; j++) {
-                    DateTime endDateTime;
-                    final Event event = new Event();
-                    if (j < 10) {
-                        jString = "0" + Integer.toString(j);
-                        if (j + 1 < 10) {
-                            jPlusOne = "0" + Integer.toString(j + 1);
-                        } else {
-                            jPlusOne = Integer.toString(j + 1);
-                        }
-                    } else {
-                        jString = Integer.toString(j);
-                        jPlusOne = Integer.toString(j + 1);
-                    }
-                    // setting start time for each event
-                    DateTime startDateTime = new DateTime(currDate + iString + ":" + jString + ":00-07:00");
-                    EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles");
-                    event.setStart(start);
-                    if (i < 10) {
-                        iString = "0" + Integer.toString(i);
-                    }
-
-                    event.setId(currDate + iString + ":" + jString + ":00-07:00");
-                    // setting end time for each event
-                    if (j + 1 == 60) {
-                        if (i + 1 == 24) {
-                            endDateTime = new DateTime(currNextDate + "00:00:00-07:00");
-                        } else {
-                            endDateTime = new DateTime(currDate + nextString + ":" + "00:00-07:00");
-                        }
-                    } else {
-                        endDateTime = new DateTime("2018-04-10T" + iString + ":" + jPlusOne + ":00-07:00");
-                    }
-                    EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles");
-                    event.setEnd(end);
-                    insertEvent(event, service, calendar);
-                }
-            }
-        }
-
-
-        // getting a list of all the events in the calendar
-        Events eventList = service.events().list(calendar.getId()).execute();
-        ArrayList<Event> listEvents = new ArrayList<>();
-        for (Event oneEvent : eventList.getItems()) {
-            listEvents.add(oneEvent);
-        }
-        for (JSONObject userBusy : totalBusyTimes) {
-                int startPlace = 0;
-                int endPlace = 0;
-            String startTime = (String) userBusy.get("start");
-            String endTime = (String) userBusy.get("end");
-            for (Event currEvent : listEvents) {
-                if (startTime.contentEquals(currEvent.getId())) {
-                    startPlace = listEvents.indexOf(currEvent);
-                }
-                if (endTime.contentEquals(currEvent.getId())) {
-                    endPlace = listEvents.indexOf(currEvent);
-                }
-                for (int l = startPlace; l < endPlace; l++) {
-                    deleteBusyTimes(service, calendar, listEvents, l);
-                }
-            }
-        }
-
-       freeBusyOutput(service, calendar);
-    }
-
-    // inserting an event into the calendar
-    public void insertEvent(final Event event, final Calendar service, final com.google.api.services.calendar.model.Calendar calendar) {
-        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> createEvent = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... voids) {
-                String returnString = null;
-                try {
-                   service.events().insert(calendar.getId(), event).execute();
-                   returnString = "It worked";
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return returnString;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                if (s != null) {
-                   Log.d("GroupActivity", "It worked!");
-                }
-            }
-        };
-        createEvent.execute();
-    }
-
-    // deleting an event
-    public void deleteBusyTimes(final Calendar service, final com.google.api.services.calendar.model.Calendar calendar, final ArrayList<Event> listEvents, final int l) {
-        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> deleteEvent = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... voids) {
-                String tempReturn = null;
-                try {
-                    service.events().delete(calendar.getId(), listEvents.get(l).getId());
-                    tempReturn = "It worked!";
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return tempReturn;
-            }
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                if (s != null) {
-                    Log.d("GroupActivity", "It worked!");
-                }
-            }
-        };
-    }
-
-    // calling the freebusy endpoint on the inverted calendar
-    public void freeBusyOutput(Calendar service, com.google.api.services.calendar.model.Calendar dayCal) throws ParseException, JSONException, IOException {
-
-        String finalStartTime = "2018-04-10 08:00:00";
-        String finalEndTime = "2018-04-17 08:00:00";
-
-        DateFormat dfFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date dFinal = dfFinal.parse(finalStartTime);
-        DateTime startTimeFinal = new DateTime(dFinal, TimeZone.getDefault());
-
-        Date deFinal = dfFinal.parse(finalEndTime);
-        DateTime endTimeFinal = new DateTime(deFinal, TimeZone.getDefault());
-
-        final FreeBusyRequest fbreq = new FreeBusyRequest();
-        ArrayList<FreeBusyRequestItem> finalFreeTime = new ArrayList<>();
-        finalFreeTime.add(new FreeBusyRequestItem().setId(dayCal.getId()));
-
-        fbreq.setItems(finalFreeTime);
-        fbreq.setTimeZone("America/Los_Angeles");
-        fbreq.setTimeMin(startTimeFinal);
-        fbreq.setTimeMax(endTimeFinal);
-
-        FreeBusyResponse fbReponseFinal = service.freebusy().query(fbreq).setFields("calendars").execute();
-        JSONObject fbResponseFinalObject = new JSONObject(fbReponseFinal.toString());
-        ArrayList<JSONObject> totalFreetimes = new ArrayList<>();
-        JSONArray tempArray = (JSONArray) (((JSONObject) ((JSONObject) fbResponseFinalObject.get("calendars")).get(dayCal.getId())).get("busy"));
-        for (int i = 0; i < tempArray.length(); i++) {
-            totalFreetimes.add(tempArray.getJSONObject(i));
-        }
-        updateAvailTimes(totalFreetimes);
-    }
-
-    // initial call to start finding the free times
-    public void callCalFB(ArrayList<String> uBusyTimes, final Calendar service) {
-        try {
-            ArrayList<JSONObject> availableTimes = new ArrayList<>();
-            ArrayList<com.google.api.services.calendar.model.Calendar> storeCal = new ArrayList<>();
-            final ArrayList<JSONObject> totalBusyTimes = new ArrayList<>();
-            final ArrayList<JSONObject> totalFT = new ArrayList<>();
-            // adding all users' busy times into an array of JSON objects
-            for (int i = 0; i < uBusyTimes.size(); i++) {
-                JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
-                JSONArray busyTimes = new JSONArray();
-                if (i == 0) {
-                    busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                            .get("e2.cornish@gmail.com")).get("busy");
-                    for (int j = 0; j < busyTimes.length(); j++) {
-                        totalBusyTimes.add(busyTimes.getJSONObject(j));
-                    }
+            } else {
+                time = Integer.toString(i);
+                if (i+1 == 24) {
+                    endTime = currNext + "00:00:00.000-07:00";
                 } else {
-                    busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                            .get("krithikai@gmail.com")).get("busy");
-                    for (int j = 0; j < busyTimes.length(); j++) {
-                        totalBusyTimes.add(busyTimes.getJSONObject(j));
+                    nextTime = Integer.toString(i+1);
+                    endTime = currDate + nextTime + ":00:00.000-07:00";
+                }
+            }
+            startTime = currDate + time + ":00:00.000-07:00";
+            singleHour.put("start", startTime);
+            singleHour.put("end", endTime);
+            calendar.add(singleHour);
+        }
+        return calendar;
+    }
+
+    public ArrayList<JSONObject> deleteBusyTimes(ArrayList<JSONObject> calendar, ArrayList<String> uBusyTimes) throws JSONException {
+        final ArrayList<JSONObject> totalBusyTimes = new ArrayList<>();
+        // adding all users' busy times into an array of JSON objects
+        for (int i = 0; i < uBusyTimes.size(); i++) {
+            JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
+            JSONArray busyTimes = new JSONArray();
+            if (i == 0) {
+                busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
+                        .get("e2.cornish@gmail.com")).get("busy");
+                for (int j = 0; j < busyTimes.length(); j++) {
+                    totalBusyTimes.add(busyTimes.getJSONObject(j));
+                }
+            } else {
+                busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
+                        .get("krithikai@gmail.com")).get("busy");
+                for (int j = 0; j < busyTimes.length(); j++) {
+                    totalBusyTimes.add(busyTimes.getJSONObject(j));
+                }
+            }
+        }
+        ArrayList<JSONObject> finalUpdatedCal = calendar;
+        for (JSONObject userBusy: totalBusyTimes) {
+            int startIndex = 0;
+            int endIndex = 0;
+            String start = userBusy.getString("start");
+            String end = userBusy.getString("end");
+            for (int i = 0; i < calendar.size(); i++) {
+                if (start.contentEquals(calendar.get(i).getString("start"))) {
+                    startIndex = i;
+                } else if (end.contentEquals(calendar.get(i).getString("start"))) {
+                    endIndex = i;
+                    for (int j = startIndex; j < endIndex; j++) {
+                        calendar.remove(j);
                     }
                 }
             }
-
-            final com.google.api.services.calendar.model.Calendar tempCal = new com.google.api.services.calendar.model.Calendar()
-                    .setSummary("Test Calendar");
-
-            @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, com.google.api.services.calendar.model.Calendar> createCalTask =
-                    new AsyncTask<Void, Void, com.google.api.services.calendar.model.Calendar>() {
-                        @Override
-                        protected com.google.api.services.calendar.model.Calendar doInBackground(Void... voids) {
-                            try {
-                                return service.calendars().insert(tempCal).execute();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(com.google.api.services.calendar.model.Calendar calendar) {
-                            super.onPostExecute(calendar);
-                            try {
-                                addCalEvents(calendar, service, totalBusyTimes);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    };
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
+        return calendar;
     }
+
 
 }
