@@ -3,12 +3,13 @@ package com.emmabr.schedulingapp;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.Message;
@@ -31,14 +32,12 @@ public class PostPollActivity extends AppCompatActivity {
 
     private EditText mETPollTitle;
     private EditText mETAddOption;
-    private EditText mETNumber;
+    private RecyclerView mRVPollOptions;
+    private PostPollAdapter mAdapter;
 
     private ArrayList<String> mOptionsText;
 
-    private TextView mTVPollOptions;
-
     private ImageView mIVPlus;
-    private ImageView mIVMultiply;
 
     private Button mBPostPoll;
     private Button mBCancelPoll;
@@ -63,12 +62,13 @@ public class PostPollActivity extends AppCompatActivity {
 
         mETPollTitle = findViewById(R.id.etPollTitle);
         mETAddOption = findViewById(R.id.etAddOption);
-        mETNumber = findViewById(R.id.etNumber);
 
         mOptionsText = new ArrayList<>();
+        mAdapter = new PostPollAdapter(mOptionsText, mGroupID);
 
-        mTVPollOptions = findViewById(R.id.tvPollOptions);
-        mTVPollOptions.setText(mOptionsText.toString());
+        mRVPollOptions = findViewById(R.id.rvPollOptions);
+        mRVPollOptions.setLayoutManager(new LinearLayoutManager(this));
+        mRVPollOptions.setAdapter(mAdapter);
 
         mIVPlus = findViewById(R.id.ivPlus);
         mIVPlus.setOnClickListener(new View.OnClickListener() {
@@ -78,27 +78,9 @@ public class PostPollActivity extends AppCompatActivity {
                     Toast.makeText(PostPollActivity.this, "Option is empty!", Toast.LENGTH_LONG).show();
                 else {
                     mOptionsText.add(mETAddOption.getText().toString());
-                    mTVPollOptions.setText(mOptionsText.toString());
+                    mAdapter.notifyItemInserted(mOptionsText.size() - 1);
                     mETAddOption.setText("");
                 }
-            }
-        });
-        mIVMultiply = findViewById(R.id.ivMultiply);
-        mIVMultiply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mETNumber.getText().toString().isEmpty())
-                    Toast.makeText(PostPollActivity.this, "No number entered!", Toast.LENGTH_LONG).show();
-                else
-                    try {
-                        mOptionsText.remove(Integer.parseInt(mETNumber.getText().toString()) - 1);
-                        mTVPollOptions.setText(mOptionsText.toString());
-                        mETNumber.setText("");
-                    } catch (IndexOutOfBoundsException badNumber) {
-                        Toast.makeText(PostPollActivity.this, "There is no option at that position!", Toast.LENGTH_LONG).show();
-                    } catch (NumberFormatException notANumber) {
-                        Toast.makeText(PostPollActivity.this, "Only use numbers in this field!", Toast.LENGTH_LONG).show();
-                    }
             }
         });
 
