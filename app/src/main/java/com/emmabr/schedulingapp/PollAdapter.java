@@ -1,12 +1,14 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,12 +36,14 @@ public class PollAdapter extends RecyclerView.Adapter<PollAdapter.ViewHolder> {
         final ArrayList<String> option = mOptions.get(position);
         holder.tvOption.setText(option.get(0));
         holder.tvVotes.setText(Integer.toString(option.size() - 1));
+        Drawable background = mContext.getDrawable(R.drawable.message_text_background);
         if (option.contains(FirebaseAuth.getInstance().getUid()))
-            holder.ivCheck.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.checkbox_on_background));
+            background.setTint(mContext.getResources().getColor(R.color.colorPrimaryDark));
         else
-            holder.ivCheck.setImageDrawable(mContext.getResources().getDrawable(android.R.drawable.checkbox_off_background));
+            background.setTint(mContext.getResources().getColor(R.color.colorPrimary));
+        holder.rlPollBubble.setBackground(background);
 
-        holder.tvOption.setOnClickListener(new View.OnClickListener() {
+        holder.rlPollBubble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (option.contains(FirebaseAuth.getInstance().getUid()))
@@ -72,14 +76,14 @@ public class PollAdapter extends RecyclerView.Adapter<PollAdapter.ViewHolder> {
 
         TextView tvOption;
         TextView tvVotes;
-        ImageView ivCheck;
+        RelativeLayout rlPollBubble;
 
         public ViewHolder(final View itemView) {
             super(itemView);
 
             tvOption = itemView.findViewById(R.id.tvOption);
             tvVotes = itemView.findViewById(R.id.tvVotes);
-            ivCheck = itemView.findViewById(R.id.ivCheck);
+            rlPollBubble = itemView.findViewById(R.id.rlPollBubble);
         }
     }
 }

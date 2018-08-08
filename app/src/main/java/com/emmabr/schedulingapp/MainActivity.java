@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    members.clear();
                                     for (final DataSnapshot member : dataSnapshot.getChildren()) {
                                                 FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
                                                     @Override
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {}
                             });
+                            pos++;
                         }
                     }
                     mAdapter.notifyDataSetChanged();
