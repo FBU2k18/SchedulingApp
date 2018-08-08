@@ -60,7 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextMe.setText(message.getPollTitle());
-                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.message_text_background));
+                holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.user_message_text_background));
                 holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -77,7 +77,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.tvFrom.setText(message.getNickName());
             if (message.getMessageText() != null) {
                 holder.tvTextYou.setText(message.getMessageText());
-                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_bubble));
+                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.message_text_background));
             } else if (message.getImageURL() != null) {
                 Glide.with(mContext).load(message.getImageURL()).into(holder.ivPicYou);
                 holder.ivPicYou.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 });
             } else if (message.getPollTitle() != null){
                 holder.tvTextYou.setText(message.getPollTitle());
-                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.in_bubble));
+                holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.message_text_background));
                 holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
                 holder.ivPicMe.setOnClickListener(new View.OnClickListener() {
                     @Override
