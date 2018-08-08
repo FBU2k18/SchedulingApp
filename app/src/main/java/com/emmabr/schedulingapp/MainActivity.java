@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                             pos++;
                         }
                     }
+                    mNotificationManager.cancelAll();
                     mAdapter.notifyDataSetChanged();
                     mSRLMain.setRefreshing(false);
                     mRVGroups.scrollToPosition(0);
