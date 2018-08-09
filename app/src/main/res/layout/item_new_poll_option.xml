@@ -26,17 +26,16 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="35dp"
-        android:layout_height="17dp"
+        android:layout_width="39dp"
+        android:layout_height="24dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/tvPollOption"
         app:layout_constraintEnd_toEndOf="@+id/tvPollOption"
-        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/tvPollOption"
         app:layout_constraintTop_toTopOf="@+id/tvPollOption"
-        app:layout_constraintVertical_bias="0.428"
         app:srcCompat="@drawable/delete_x" />
 </android.support.constraint.ConstraintLayout>

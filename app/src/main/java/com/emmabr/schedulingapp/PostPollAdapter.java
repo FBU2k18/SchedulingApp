@@ -51,6 +51,10 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
         return mPollOptions.size();
     }
 
+    public ArrayList<String> getUsersArray() {
+        return mPollOptions;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvPollOption;
