@@ -277,34 +277,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
-
-//        for (final String user : usersIDs) {
-//            FirebaseDatabase.getInstance().getReference().child("users").child(user).child("calendar").addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    String userCalendar = (String) dataSnapshot.getValue();
-//                    userBusyTimes.add(userCalendar);
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
-
-        //userBusyTimes.add("{\"calendars\":{\"e2.cornish@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T13:00:00.000-07:00\",\"start\":\"2018-04-10T12:00:00.000-07:00\"},{\"end\":\"2018-04-10T16:00:00.000-07:00\",\"start\":\"2018-04-10T14:00:00.000-07:00\"}]}}}");
-        //userBusyTimes.add("{\"calendars\":{\"krithikai@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T19:00:00.000-07:00\",\"start\":\"2018-04-10T17:00:00.000-07:00\"}]}}}");
-
-
-        // get free times
-//        try {
-//            ArrayList<JSONObject> tempCal = createCalendar();
-//            ArrayList<JSONObject> updatedCal = deleteBusyTimes(tempCal, userBusyTimes);
-//            updateAvailTimes(updatedCal);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
     }
 
 
