@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -20,9 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emmabr.schedulingapp.Models.Message;
-import com.emmabr.schedulingapp.model.TimeOption;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,24 +27,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 import me.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
-public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
 
     private String mGroupID;
 
-    private ArrayList<TimeOption> mTimes;
-    private TimeOptionAdapter mTimeAdapter;
-    private RecyclerView mRVTimes;
+    private ArrayList<String> mDays;
+    private DayAdapter mDayAdapter;
+    private RecyclerView mRVDays;
 
     private ArrayList<Message> mMessages;
     private MessageAdapter mMessageAdapter;
     private RecyclerView mRVMessageDisplay;
+    private PagerSnapHelper mHelper;
 
     private TextView mTVGroupName;
     private EditText mETMessage;
@@ -72,12 +69,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         mGroupID = getIntent().getStringExtra("mGroupID");
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
-        mTimes = new ArrayList<>();
-        mTimeAdapter = new TimeOptionAdapter(mTimes, this);
-        mRVTimes = findViewById(R.id.rvTimes);
-        mRVTimes.setAdapter(mTimeAdapter);
-        mRVTimes.setLayoutManager(new LinearLayoutManager(this));
-        mRVTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mDays = new ArrayList<>();
+        mDayAdapter = new DayAdapter(mDays, this);
+        mRVDays = findViewById(R.id.rvDays);
+        mRVDays.setAdapter(mDayAdapter);
+        mRVDays.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mHelper = new PagerSnapHelper();
+        mHelper.attachToRecyclerView(mRVDays);
 
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, mGroupID);
@@ -97,6 +95,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
+        mTVGroupName.setSelected(true);
         mETMessage = findViewById(R.id.etMessage);
         mFLPeeker = findViewById(R.id.flPeeker);
         mPeekerBehavior = BottomSheetBehavior.from(mFLPeeker);
@@ -193,17 +192,20 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        getTimes();
-
+        getDays();
         getMessages();
     }
 
-    public void getTimes() {
-        //will pull times from Firebase, but testing for now
-        for (int i = 0; i < 10; i++)
-            mTimes.add(TimeOption.newTime());
-        Collections.sort(mTimes);
-        mTimeAdapter.notifyDataSetChanged();
+    public void getDays() {
+        mDays.clear();
+        mDays.add("Sunday");
+        mDays.add("Monday");
+        mDays.add("Tuesday");
+        mDays.add("Wednesday");
+        mDays.add("Thursday");
+        mDays.add("Friday");
+        mDays.add("Saturday");
+        mDayAdapter.notifyDataSetChanged();
     }
 
     public void getMessages() {
@@ -282,40 +284,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     }
 
     public void scrollToPosition(int position) {
-        mRVTimes.scrollToPosition(position);
-    }
-
-    //for use in calendar pulling
-    private ArrayList<String> mCalendars;
-    public void test() {
-        mCalendars = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (final DataSnapshot member : dataSnapshot.getChildren())
-                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
-                        @Override
-                        public Task<DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("calendar").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    mCalendars.add(dataSnapshot.getValue().toString());
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                            return null;
-                        }
-                    });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        mRVDays.scrollToPosition(position);
     }
 }
