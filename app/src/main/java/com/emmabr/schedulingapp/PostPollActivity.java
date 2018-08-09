@@ -1,14 +1,15 @@
 package com.emmabr.schedulingapp;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.Message;
@@ -27,102 +28,99 @@ import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPollActivity extends AppCompatActivity {
 
-    String groupID;
+    private String mGroupID;
 
-    EditText etPollTitle;
-    EditText etAddOption;
-    EditText etNumber;
+    private EditText mETPollTitle;
+    private EditText mETAddOption;
+    private RecyclerView mRVPollOptions;
+    private PostPollAdapter mAdapter;
 
-    ArrayList<String> optionsText;
+    private ArrayList<String> mOptionsText;
 
-    TextView tvPollOptions;
+    private ImageView mIVPlus;
 
-    ImageView ivPlus;
-    ImageView ivMultiply;
+    private Button mBPostPoll;
+    private Button mBCancelPoll;
 
-    Button bPostPoll;
-    Button bCancelPoll;
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_poll);
 
-        groupID = getIntent().getStringExtra("groupID");
+        mGroupID = getIntent().getStringExtra("mGroupID");
 
-        etPollTitle = findViewById(R.id.etPollTitle);
-        etAddOption = findViewById(R.id.etAddOption);
-        etNumber = findViewById(R.id.etNumber);
+        getSupportActionBar().hide();
 
-        optionsText = new ArrayList<>();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
 
-        tvPollOptions = findViewById(R.id.tvPollOptions);
-        tvPollOptions.setText(optionsText.toString());
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        ivPlus = findViewById(R.id.ivPlus);
-        ivPlus.setOnClickListener(new View.OnClickListener() {
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+
+        getWindow().setLayout((int)(width * .83), (int)(height * .56));
+
+        mETPollTitle = findViewById(R.id.etPollTitle);
+        mETAddOption = findViewById(R.id.etAddOption);
+
+        mOptionsText = new ArrayList<>();
+        mAdapter = new PostPollAdapter(mOptionsText, mGroupID);
+
+        mRVPollOptions = findViewById(R.id.rvPollOptions);
+        mRVPollOptions.setLayoutManager(new LinearLayoutManager(this));
+        mRVPollOptions.setAdapter(mAdapter);
+
+        mIVPlus = findViewById(R.id.ivPlus);
+        mIVPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etAddOption.getText().toString().isEmpty())
+                if (mETAddOption.getText().toString().isEmpty())
                     Toast.makeText(PostPollActivity.this, "Option is empty!", Toast.LENGTH_LONG).show();
                 else {
-                    optionsText.add(etAddOption.getText().toString());
-                    tvPollOptions.setText(optionsText.toString());
-                    etAddOption.setText("");
+                    mOptionsText.add(mETAddOption.getText().toString());
+                    mAdapter.notifyItemInserted(mOptionsText.size() - 1);
+                    mETAddOption.setText("");
                 }
             }
         });
-        ivMultiply = findViewById(R.id.ivMultiply);
-        ivMultiply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (etNumber.getText().toString().isEmpty())
-                    Toast.makeText(PostPollActivity.this, "No number entered!", Toast.LENGTH_LONG).show();
-                else
-                    try {
-                        optionsText.remove(Integer.parseInt(etNumber.getText().toString()) - 1);
-                        tvPollOptions.setText(optionsText.toString());
-                        etNumber.setText("");
-                    } catch (IndexOutOfBoundsException badNumber) {
-                        Toast.makeText(PostPollActivity.this, "There is no option at that position!", Toast.LENGTH_LONG).show();
-                    } catch (NumberFormatException notANumber) {
-                        Toast.makeText(PostPollActivity.this, "Only use numbers in this field!", Toast.LENGTH_LONG).show();
-                    }
-            }
-        });
 
-        bPostPoll = findViewById(R.id.bPostPoll);
-        bPostPoll.setOnClickListener(new View.OnClickListener() {
+        mBPostPoll = findViewById(R.id.bPostPoll);
+        mBPostPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!etPollTitle.getText().toString().isEmpty())
-                            if (optionsText.size() > 1) {
+                        //
+                        if (!mETPollTitle.getText().toString().isEmpty())
+                            if (mOptionsText.size() > 1) {
                                 Date date = new Date();
-                                Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + etPollTitle.getText().toString(), Long.toString(date.getTime()));
-                                saveMessage(message, groupID);
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+                                Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + mETPollTitle.getText().toString(), Long.toString(date.getTime()));
+                                saveMessage(message, mGroupID);
+
+                                valueEventListener = new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot childData : dataSnapshot.getChildren())
-                                            if (childData.hasChild("pollTitle") && !childData.hasChild("options"))
-                                                for (String option : optionsText)
+                                        for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                                            if (childData.hasChild("pollTitle") && !childData.hasChild("options")) {
+                                                //mAdapter.getUsersArray()
+                                                for (String option : mOptionsText) {
                                                     childData.child("options").child(option).child("text").getRef().setValue(option);
+                                                }
+                                            }
+                                        }
+                                        finish();
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
-                                });
-                                Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
-                                intent.putExtra("groupID", groupID);
-                                intent.putExtra("up", true);
-                                startActivity(intent);
-                                finish();
-                            } else if (optionsText.size() == 0)
+                                };
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").addValueEventListener(valueEventListener);
+                            } else if (mOptionsText.size() == 0)
                                 Toast.makeText(PostPollActivity.this, "No options!", Toast.LENGTH_LONG).show();
                             else
                                 Toast.makeText(PostPollActivity.this, "Only one option!", Toast.LENGTH_LONG).show();
@@ -136,16 +134,22 @@ public class PostPollActivity extends AppCompatActivity {
                 });
             }
         });
-        bCancelPoll = findViewById(R.id.bCancelPoll);
-        bCancelPoll.setOnClickListener(new View.OnClickListener() {
+        mBCancelPoll = findViewById(R.id.bCancelPoll);
+        mBCancelPoll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PostPollActivity.this, GroupActivity.class);
-                intent.putExtra("groupID", groupID);
-                intent.putExtra("up", true);
-                startActivity(intent);
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(valueEventListener != null) {
+            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").removeEventListener(valueEventListener);
+        }
+
     }
 }

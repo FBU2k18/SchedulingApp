@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SchedulingApp</string>
+    <string name="app_name">ScheduleMe</string>
     <string name="email">Enter your email</string>
     <string name="password">Enter your password</string>
     <string name="login_btn">login</string>
@@ -14,6 +14,27 @@
     <string name="code_verifier">Sknd576.354KLN/3anfb67jnbjasd.sjFJLnfsjJksbnga</string>
     <string name="API_KEY">AIzaSyANQa_zB5i6nWLVk8M2wfooIvV7FeBixNg</string>
     <string name="set_button">set</string>
+    <string name="messages_title">Messages</string>
+    <string name="message_hint">Message</string>
+    <string name="send_button">Send</string>
+    <string name="add_poll">Add a Poll</string>
+    <string name="add_pic">Add a Photo</string>
+    <string name="group">Group Name</string>
+    <string name="change_group">Change Group Name</string>
+    <string name="post_pic">Post Image</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_title">Enter Poll Title</string>
+    <string name="post_poll">Post Poll</string>
+    <string name="add_option">Add an Option</string>
+    <string name="instructions">Remove an above option by its position in the list.</string>
+    <string name="pound">#</string>
+    <string name="change_username">Change Username</string>
+    <string name="poll_title">Poll Title</string>
+    <string name="option">Option</string>
+    <string name="time">Time</string>
+    <string name="votes">Votes</string>
+    <string name="finish">Finish</string>
+    <string name="members">Members</string>
 
     <string name="singledisplayname">DisplayName</string>
     <string name="singleDisplayEmail">DisplayEmail</string>

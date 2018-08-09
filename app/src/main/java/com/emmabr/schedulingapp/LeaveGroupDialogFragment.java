@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 
 public class LeaveGroupDialogFragment extends DialogFragment {
 
-    LeaveGroupDialogFragmentListener mListener;
+    private LeaveGroupDialogFragmentListener mListener;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

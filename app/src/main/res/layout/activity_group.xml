@@ -4,13 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.GroupActivity"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context="com.emmabr.schedulingapp.GroupActivity">
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@android:color/white"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/group"
+        android:textColor="@color/colorPrimaryDark" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimes"
         android:layout_width="match_parent"
-        android:layout_height="555dp" />
+        android:layout_height="540dp"
+        android:layout_marginTop="20dp" />
 
     <FrameLayout
         android:id="@+id/flPeeker"
@@ -24,11 +40,10 @@
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="56dp"
             android:layout_gravity="top|left"
-            android:background="@drawable/box"
+            android:background="@drawable/messages_bar"
             android:gravity="center_vertical"
-            android:text="Messages"
             android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.RecyclerView
@@ -43,7 +58,7 @@
             android:layout_height="55dp"
             android:layout_gravity="bottom|left"
             android:layout_marginLeft="55dp"
-            android:hint="Message" />
+            android:hint="@string/message_hint" />
 
         <ImageView
             android:id="@+id/ivAddOther"
@@ -54,10 +69,10 @@
 
         <Button
             android:id="@+id/bSend"
-            android:layout_width="wrap_content"
+            android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="bottom|right"
-            android:text="SEND" />
+            android:background="@drawable/send_messsage_plane"/>
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -67,10 +82,10 @@
             <FrameLayout
                 android:id="@+id/flOtherTypes"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_gravity="bottom|left"
                 app:behavior_hideable="true"
-                app:behavior_peekHeight="150dp"
+                app:behavior_peekHeight="100dp"
                 app:layout_behavior="@string/bottom_sheet_behavior">
 
                 <Button
@@ -78,22 +93,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="top"
-                    android:text="Add a Poll" />
-
-                <Button
-                    android:id="@+id/bTakePic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="Take a Picture" />
+                    android:text="@string/add_poll" />
 
                 <Button
                     android:id="@+id/bAddPic"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:text="Add from Photos" />
+                    android:text="@string/add_pic" />
             </FrameLayout>
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                app:srcCompat="@drawable/messages_text" />
         </android.support.design.widget.CoordinatorLayout>
     </FrameLayout>
 

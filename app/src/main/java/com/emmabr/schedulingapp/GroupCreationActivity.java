@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -51,40 +52,37 @@ public class GroupCreationActivity extends AppCompatActivity {
 
 
     //firebase variables
-    private DatabaseReference userDatabase;
+    private DatabaseReference mUserDatabase;
     private FirebaseAuth mAuth;
 
-    private RecyclerView rvUsers;
-    private EditText etGroupName;
-    private EditText etSearchUser;
-    private Button btnCreate;
+    private RecyclerView mRVUsers;
+    private EditText mETGroupName;
+    private EditText mETSearchUser;
+    private Button mBtnCreate;
 
-    // Button to test calendar
-    private Button mCalendarButton;
-
-
-    ArrayList<String> alUsers = new ArrayList<>();
+    private ArrayList<String> mALUsers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_creation);
 
-        userDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mUserDatabase = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
 
-        rvUsers = findViewById(R.id.rvUsers);
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        mRVUsers = findViewById(R.id.rvUsers);
+        mRVUsers.setLayoutManager(new LinearLayoutManager(this));
 
-        etGroupName = findViewById(R.id.etGroupName);
-        etSearchUser = findViewById(R.id.etSearchUser);
-        btnCreate = findViewById(R.id.btnCreate);
+        mETGroupName = findViewById(R.id.etGroupName);
+        mETSearchUser = findViewById(R.id.etSearchUser);
+        mBtnCreate = findViewById(R.id.btnCreate);
 
-        //TODO: on edit text changed
-        etSearchUser.addTextChangedListener(new TextWatcher() {
+
+        mETSearchUser.addTextChangedListener(new TextWatcher() {
+            @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do what you want with your edit text here
-                String searchText = etSearchUser.getText().toString();
+               // do what you want with your edit text here
+                String searchText = mETSearchUser.getText().toString();
                 firebaseUserSearch(searchText);
             }
 
@@ -97,29 +95,44 @@ public class GroupCreationActivity extends AppCompatActivity {
             }
         });
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
+        mBtnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //get group name and set
-                String groupName = etGroupName.getText().toString();
-                GroupData groupData = new GroupData(groupName, "", "");
-                alUsers.add(mAuth.getUid());
+                String groupName = mETGroupName.getText().toString();
+                GroupData groupData = new GroupData(groupName, "", "", mALUsers);
+                mALUsers.add(mAuth.getUid());
 
-                saveGroup(groupData, alUsers);
+                saveGroup(groupData, mALUsers);
 
                 Intent intent = new Intent(GroupCreationActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
-
             }
+
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
 
     private void firebaseUserSearch(String searchText) {
 
-        Query query = userDatabase.orderByChild("email").startAt(searchText).endAt(searchText + "\uf8ff");
+        Query query = mUserDatabase.orderByChild("email").startAt(searchText).endAt(searchText + "\uf8ff");
 
         FirebaseRecyclerOptions<User> options =
                 new FirebaseRecyclerOptions.Builder<User>()
@@ -144,7 +157,7 @@ public class GroupCreationActivity extends AppCompatActivity {
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        alUsers.add(user_id);
+                        mALUsers.add(user_id);
                         Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
                         //then clear the text in the edit test field
                     }
@@ -152,7 +165,7 @@ public class GroupCreationActivity extends AppCompatActivity {
             }
         };
 
-        rvUsers.setAdapter(firebaseRecyclerAdapter);
+        mRVUsers.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
     }
 
@@ -207,3 +220,4 @@ public class GroupCreationActivity extends AppCompatActivity {
         }
     }
 }
+

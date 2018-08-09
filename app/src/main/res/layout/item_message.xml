@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,14 +10,16 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvFrom"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
+        android:maxWidth="270dp"
         android:paddingBottom="5dp"
         android:paddingLeft="25dp"
-        android:paddingRight="5dp"
+        android:padding="10dp"
         android:paddingTop="5dp"
+        android:textColor="@color/lightText"
         android:text=""
-        android:maxWidth="270dp"/>
+        android:gravity="left" />
 
     <TextView
         android:id="@+id/tvFrom"
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
         android:text="" />
 
@@ -35,28 +36,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:padding="10dp"
         android:layout_below="@+id/tvFrom"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
+        android:maxWidth="270dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="25dp"
         android:paddingTop="5dp"
         android:text=""
-        android:maxWidth="270dp"/>
+        android:gravity="left"
+        android:textColor="@color/lightText" />
 
     <ImageView
         android:id="@+id/ivPicYou"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignStart="@+id/tvTextYou"
         android:layout_alignTop="@+id/tvTextYou" />
 
     <ImageView
         android:id="@+id/ivPicMe"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignEnd="@+id/tvTextMe"
         android:layout_alignTop="@+id/tvTextYou" />
 

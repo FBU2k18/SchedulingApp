@@ -65,6 +65,9 @@ dependencies {
     implementation 'com.google.apis:google-api-services-calendar:v3-rev305-1.23.0'
     implementation group: 'com.google.oauth-client', name: 'google-oauth-client-jetty', version: '1.11.0-beta'
 
+    implementation "com.android.support:support-compat:27.1.1"
+    implementation 'org.parceler:parceler-api:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
     implementation('com.google.api-client:google-api-client-android:1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }
