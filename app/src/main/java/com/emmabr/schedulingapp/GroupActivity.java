@@ -229,35 +229,82 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         // get busy times from Firebase
         userBusyTimes = new ArrayList<>();
-        userBusyTimes.add("{\"calendars\":{\"e2.cornish@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T13:00:00.000-07:00\",\"start\":\"2018-04-10T12:00:00.000-07:00\"},{\"end\":\"2018-04-10T16:00:00.000-07:00\",\"start\":\"2018-04-10T14:00:00.000-07:00\"}]}}}");
-        userBusyTimes.add("{\"calendars\":{\"krithikai@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T19:00:00.000-07:00\",\"start\":\"2018-04-10T17:00:00.000-07:00\"}]}}}");
+        final ArrayList<String> usersIDs = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID).child("Recipients").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getMessages();
+                try {
+                    final ArrayList<ArrayList<JSONObject>> totalFreeTimes = createCalendar();
+                    for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                        String userID = (String) childData.getValue();
+                        usersIDs.add(userID);
+                    }
+                        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                try {
+                                    for (String user : usersIDs) {
+                                        for(DataSnapshot childUser : dataSnapshot.getChildren()) {
+                                            if (user.contentEquals(childUser.getKey())) {
+                                                String userCalendar = (String) childUser.child("calendar").getValue();
+                                                userBusyTimes.add(userCalendar);
+                                            }
+                                        }
+                                    }
+                                    ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, usersIDs);
+                                    updateAvailTimes(updatedTimes, 0);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
 
-        // creating calendar connection
-        GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
-                Collections.singleton("https://www.googleapis.com/auth/calendar"));
-        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (accountGoogle != null) {
-            credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
-        }
-        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-        final Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY, credential)
-                .setApplicationName("SchedulingApp").build();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                            }
+                        });
 
-//        getTimes();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-        getMessages();
+            }
 
-        ArrayList<JSONObject> tempCal = new ArrayList<>();
-        ArrayList<JSONObject> updatedCal = new ArrayList<>();
-        try {
-            tempCal = createCalendar();
-            updatedCal = deleteBusyTimes(tempCal, userBusyTimes);
-            updateAvailTimes(updatedCal);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        for (final String user : usersIDs) {
+//            FirebaseDatabase.getInstance().getReference().child("users").child(user).child("calendar").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    String userCalendar = (String) dataSnapshot.getValue();
+//                    userBusyTimes.add(userCalendar);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
+
+        //userBusyTimes.add("{\"calendars\":{\"e2.cornish@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T13:00:00.000-07:00\",\"start\":\"2018-04-10T12:00:00.000-07:00\"},{\"end\":\"2018-04-10T16:00:00.000-07:00\",\"start\":\"2018-04-10T14:00:00.000-07:00\"}]}}}");
+        //userBusyTimes.add("{\"calendars\":{\"krithikai@gmail.com\":{\"busy\":[{\"end\":\"2018-04-10T19:00:00.000-07:00\",\"start\":\"2018-04-10T17:00:00.000-07:00\"}]}}}");
+
+
+        // get free times
+//        try {
+//            ArrayList<JSONObject> tempCal = createCalendar();
+//            ArrayList<JSONObject> updatedCal = deleteBusyTimes(tempCal, userBusyTimes);
+//            updateAvailTimes(updatedCal);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -339,57 +386,50 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         rvTimes.scrollToPosition(position);
     }
 
-    // updating the adapter to populate the current times
-    public void updateAvailTimes(ArrayList<JSONObject> times) throws JSONException {
-        for (JSONObject time : times) {
-            String start = time.getString("start");
-            String end = time.getString("end");
-            TimeOption newTime = new TimeOption(start, end);
-            mTimes.add(newTime);
-        }
-        mTimeAdapter.notifyDataSetChanged();
-    }
 
+    public ArrayList<ArrayList<JSONObject>> createCalendar() throws JSONException {
+        ArrayList<ArrayList<JSONObject>> masterCalendar = new ArrayList<>();
+        for (int k = 10; k < 18; k++) {
+            ArrayList<JSONObject> calendar = new ArrayList<>();
+            for (int i = 0; i < 24; i++) {
+                JSONObject singleHour = new JSONObject();
+                String time = null;
+                String nextTime = null;
+                String dateTime = null;
+                String startTime = null;
+                String endTime = null;
+                String currDate = "2018-04-" + Integer.toString(k) + "T";
+                String currNext = "2018-04-" + Integer.toString(k+1) + "T";
+                if (i < 10) {
+                    time = "0" + Integer.toString(i);
+                    if (i + 1 == 10) {
+                        nextTime = Integer.toString(i + 1);
+                        endTime = currDate + nextTime + ":00:00.000-07:00";
 
-    public ArrayList<JSONObject> createCalendar() throws JSONException {
-        ArrayList<JSONObject> calendar = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            JSONObject singleHour = new JSONObject();
-            String time = null;
-            String nextTime = null;
-            String dateTime = null;
-            String startTime = null;
-            String endTime = null;
-            String currDate = "2018-04-10T";
-            String currNext = "2018-04-11T";
-            if (i < 10) {
-                time = "0" + Integer.toString(i);
-                if (i+1 == 10) {
-                    nextTime = Integer.toString(i+1);
-                    endTime = currDate + nextTime + ":00:00.000-07:00";
-
+                    } else {
+                        nextTime = "0" + Integer.toString(i + 1);
+                        endTime = currDate + nextTime + ":00:00.000-07:00";
+                    }
                 } else {
-                    nextTime = "0" + Integer.toString(i+1);
-                    endTime = currDate + nextTime + ":00:00.000-07:00";
+                    time = Integer.toString(i);
+                    if (i + 1 == 24) {
+                        endTime = currNext + "00:00:00.000-07:00";
+                    } else {
+                        nextTime = Integer.toString(i + 1);
+                        endTime = currDate + nextTime + ":00:00.000-07:00";
+                    }
                 }
-            } else {
-                time = Integer.toString(i);
-                if (i+1 == 24) {
-                    endTime = currNext + "00:00:00.000-07:00";
-                } else {
-                    nextTime = Integer.toString(i+1);
-                    endTime = currDate + nextTime + ":00:00.000-07:00";
-                }
+                startTime = currDate + time + ":00:00.000-07:00";
+                singleHour.put("start", startTime);
+                singleHour.put("end", endTime);
+                calendar.add(singleHour);
             }
-            startTime = currDate + time + ":00:00.000-07:00";
-            singleHour.put("start", startTime);
-            singleHour.put("end", endTime);
-            calendar.add(singleHour);
+            masterCalendar.add(calendar);
         }
-        return calendar;
+        return masterCalendar;
     }
 
-    public ArrayList<JSONObject> deleteBusyTimes(ArrayList<JSONObject> calendar, ArrayList<String> uBusyTimes) throws JSONException {
+    public ArrayList<ArrayList<JSONObject>> deleteBusyTimes(ArrayList<ArrayList<JSONObject>> calendar, ArrayList<String> uBusyTimes, ArrayList<String> userIds) throws JSONException {
         final ArrayList<JSONObject> totalBusyTimes = new ArrayList<>();
         // adding all users' busy times into an array of JSON objects
         for (int i = 0; i < uBusyTimes.size(); i++) {
@@ -409,25 +449,39 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 }
             }
         }
-        ArrayList<JSONObject> finalUpdatedCal = calendar;
-        for (JSONObject userBusy: totalBusyTimes) {
-            int startIndex = 0;
-            int endIndex = 0;
-            String start = userBusy.getString("start");
-            String end = userBusy.getString("end");
-            for (int i = 0; i < calendar.size(); i++) {
-                if (start.contentEquals(calendar.get(i).getString("start"))) {
-                    startIndex = i;
-                } else if (end.contentEquals(calendar.get(i).getString("start"))) {
-                    endIndex = i;
-                    for (int j = startIndex; j < endIndex; j++) {
-                        calendar.remove(j);
+        for (JSONObject userBusy : totalBusyTimes) {
+                for (int m = 0; m < calendar.size(); m++) {
+                    ArrayList<JSONObject> finalUpdatedCal = calendar.get(m);
+                    int startIndex = 0;
+                    int endIndex = 0;
+                    String start = userBusy.getString("start");
+                    String end = userBusy.getString("end");
+                    for (int i = 0; i < finalUpdatedCal.size(); i++) {
+                        if (start.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                            startIndex = i;
+                        } else if (end.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                            endIndex = i;
+                            for (int j = startIndex; j < endIndex; j++) {
+                                finalUpdatedCal.remove(startIndex);
+                            }
+                        }
                     }
+                    calendar.remove(m);
+                    calendar.add(m, finalUpdatedCal);
                 }
             }
-        }
         return calendar;
     }
 
-
+    // updating the adapter to populate the current times
+    public void updateAvailTimes(ArrayList<ArrayList<JSONObject>> allTimes, int index) throws JSONException {
+        ArrayList<JSONObject> times = allTimes.get(index);
+        for (JSONObject time : times) {
+            String start = time.getString("start");
+            String end = time.getString("end");
+            TimeOption newTime = new TimeOption(start, end);
+            mTimes.add(newTime);
+        }
+        mTimeAdapter.notifyDataSetChanged();
+    }
 }

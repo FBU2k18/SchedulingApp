@@ -26,6 +26,12 @@ public class TimeOption implements Comparable{
     }
 
     public String getTime() {
+        int startT = startTime.indexOf("T");
+        int endT = endTime.indexOf("T");
+        int startPeriod = startTime.indexOf(".");
+        int endPeriod = endTime.indexOf(".");
+        startTime = startTime.substring(startT + 1, startPeriod);
+        endTime = endTime.substring(endT + 1, endPeriod);
         String finalTime =  startTime + " - " + endTime;
         return finalTime;
     }
