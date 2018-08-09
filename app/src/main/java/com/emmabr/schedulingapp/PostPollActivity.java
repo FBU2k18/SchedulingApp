@@ -60,7 +60,7 @@ public class PostPollActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .85), (int)(height * .66));
+        getWindow().setLayout((int)(width * .83), (int)(height * .56));
 
         mETPollTitle = findViewById(R.id.etPollTitle);
         mETAddOption = findViewById(R.id.etAddOption);

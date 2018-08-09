@@ -30,31 +30,40 @@
         android:layout_height="31dp"
         android:layout_alignEnd="@+id/tvPollOptions"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/post_poll"
         android:textColor="@color/lightText"
-        tools:layout_editor_absoluteX="194dp"
-        tools:layout_editor_absoluteY="328dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintStart_toEndOf="@+id/bCancelPoll"
+        app:layout_constraintTop_toBottomOf="@+id/etAddOption"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/bCancelPoll"
-        android:layout_width="122dp"
-        android:layout_height="30dp"
+        android:layout_width="124dp"
+        android:layout_height="31dp"
         android:layout_alignTop="@+id/bPostPoll"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/cancel"
         android:textColor="@color/lightText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bPostPoll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAddOption"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintVertical_bias="0.063" />
 
     <!--<TextView-->
         <!--android:id="@+id/tvPollOptions"-->
