@@ -20,6 +20,7 @@
         android:hint="@string/enter_title"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivNewPoll" />
 
@@ -29,37 +30,40 @@
         android:layout_height="31dp"
         android:layout_alignEnd="@+id/tvPollOptions"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="84dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/post_poll"
         android:textColor="@color/lightText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintStart_toEndOf="@+id/bCancelPoll"
         app:layout_constraintTop_toBottomOf="@+id/etAddOption"
-        app:layout_constraintVertical_bias="0.108" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/bCancelPoll"
-        android:layout_width="122dp"
-        android:layout_height="30dp"
+        android:layout_width="124dp"
+        android:layout_height="31dp"
         android:layout_alignTop="@+id/bPostPoll"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/cancel"
         android:textColor="@color/lightText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bPostPoll"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAddOption"
-        app:layout_constraintVertical_bias="0.059" />
+        app:layout_constraintVertical_bias="0.063" />
 
     <!--<TextView-->
         <!--android:id="@+id/tvPollOptions"-->
@@ -81,16 +85,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="@string/add_option"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.359"
+        app:layout_constraintHorizontal_bias="0.352"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvPollOptions" />
+        app:layout_constraintTop_toBottomOf="@+id/rvPollOptions"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/ivPlus"
@@ -106,7 +113,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/etAddOption"
         app:layout_constraintTop_toBottomOf="@+id/rvPollOptions"
-        app:layout_constraintVertical_bias="0.363"
+        app:layout_constraintVertical_bias="0.545"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <!--<TextView-->
@@ -176,7 +183,7 @@
         android:layout_height="46dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/new_poll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"

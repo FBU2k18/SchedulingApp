@@ -42,6 +42,8 @@ public class PostPollActivity extends AppCompatActivity {
     private Button mBPostPoll;
     private Button mBCancelPoll;
 
+    private ValueEventListener valueEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,7 @@ public class PostPollActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .85), (int)(height * .66));
+        getWindow().setLayout((int)(width * .83), (int)(height * .56));
 
         mETPollTitle = findViewById(R.id.etPollTitle);
         mETAddOption = findViewById(R.id.etAddOption);
@@ -91,26 +93,33 @@ public class PostPollActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("nickName").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //
                         if (!mETPollTitle.getText().toString().isEmpty())
                             if (mOptionsText.size() > 1) {
                                 Date date = new Date();
                                 Message message = new Message(FirebaseAuth.getInstance().getUid(), dataSnapshot.getValue().toString(), null, null, "Poll: " + mETPollTitle.getText().toString(), Long.toString(date.getTime()));
                                 saveMessage(message, mGroupID);
-                                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").addValueEventListener(new ValueEventListener() {
+
+                                valueEventListener = new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot childData : dataSnapshot.getChildren())
-                                            if (childData.hasChild("pollTitle") && !childData.hasChild("options"))
-                                                for (String option : mOptionsText)
+                                        for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                                            if (childData.hasChild("pollTitle") && !childData.hasChild("options")) {
+                                                //mAdapter.getUsersArray()
+                                                for (String option : mOptionsText) {
                                                     childData.child("options").child(option).child("text").getRef().setValue(option);
+                                                }
+                                            }
+                                        }
+                                        finish();
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
-                                });
-                                finish();
+                                };
+                                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").addValueEventListener(valueEventListener);
                             } else if (mOptionsText.size() == 0)
                                 Toast.makeText(PostPollActivity.this, "No options!", Toast.LENGTH_LONG).show();
                             else
@@ -132,5 +141,15 @@ public class PostPollActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(valueEventListener != null) {
+            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").removeEventListener(valueEventListener);
+        }
+
     }
 }
