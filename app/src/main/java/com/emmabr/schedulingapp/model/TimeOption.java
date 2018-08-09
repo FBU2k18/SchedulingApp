@@ -26,12 +26,12 @@ public class TimeOption implements Comparable{
     }
 
     public String getTime() {
-        int startT = startTime.indexOf("T");
-        int endT = endTime.indexOf("T");
-        int startPeriod = startTime.indexOf(".");
-        int endPeriod = endTime.indexOf(".");
-        startTime = startTime.substring(startT + 1, startPeriod);
-        endTime = endTime.substring(endT + 1, endPeriod);
+//        int startT = startTime.indexOf("T");
+//        int endT = endTime.indexOf("T");
+//        int startPeriod = startTime.indexOf(".");
+//        int endPeriod = endTime.indexOf(".");
+//        startTime = startTime.substring(startT + 1, startPeriod);
+//        endTime = endTime.substring(endT + 1, endPeriod);
         String finalTime =  startTime + " - " + endTime;
         return finalTime;
     }
@@ -82,12 +82,4 @@ public class TimeOption implements Comparable{
         return Integer.toString(getVotes());
     }
 
-    //just for testing, will be removed later
-//    public static TimeOption newTime() {
-////        TimeOption time = new TimeOption("");
-////        time.upVoters = new ArrayList<>();
-////        time.downVoters = new ArrayList<>();
-//////        time.time = "TimeOption " + (int) (Math.random()*10);
-////        return time;
-////    }
 }
