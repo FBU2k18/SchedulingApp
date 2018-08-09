@@ -56,7 +56,7 @@ public class PopUpActivity extends Activity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .8), (int)(height * .28));
+        getWindow().setLayout((int)(width * .87), (int)(height * .27));
 
         //listeners
         mUserDatabase.addValueEventListener(new ValueEventListener() {

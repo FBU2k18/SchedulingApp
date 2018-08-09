@@ -49,6 +49,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     private MessageAdapter mMessageAdapter;
     private RecyclerView mRVMessageDisplay;
 
+    private TextView mTVGroupName;
     private EditText mETMessage;
     private FrameLayout mFLPeeker;
     private BottomSheetBehavior mPeekerBehavior;
@@ -69,6 +70,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mGroupID = getIntent().getStringExtra("mGroupID");
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);
@@ -83,6 +85,18 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         mRVMessageDisplay.setAdapter(mMessageAdapter);
         mRVMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
 
+        mTVGroupName = findViewById(R.id.tvGroupName);
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("groupName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mTVGroupName.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         mETMessage = findViewById(R.id.etMessage);
         mFLPeeker = findViewById(R.id.flPeeker);
         mPeekerBehavior = BottomSheetBehavior.from(mFLPeeker);

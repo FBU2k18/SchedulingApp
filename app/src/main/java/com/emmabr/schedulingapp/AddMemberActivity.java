@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -83,9 +84,20 @@ public class AddMemberActivity extends AppCompatActivity {
             }
         });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     private void firebaseUserSearch(String searchText) {
@@ -122,8 +134,6 @@ public class AddMemberActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
-
-                                    //??
                                 }
 
                                 @Override
@@ -132,16 +142,18 @@ public class AddMemberActivity extends AppCompatActivity {
                                 }
                             });
                             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).removeEventListener(eventListener);
+                            mETSearchMember.setText("");
+                            firebaseUserSearch("");
                             Toast.makeText(AddMemberActivity.this, "User Added to Group!", Toast.LENGTH_LONG).show();
                         } else {
-                        if (!mGroupMembers.contains(user_id))
-                            if (!mALUsers.contains(user_id)) {
-                                mALUsers.add(user_id);
-                                Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-                            } else
-                                Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(AddMemberActivity.this, "User already in group!", Toast.LENGTH_LONG).show();
+                            if (!mGroupMembers.contains(user_id))
+                                if (!mALUsers.contains(user_id)) {
+                                    mALUsers.add(user_id);
+                                    Toast.makeText(AddMemberActivity.this, "Added User!", Toast.LENGTH_LONG).show();
+                                } else
+                                    Toast.makeText(AddMemberActivity.this, "User already added!", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(AddMemberActivity.this, "User already in group!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

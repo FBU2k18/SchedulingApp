@@ -30,6 +30,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
+        android:gravity="center_horizontal"
         android:text="@string/group"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"

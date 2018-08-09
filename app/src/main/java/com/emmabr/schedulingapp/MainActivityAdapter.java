@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,8 +18,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.GroupData;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -44,8 +49,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainActivityAdapter.ViewHolder holder, int position) {
-        GroupData currGroup = mGroups.get(position);
+    public void onBindViewHolder(@NonNull final MainActivityAdapter.ViewHolder holder, final int position) {
+        GroupData currGroup = mFilteredGroups.get(position);
 
         userlist = "";
 
@@ -65,6 +70,24 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                     .load(currGroup.getImageURL())
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(holder.ivGroupLogo);
+        else
+            holder.ivGroupLogo.setImageDrawable(mHome.getDrawable(R.drawable.group_default_logo));
+        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(currGroup.getGroupId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("unreadMessages")) {
+                    Drawable icon = mHome.getDrawable(android.R.drawable.ic_notification_overlay);
+                    icon.setTint(mHome.getResources().getColor(R.color.colorAccent));
+                    holder.ivNotification.setImageDrawable(icon);
+                } else
+                    holder.ivNotification.setImageDrawable(null);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @NonNull
@@ -87,6 +110,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
         ImageView ivGroupLogo;
         TextView tvGroupName;
+        ImageView ivNotification;
         TextView tvGroupMembers;
 
         public ViewHolder(View itemView) {
@@ -95,6 +119,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
             ivGroupLogo = itemView.findViewById(R.id.ivGroupLogo);
             tvGroupName = itemView.findViewById(R.id.tvGroupName);
+            ivNotification = itemView.findViewById(R.id.ivNotification);
             tvGroupMembers = itemView.findViewById(R.id.tvGroupMembers);
 
             itemView.setOnClickListener(this);
@@ -110,6 +135,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
                 mContext.startActivity(intent);
                 mHome.clearNotifications(getAdapterPosition());
                 mHome.blockNotifications(group.getGroupId());
+                notifyItemChanged(getAdapterPosition());
                 Log.i("GroupData", group.getGroupName());
             }
         }

@@ -19,7 +19,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCHANGEME" />
+        app:layout_constraintTop_toBottomOf="@+id/ivChangeName" />
 
     <Button
         android:id="@+id/bSetGroup"
@@ -40,13 +40,13 @@
         app:layout_constraintVertical_bias="0.019" />
 
     <ImageView
-        android:id="@+id/ivCHANGEME"
+        android:id="@+id/ivChangeName"
         android:layout_width="235dp"
         android:layout_height="46dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
-        android:src="@drawable/new_username"
+        android:src="@drawable/change_groupname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"

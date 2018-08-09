@@ -45,7 +45,7 @@ public class ViewPollActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .70), (int)(height * .55));
+        getWindow().setLayout((int)(width * .85), (int)(height * .55));
 
         mOptions = new ArrayList<>();
         mPollAdapter = new PollAdapter(mOptions, mGroupID, mMessageID);
