@@ -16,6 +16,7 @@ public class TimeOption implements Comparable{
     public TimeOption(String startTime, String endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+        votes = 0;
         upVoters = new ArrayList<>();
         downVoters = new ArrayList<>();
 

@@ -490,7 +490,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         for (JSONObject time : times) {
             String start = time.getString("start");
             String end = time.getString("end");
-            TimeOption newTime = new TimeOption(start, end);
+            int startT = start.indexOf("T");
+            int endT = end.indexOf("T");
+            int startPeriod = start.indexOf(".");
+            int endPeriod = end.indexOf(".");
+            String startTime = start.substring(startT + 1, startPeriod);
+            String endTime = end.substring(endT + 1, endPeriod);
+            TimeOption newTime = new TimeOption(startTime, endTime);
             mTimes.add(newTime);
         }
         mTimeAdapter.notifyDataSetChanged();
