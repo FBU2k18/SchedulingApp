@@ -9,8 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -48,6 +48,7 @@ import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -59,7 +60,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -70,17 +70,18 @@ import org.json.JSONObject;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
-public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
 
     private String mGroupID;
 
-    private ArrayList<TimeOption> mTimes;
-    private TimeOptionAdapter mTimeAdapter;
-    private RecyclerView mRVTimes;
+    private ArrayList<String> mDays;
+    private DayAdapter mDayAdapter;
+    private RecyclerView mRVDays;
 
     private ArrayList<Message> mMessages;
     private MessageAdapter mMessageAdapter;
     private RecyclerView mRVMessageDisplay;
+    private PagerSnapHelper mHelper;
 
     private TextView mTVGroupName;
     private EditText mETMessage;
@@ -109,12 +110,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         mGroupID = getIntent().getStringExtra("mGroupID");
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
-        mTimes = new ArrayList<>();
-        mTimeAdapter = new TimeOptionAdapter(mTimes, this);
-        mRVTimes = findViewById(R.id.rvTimes);
-        mRVTimes.setAdapter(mTimeAdapter);
-        mRVTimes.setLayoutManager(new LinearLayoutManager(this));
-        mRVTimes.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mDays = new ArrayList<>();
+        mDayAdapter = new DayAdapter(mDays, this);
+        mRVDays = findViewById(R.id.rvDays);
+        mRVDays.setAdapter(mDayAdapter);
+        mRVDays.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mHelper = new PagerSnapHelper();
+        mHelper.attachToRecyclerView(mRVDays);
 
         mMessages = new ArrayList<>();
         mMessageAdapter = new MessageAdapter(mMessages, mGroupID);
@@ -135,6 +137,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
+        mTVGroupName.setSelected(true);
         mETMessage = findViewById(R.id.etMessage);
         mFLPeeker = findViewById(R.id.flPeeker);
         mPeekerBehavior = BottomSheetBehavior.from(mFLPeeker);
@@ -253,7 +256,12 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                                         }
                                     }
                                     ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, usersIDs);
-                                    updateAvailTimes(updatedTimes, 0);
+                                    updateAvailTimes(updatedTimes);
+                                    //getDays();
+                                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                                    getSupportActionBar().setDisplayShowHomeEnabled(true);
+                                    getSupportActionBar().setDisplayShowTitleEnabled(false);
+                                    getSupportActionBar().setDisplayUseLogoEnabled(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -261,11 +269,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
                             }
                         });
@@ -281,6 +284,19 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
+        getMessages();
+    }
+
+    public void getDays() {
+        mDays.clear();
+        mDays.add("Sunday");
+        mDays.add("Monday");
+        mDays.add("Tuesday");
+        mDays.add("Wednesday");
+        mDays.add("Thursday");
+        mDays.add("Friday");
+        mDays.add("Saturday");
+        mDayAdapter.notifyDataSetChanged();
     }
 
 
@@ -360,41 +376,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     }
 
     public void scrollToPosition(int position) {
-        mRVTimes.scrollToPosition(position);
-    }
-
-    //for use in calendar pulling
-    private ArrayList<String> mCalendars;
-    public void test() {
-        mCalendars = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (final DataSnapshot member : dataSnapshot.getChildren())
-                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
-                        @Override
-                        public Task<DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("calendar").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    mCalendars.add(dataSnapshot.getValue().toString());
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                            return null;
-                        }
-                    });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        mRVDays.scrollToPosition(position);
     }
 
 
@@ -485,20 +467,26 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     }
 
     // updating the adapter to populate the current times
-    public void updateAvailTimes(ArrayList<ArrayList<JSONObject>> allTimes, int index) throws JSONException {
-        ArrayList<JSONObject> times = allTimes.get(index);
-        for (JSONObject time : times) {
-            String start = time.getString("start");
-            String end = time.getString("end");
-            int startT = start.indexOf("T");
-            int endT = end.indexOf("T");
-            int startPeriod = start.indexOf(".");
-            int endPeriod = end.indexOf(".");
-            String startTime = start.substring(startT + 1, startPeriod);
-            String endTime = end.substring(endT + 1, endPeriod);
-            TimeOption newTime = new TimeOption(startTime, endTime);
-            mTimes.add(newTime);
+    public void updateAvailTimes(ArrayList<ArrayList<JSONObject>> allTimes) throws JSONException {
+        for (int index = 0; index < 8; index++) {
+            String date = null;
+            ArrayList<JSONObject> times = allTimes.get(index);
+            for (JSONObject time : times) {
+                String start = time.getString("start");
+                String end = time.getString("end");
+                int startT = start.indexOf("T");
+                int endT = end.indexOf("T");
+                int startPeriod = start.indexOf(".");
+                int endPeriod = end.indexOf(".");
+                date = start.substring(0, startT);
+                String startTime = start.substring(startT + 1, startPeriod);
+                String endTime = end.substring(endT + 1, endPeriod);
+                TimeOption newTime = new TimeOption(startTime, endTime);
+                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
+                        .child(Integer.toString(index)).child(date).setValue(newTime);
+            }
+            mDays.add(date);
         }
-        mTimeAdapter.notifyDataSetChanged();
+        mDayAdapter.notifyDataSetChanged();
     }
 }

@@ -69,10 +69,10 @@
         <activity android:name="com.emmabr.schedulingapp.PostPhotoActivity" />
         <activity
             android:name="com.emmabr.schedulingapp.ViewPhotoActivity"
-            android:theme="@style/AppTheme.CustomTheme"/>
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name="com.emmabr.schedulingapp.PostPollActivity"
-            android:theme="@style/AppTheme.CustomTheme"/>
+            android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name="com.emmabr.schedulingapp.ViewPollActivity"
             android:theme="@style/AppTheme.CustomTheme" />

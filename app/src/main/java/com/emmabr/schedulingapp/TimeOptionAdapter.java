@@ -45,10 +45,9 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
 
     private ArrayList<TimeOption> mTimes;
     private Context mContext;
-    private GroupActivity mParent;
+    private DayAdapter.ViewHolder mParent;
 
-
-    public TimeOptionAdapter(ArrayList<TimeOption> times, GroupActivity parent) {
+    public TimeOptionAdapter(ArrayList<TimeOption> times, DayAdapter.ViewHolder parent) {
         this.mTimes = times;
         this.mParent = parent;
 
