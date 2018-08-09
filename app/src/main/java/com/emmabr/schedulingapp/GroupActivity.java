@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.accounts.Account;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -27,6 +28,10 @@ import com.emmabr.schedulingapp.Models.Message;
 import com.emmabr.schedulingapp.model.TimeOption;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -86,29 +91,10 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     private TextView mTVTitle;
     private Button mBSend;
 
-    private FrameLayout flOtherTypes;
-    private BottomSheetBehavior otherTypesBehavior;
-    private Button bAddPoll;
-    private Button bTakePic;
-    private Button bAddPic;
-    ArrayList<TimeOption> times;
-    TimeOptionAdapter timeAdapter;
-    ArrayList<Message> messages;
-    MessageAdapter messsageAdapter;
-    BottomSheetBehavior behavior;
-
-    // creating credentials
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "credentials.json";
-    private static final String APPLICATION_NAME = "ScheduleMe";
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
     // getting users ids for email
     ArrayList<String> userBusyTimes;
 
     // populating available times
-    ArrayList<AvailableTime> mAvailTimes;
     private FrameLayout mFLOtherTypes;
     private BottomSheetBehavior mOtherTypesBehavior;
     private Button mBAddPoll;
@@ -123,7 +109,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         mGroupID = getIntent().getStringExtra("mGroupID");
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
-
         mTimes = new ArrayList<>();
         mTimeAdapter = new TimeOptionAdapter(mTimes, this);
         mRVTimes = findViewById(R.id.rvTimes);
@@ -136,6 +121,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         mRVMessageDisplay = findViewById(R.id.rvMessageDisplay);
         mRVMessageDisplay.setAdapter(mMessageAdapter);
         mRVMessageDisplay.setLayoutManager(new LinearLayoutManager(this));
+
 
         mTVGroupName = findViewById(R.id.tvGroupName);
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("groupName").addValueEventListener(new ValueEventListener() {
@@ -462,13 +448,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             JSONArray busyTimes = new JSONArray();
             if (i == 0) {
                 busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                        .get("e2.cornish@gmail.com")).get("busy");
+                        .get("krithikai@gmail.com")).get("busy");
                 for (int j = 0; j < busyTimes.length(); j++) {
                     totalBusyTimes.add(busyTimes.getJSONObject(j));
                 }
             } else {
                 busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                        .get("krithikai@gmail.com")).get("busy");
+                        .get("e2.cornish@gmail.com")).get("busy");
                 for (int j = 0; j < busyTimes.length(); j++) {
                     totalBusyTimes.add(busyTimes.getJSONObject(j));
                 }

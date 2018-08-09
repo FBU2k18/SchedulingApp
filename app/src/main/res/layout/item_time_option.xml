@@ -33,20 +33,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/flRoundedRectangle"
-        android:layout_below="@+id/flRoundedRectangle"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="91dp"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageButton
         android:id="@+id/ibDownVote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/flRoundedRectangle"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_alignTop="@+id/ibUpVote"
         android:layout_toStartOf="@+id/ibUpVote"
         app:srcCompat="@android:drawable/arrow_down_float" />
+
+    <Button
+        android:id="@+id/ibAddCal"
+        android:layout_width="128dp"
+        android:layout_height="34dp"
+        android:layout_alignStart="@+id/flRoundedRectangle"
+        android:layout_alignTop="@+id/ibUpVote"
+        android:text="Add to Calendar"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="12sp" />
+
 </RelativeLayout>
