@@ -20,16 +20,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.emmabr.schedulingapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DayAdapter extends RecyclerView.Adapter<com.emmabr.schedulingapp.DayAdapter.ViewHolder> {
 
     private ArrayList<String> mDays;
     private Context mContext;
     private GroupActivity mParent;
+    private String mGroupID;
 
-    public DayAdapter(ArrayList<String> days, GroupActivity parent) {
+    public DayAdapter(ArrayList<String> days, GroupActivity parent, String groupID) {
         this.mDays = days;
         this.mParent = parent;
+        this.mGroupID = groupID;
     }
 
     @Override
@@ -38,16 +45,17 @@ public class DayAdapter extends RecyclerView.Adapter<com.emmabr.schedulingapp.Da
         holder.mIVForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mParent.scrollToPosition((position + 1) % 7);
+                mParent.scrollToPosition((position + 1) % 8);
             }
         });
         holder.mIVBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mParent.scrollToPosition((position - 1) % 7);
+                mParent.scrollToPosition((position - 1) % 8);
             }
         });
-//        holder.getTimes(position);
+        holder.getTimes(position);
+        holder.sort();
     }
 
     @NonNull
@@ -87,16 +95,31 @@ public class DayAdapter extends RecyclerView.Adapter<com.emmabr.schedulingapp.Da
             mIVBack = itemView.findViewById(R.id.ivBack);
         }
 
-//        public void getTimes(int day) {
-////            //will pull times from Firebase, but testing for now
-////            for (int i = 0; i < 10; i++)
-////                mTimes.add(TimeOption.newTime());
-////            Collections.sort(mTimes);
-////            mTimeAdapter.notifyDataSetChanged();
-//        }
+        public void getTimes(int day) {
+            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions").child(Integer.toString(day)).child(mDays.get(day)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (mTimes.isEmpty()) {
+                        for (DataSnapshot startTime : dataSnapshot.getChildren())
+                            mTimes.add(new TimeOption(startTime.child("startTime").getValue().toString(), startTime.child("time").getValue().toString().substring(11), startTime));
+                        sort();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         public void scrollToPosition(int position) {
             mRVTimes.scrollToPosition(position);
+        }
+
+        public void sort() {
+            Collections.sort(mTimes);
+            mTimeAdapter.notifyDataSetChanged();
         }
     }
 }

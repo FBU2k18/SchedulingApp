@@ -255,10 +255,8 @@ public class UserProfile extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
-                                        if (!childData.getKey().contentEquals(current_uid)) {
-                                            userCalendars.add(childData.getKey());
-                                            mNumCals.setText(Integer.toString(userCalendars.size()));
-                                        }
+                                        userCalendars.add(childData.getKey());
+                                        mNumCals.setText(Integer.toString(userCalendars.size()));
                                     }
                                 }
 
@@ -280,4 +278,3 @@ public class UserProfile extends AppCompatActivity {
     }
 
 }
-

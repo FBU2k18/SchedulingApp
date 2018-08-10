@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddCalendarActivity">
+
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="297dp"
+        android:layout_height="161dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/new_event_border"
+        android:elevation="10dp" />
+
+    <EditText
+        android:id="@+id/etEventName"
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:ems="10"
+        android:gravity="bottom"
+        android:hint="Enter the event name"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btCreateEvent"
+        android:layout_width="99dp"
+        android:layout_height="34dp"
+        android:layout_alignEnd="@+id/etEventName"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="89dp"
+        android:background="@drawable/create_event"
+        android:text="Create Event"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        android:textStyle="bold|italic" />
+
+
+</RelativeLayout>

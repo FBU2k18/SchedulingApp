@@ -127,10 +127,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.miLogOut:
-                //FirebaseAuth.getInstance().signOut();
+                FirebaseAuth.getInstance().signOut();
                 Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(logBack);
                 Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();
+                finish();
                 break;
         }
         return true;

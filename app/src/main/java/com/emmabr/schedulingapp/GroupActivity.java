@@ -70,7 +70,7 @@ import org.json.JSONObject;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
-public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
 
     private String mGroupID;
 
@@ -113,7 +113,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
         mDays = new ArrayList<>();
-        mDayAdapter = new DayAdapter(mDays, this);
+        mDayAdapter = new DayAdapter(mDays, this, mGroupID);
         mRVDays = findViewById(R.id.rvDays);
         mRVDays.setAdapter(mDayAdapter);
         mRVDays.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -238,8 +238,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getMessages();
                 try {
                     final ArrayList<ArrayList<JSONObject>> totalFreeTimes = createCalendar();
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
@@ -251,7 +249,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 try {
                                     for (String user : usersIDs) {
-                                        for(DataSnapshot childUser : dataSnapshot.getChildren()) {
+                                        for (DataSnapshot childUser : dataSnapshot.getChildren()) {
                                             if (user.contentEquals(childUser.getKey())) {
                                                 String email = (String) childUser.child("email").getValue();
                                                 userEmails.add(email);
@@ -271,7 +269,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                                     e.printStackTrace();
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -289,19 +286,9 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
-        getMessages();
-    }
 
-    public void getDays() {
-        mDays.clear();
-        mDays.add("Sunday");
-        mDays.add("Monday");
-        mDays.add("Tuesday");
-        mDays.add("Wednesday");
-        mDays.add("Thursday");
-        mDays.add("Friday");
-        mDays.add("Saturday");
-        mDayAdapter.notifyDataSetChanged();
+        getMessages();
+
     }
 
 
@@ -397,7 +384,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String startTime = null;
                 String endTime = null;
                 String currDate = "2018-04-" + Integer.toString(k) + "T";
-                String currNext = "2018-04-" + Integer.toString(k+1) + "T";
+                String currNext = "2018-04-" + Integer.toString(k + 1) + "T";
                 if (i < 10) {
                     time = "0" + Integer.toString(i);
                     if (i + 1 == 10) {
@@ -434,33 +421,33 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
             JSONArray busyTimes = new JSONArray();
             String userEmail = userIds.get(i);
-                busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                        .get(userEmail)).get("busy");
-                for (int j = 0; j < busyTimes.length(); j++) {
-                    totalBusyTimes.add(busyTimes.getJSONObject(j));
-                }
+            busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
+                    .get(userEmail)).get("busy");
+            for (int j = 0; j < busyTimes.length(); j++) {
+                totalBusyTimes.add(busyTimes.getJSONObject(j));
+            }
         }
         for (JSONObject userBusy : totalBusyTimes) {
-                for (int m = 0; m < calendar.size(); m++) {
-                    ArrayList<JSONObject> finalUpdatedCal = calendar.get(m);
-                    int startIndex = 0;
-                    int endIndex = 0;
-                    String start = userBusy.getString("start");
-                    String end = userBusy.getString("end");
-                    for (int i = 0; i < finalUpdatedCal.size(); i++) {
-                        if (start.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
-                            startIndex = i;
-                        } else if (end.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
-                            endIndex = i;
-                            for (int j = startIndex; j < endIndex; j++) {
-                                finalUpdatedCal.remove(startIndex);
-                            }
+            for (int m = 0; m < calendar.size(); m++) {
+                ArrayList<JSONObject> finalUpdatedCal = calendar.get(m);
+                int startIndex = 0;
+                int endIndex = 0;
+                String start = userBusy.getString("start");
+                String end = userBusy.getString("end");
+                for (int i = 0; i < finalUpdatedCal.size(); i++) {
+                    if (start.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                        startIndex = i;
+                    } else if (end.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                        endIndex = i;
+                        for (int j = startIndex; j < endIndex; j++) {
+                            finalUpdatedCal.remove(startIndex);
                         }
                     }
-                    calendar.remove(m);
-                    calendar.add(m, finalUpdatedCal);
                 }
+                calendar.remove(m);
+                calendar.add(m, finalUpdatedCal);
             }
+        }
         return calendar;
     }
 
@@ -481,7 +468,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String endTime = end.substring(endT + 1, endPeriod);
                 TimeOption newTime = new TimeOption(startTime, endTime);
                 FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
-                        .child(Integer.toString(index)).child(date).setValue(newTime);
+                        .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
             }
             mDays.add(date);
         }
