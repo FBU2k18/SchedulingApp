@@ -415,7 +415,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
             JSONArray busyTimes = new JSONArray();
             //TODO: Undo hard-coded dated below
-            if (i != 0) {
+            if (i == 0) {
                 busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
                         .get("krithikai@gmail.com")).get("busy");
                 for (int j = 0; j < busyTimes.length(); j++) {
@@ -469,8 +469,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String startTime = start.substring(startT + 1, startPeriod);
                 String endTime = end.substring(endT + 1, endPeriod);
                 TimeOption newTime = new TimeOption(startTime, endTime);
-                //FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
-                //        .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
+                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
+                        .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
             }
             mDays.add(date);
         }

@@ -173,7 +173,7 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
             });
         }
 
-        public void move(TimeOption time) {
+        public void move(TimeOption time, boolean isMe) {
             int oldPos = mTimes.indexOf(time);
             int newPosUp = oldPos - 1;
             int newPosDown = oldPos + 1;
@@ -188,13 +188,15 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
             } else if (oldPos == newPosDown) {
                 mTimes.remove(oldPos);
                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                TimeOptionAdapter.this.mParent.scrollToPosition(newPosUp);
+                if (isMe)
+                    TimeOptionAdapter.this.mParent.scrollToPosition(newPosUp);
                 mTimes.add(newPosUp, time);
                 TimeOptionAdapter.this.notifyItemInserted(newPosUp);
             } else if (oldPos == newPosUp) {
                 mTimes.remove(oldPos);
                 TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                TimeOptionAdapter.this.mParent.scrollToPosition(newPosDown);
+                if (isMe)
+                    TimeOptionAdapter.this.mParent.scrollToPosition(newPosDown);
                 mTimes.add(newPosDown, time);
                 TimeOptionAdapter.this.notifyItemInserted(newPosDown);
             }

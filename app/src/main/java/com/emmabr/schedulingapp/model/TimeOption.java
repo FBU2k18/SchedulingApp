@@ -21,6 +21,7 @@ public class TimeOption implements Comparable {
     ArrayList<String> downVoters; //possible way to keep track of who votes down
     DataSnapshot self;
     TimeOptionAdapter.ViewHolder holder;
+    boolean isMe;
 
     public TimeOption(String startTime, String endTime) {
         this.startTime = startTime;
@@ -33,6 +34,7 @@ public class TimeOption implements Comparable {
         this.self = self;
         upVoters = new ArrayList<>();
         downVoters = new ArrayList<>();
+        isMe = false;
         findUpVotes();
         findDownVotes();
     }
@@ -65,8 +67,10 @@ public class TimeOption implements Comparable {
                     temp.add(upVoter.getValue().toString());
                 upVoters = (ArrayList<String>) temp.clone();
                 setVotes();
-                if (holder != null)
-                    holder.move(TimeOption.this);
+                if (holder != null) {
+                    holder.move(TimeOption.this, isMe);
+                    isMe = false;
+                }
             }
 
             @Override
@@ -85,8 +89,10 @@ public class TimeOption implements Comparable {
                     temp.add(downVoter.getValue().toString());
                 downVoters = (ArrayList<String>) temp.clone();
                 setVotes();
-                if (holder != null)
-                    holder.move(TimeOption.this);
+                if (holder != null) {
+                    holder.move(TimeOption.this, isMe);
+                    isMe = false;
+                }
             }
 
             @Override
@@ -113,6 +119,7 @@ public class TimeOption implements Comparable {
     }
 
     public void upVote(String user) {
+        isMe = true;
         if (!upVoters.contains(user)) {
             self.child("upVoters").child(user).getRef().setValue(user);
             if (downVoters.contains(user))
@@ -126,6 +133,7 @@ public class TimeOption implements Comparable {
     }
 
     public void downVote(String user) {
+        isMe = true;
         if (!downVoters.contains(user)) {
             self.child("downVoters").child(user).getRef().setValue(FirebaseAuth.getInstance().getUid());
             if (upVoters.contains(user))
