@@ -38,6 +38,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
@@ -57,13 +58,14 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
     public void onBindViewHolder(@NonNull TimeOptionAdapter.ViewHolder holder, int position) {
         TimeOption time = mTimes.get(position);
         time.setVotes();
+        time.setHolder(holder);
         holder.tvTime.setText(time.getTime());
         holder.tvVotes.setText(Integer.toString(time.getVotes()));
         //get current user
-        if (time.getUpVoters().contains(new User("abc123")))
+        if (time.getUpVoters().contains(FirebaseAuth.getInstance().getUid()))
             holder.rlOption.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             //get current user again
-        else if (time.getDownVoters().contains(new User("abc123")))
+        else if (time.getDownVoters().contains(FirebaseAuth.getInstance().getUid()))
             holder.rlOption.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_red_light));
         else
             holder.rlOption.setBackgroundColor(Color.TRANSPARENT);
@@ -104,91 +106,16 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
             btAddCal = itemView.findViewById(R.id.ibAddCal);
             mBusyTime = itemView.findViewById(R.id.tvTime);
 
-            //need function to get current user for onClickListeners below
             ibUpVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int oldPos = getAdapterPosition();
-                    if (oldPos != RecyclerView.NO_POSITION) {
-                        TimeOption time = mTimes.get(oldPos);
-                        //replace line below
-                        time.upVote(new User("abc123"));
-                        int newPos;
-                        if (time.getVotes() > Integer.parseInt(tvVotes.getText().toString())) {
-                            newPos = oldPos - 1;
-                            while (newPos > -1 && time.getVotes() > mTimes.get(newPos).getVotes())
-                                newPos--;
-                            newPos++;
-                            if (newPos == oldPos)
-                                TimeOptionAdapter.this.notifyItemChanged(newPos);
-                            else {
-                                mTimes.remove(oldPos);
-                                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
-                                tvVotes.setText(Integer.toString(time.getVotes()));
-                                mTimes.add(newPos, time);
-                                TimeOptionAdapter.this.notifyItemInserted(newPos);
-                            }
-                        } else {
-                            newPos = oldPos + 1;
-                            while (newPos < mTimes.size() && time.getVotes() < mTimes.get(newPos).getVotes())
-                                newPos++;
-                            newPos--;
-                            if (newPos == oldPos)
-                                TimeOptionAdapter.this.notifyItemChanged(newPos);
-                            else {
-                                mTimes.remove(oldPos);
-                                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
-                                tvVotes.setText(Integer.toString(time.getVotes()));
-                                mTimes.add(newPos, time);
-                                TimeOptionAdapter.this.notifyItemInserted(newPos);
-                            }
-                        }
-                    }
+                    mTimes.get(getAdapterPosition()).upVote(FirebaseAuth.getInstance().getUid());
                 }
             });
             ibDownVote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int oldPos = getAdapterPosition();
-                    if (oldPos != RecyclerView.NO_POSITION) {
-                        TimeOption time = mTimes.get(oldPos);
-                        //replace line below
-                        time.downVote(new User("abc123"));
-                        int newPos;
-                        if (time.getVotes() > Integer.parseInt(tvVotes.getText().toString())) {
-                            newPos = oldPos - 1;
-                            while (newPos > -1 && time.getVotes() > mTimes.get(newPos).getVotes())
-                                newPos--;
-                            newPos++;
-                            if (newPos == oldPos)
-                                TimeOptionAdapter.this.notifyItemChanged(newPos);
-                            else {
-                                mTimes.remove(oldPos);
-                                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
-                                tvVotes.setText(Integer.toString(time.getVotes()));
-                                mTimes.add(newPos, time);
-                                TimeOptionAdapter.this.notifyItemInserted(newPos);
-                            }
-                        } else {
-                            newPos = oldPos + 1;
-                            while (newPos < mTimes.size() && time.getVotes() < mTimes.get(newPos).getVotes())
-                                newPos++;
-                            newPos--;
-                            if (newPos == oldPos)
-                                TimeOptionAdapter.this.notifyItemChanged(newPos);
-                            else {
-                                mTimes.remove(oldPos);
-                                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
-                                TimeOptionAdapter.this.mParent.scrollToPosition(newPos);
-                                tvVotes.setText(Integer.toString(time.getVotes()));
-                                mTimes.add(newPos, time);
-                                TimeOptionAdapter.this.notifyItemInserted(newPos);
-                            }
-                        }
-                    }
+                    mTimes.get(getAdapterPosition()).downVote(FirebaseAuth.getInstance().getUid());
                 }
             });
 
@@ -210,7 +137,7 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
                     int cutOff = totalTime.indexOf(" ");
                     int endCutOff = totalTime.lastIndexOf(" ");
                     String startTime = totalTime.substring(0, cutOff);
-                    String endTime = totalTime.substring(endCutOff+1);
+                    String endTime = totalTime.substring(endCutOff + 1);
                     DateTime startEventDT = new DateTime("2018-04-10T" + startTime + "-07:00");
                     EventDateTime start = new EventDateTime()
                             .setDateTime(startEventDT)
@@ -246,5 +173,31 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
             });
         }
 
+        public void move(TimeOption time) {
+            int oldPos = mTimes.indexOf(time);
+            int newPosUp = oldPos - 1;
+            int newPosDown = oldPos + 1;
+            while (newPosUp > -1 && time.getVotes() > mTimes.get(newPosUp).getVotes())
+                newPosUp--;
+            newPosUp++;
+            while (newPosDown < mTimes.size() && time.getVotes() < mTimes.get(newPosDown).getVotes())
+                newPosDown++;
+            newPosDown--;
+            if (newPosUp == newPosDown) {
+                TimeOptionAdapter.this.notifyItemChanged(oldPos);
+            } else if (oldPos == newPosDown) {
+                mTimes.remove(oldPos);
+                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
+                TimeOptionAdapter.this.mParent.scrollToPosition(newPosUp);
+                mTimes.add(newPosUp, time);
+                TimeOptionAdapter.this.notifyItemInserted(newPosUp);
+            } else if (oldPos == newPosUp) {
+                mTimes.remove(oldPos);
+                TimeOptionAdapter.this.notifyItemRemoved(oldPos);
+                TimeOptionAdapter.this.mParent.scrollToPosition(newPosDown);
+                mTimes.add(newPosDown, time);
+                TimeOptionAdapter.this.notifyItemInserted(newPosDown);
+            }
+        }
     }
 }

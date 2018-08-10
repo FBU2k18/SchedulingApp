@@ -70,7 +70,7 @@ import org.json.JSONObject;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
-public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener{
+public class GroupActivity extends AppCompatActivity implements LeaveGroupDialogFragment.LeaveGroupDialogFragmentListener {
 
     private String mGroupID;
 
@@ -111,7 +111,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).child("unreadMessages").removeValue();
 
         mDays = new ArrayList<>();
-        mDayAdapter = new DayAdapter(mDays, this);
+        mDayAdapter = new DayAdapter(mDays, this, mGroupID);
         mRVDays = findViewById(R.id.rvDays);
         mRVDays.setAdapter(mDayAdapter);
         mRVDays.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -235,43 +235,36 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getMessages();
                 try {
                     final ArrayList<ArrayList<JSONObject>> totalFreeTimes = createCalendar();
                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                         String userID = (String) childData.getValue();
                         usersIDs.add(userID);
                     }
-                        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                try {
-                                    for (String user : usersIDs) {
-                                        for(DataSnapshot childUser : dataSnapshot.getChildren()) {
-                                            if (user.contentEquals(childUser.getKey())) {
-                                                String userCalendar = (String) childUser.child("calendar").getValue();
-                                                userBusyTimes.add(userCalendar);
-                                            }
+                    FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            try {
+                                for (String user : usersIDs) {
+                                    for (DataSnapshot childUser : dataSnapshot.getChildren()) {
+                                        if (user.contentEquals(childUser.getKey())) {
+                                            String userCalendar = (String) childUser.child("calendar").getValue();
+                                            userBusyTimes.add(userCalendar);
                                         }
                                     }
-                                    ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, usersIDs);
-                                    updateAvailTimes(updatedTimes);
-                                    //getDays();
-                                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                                    getSupportActionBar().setDisplayShowHomeEnabled(true);
-                                    getSupportActionBar().setDisplayShowTitleEnabled(false);
-                                    getSupportActionBar().setDisplayUseLogoEnabled(true);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
+                                ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, usersIDs);
+                                updateAvailTimes(updatedTimes);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                        }
+                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -285,18 +278,11 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             }
         });
         getMessages();
-    }
 
-    public void getDays() {
-        mDays.clear();
-        mDays.add("Sunday");
-        mDays.add("Monday");
-        mDays.add("Tuesday");
-        mDays.add("Wednesday");
-        mDays.add("Thursday");
-        mDays.add("Friday");
-        mDays.add("Saturday");
-        mDayAdapter.notifyDataSetChanged();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
 
@@ -392,7 +378,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String startTime = null;
                 String endTime = null;
                 String currDate = "2018-04-" + Integer.toString(k) + "T";
-                String currNext = "2018-04-" + Integer.toString(k+1) + "T";
+                String currNext = "2018-04-" + Integer.toString(k + 1) + "T";
                 if (i < 10) {
                     time = "0" + Integer.toString(i);
                     if (i + 1 == 10) {
@@ -428,7 +414,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         for (int i = 0; i < uBusyTimes.size(); i++) {
             JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
             JSONArray busyTimes = new JSONArray();
-            if (i == 0) {
+            //TODO: Undo hard-coded dated below
+            if (i != 0) {
                 busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
                         .get("krithikai@gmail.com")).get("busy");
                 for (int j = 0; j < busyTimes.length(); j++) {
@@ -443,26 +430,26 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             }
         }
         for (JSONObject userBusy : totalBusyTimes) {
-                for (int m = 0; m < calendar.size(); m++) {
-                    ArrayList<JSONObject> finalUpdatedCal = calendar.get(m);
-                    int startIndex = 0;
-                    int endIndex = 0;
-                    String start = userBusy.getString("start");
-                    String end = userBusy.getString("end");
-                    for (int i = 0; i < finalUpdatedCal.size(); i++) {
-                        if (start.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
-                            startIndex = i;
-                        } else if (end.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
-                            endIndex = i;
-                            for (int j = startIndex; j < endIndex; j++) {
-                                finalUpdatedCal.remove(startIndex);
-                            }
+            for (int m = 0; m < calendar.size(); m++) {
+                ArrayList<JSONObject> finalUpdatedCal = calendar.get(m);
+                int startIndex = 0;
+                int endIndex = 0;
+                String start = userBusy.getString("start");
+                String end = userBusy.getString("end");
+                for (int i = 0; i < finalUpdatedCal.size(); i++) {
+                    if (start.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                        startIndex = i;
+                    } else if (end.contentEquals(finalUpdatedCal.get(i).getString("start"))) {
+                        endIndex = i;
+                        for (int j = startIndex; j < endIndex; j++) {
+                            finalUpdatedCal.remove(startIndex);
                         }
                     }
-                    calendar.remove(m);
-                    calendar.add(m, finalUpdatedCal);
                 }
+                calendar.remove(m);
+                calendar.add(m, finalUpdatedCal);
             }
+        }
         return calendar;
     }
 
@@ -482,8 +469,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String startTime = start.substring(startT + 1, startPeriod);
                 String endTime = end.substring(endT + 1, endPeriod);
                 TimeOption newTime = new TimeOption(startTime, endTime);
-                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
-                        .child(Integer.toString(index)).child(date).setValue(newTime);
+                //FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
+                //        .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
             }
             mDays.add(date);
         }
