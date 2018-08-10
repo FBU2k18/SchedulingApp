@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
 
 public class PollAdapter extends RecyclerView.Adapter<PollAdapter.ViewHolder> {
 

@@ -1,6 +1,7 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class AddMemberActivity extends AppCompatActivity {
 
@@ -58,7 +62,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -83,7 +86,6 @@ public class AddMemberActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
         });
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -101,7 +103,6 @@ public class AddMemberActivity extends AppCompatActivity {
     }
 
     private void firebaseUserSearch(String searchText) {
-
         Query query = FirebaseDatabase.getInstance().getReference("users").orderByChild("email").startAt(searchText).endAt(searchText + "\uf8ff");
 
         FirebaseRecyclerOptions<User> options =
@@ -110,7 +111,6 @@ public class AddMemberActivity extends AppCompatActivity {
                         .build();
 
         FirebaseRecyclerAdapter<User, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, UsersViewHolder>(options) {
-            @NonNull
             @Override
             public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 View view = LayoutInflater.from(viewGroup.getContext())
@@ -191,28 +191,4 @@ public class AddMemberActivity extends AppCompatActivity {
                     .into(user_image);
         }
     }
-
-//    private void signIn() {
-//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-//        startActivityForResult(signInIntent, RC_SIGN_IN);
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            try {
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                // Google Sign In was successful
-//                Log.d("Google Authentication", "Google email successfully authenticated!");
-//
-//            } catch (ApiException e) {
-//                // Google Sign In failed, update UI appropriately
-//                Log.w("GoogleLogIn", "Google sign in failed", e);
-//            }
-//        }
-//    }
 }

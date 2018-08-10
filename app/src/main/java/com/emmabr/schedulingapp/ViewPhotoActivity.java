@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 

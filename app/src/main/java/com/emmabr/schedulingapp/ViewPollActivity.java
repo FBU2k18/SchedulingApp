@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class ViewPollActivity extends AppCompatActivity {
 

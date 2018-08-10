@@ -11,6 +11,7 @@
     <string name="display_name">Display Name</string>
     <string name="username_creation">Enter your username</string>
     <string name="btn_next">Next</string>
+    <string name="code_verifier">Sknd576.354KLN/3anfb67jnbjasd.sjFJLnfsjJksbnga</string>
     <string name="API_KEY">AIzaSyANQa_zB5i6nWLVk8M2wfooIvV7FeBixNg</string>
     <string name="set_button">set</string>
     <string name="messages_title">Messages</string>
@@ -34,9 +35,12 @@
     <string name="votes">Votes</string>
     <string name="finish">Finish</string>
     <string name="members">Members</string>
+    <string name="day">Day</string>
 
-    <!--TODO: Replace place holders -->
     <string name="singledisplayname">DisplayName</string>
     <string name="singleDisplayEmail">DisplayEmail</string>
     <string name="change_image">Change Image</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

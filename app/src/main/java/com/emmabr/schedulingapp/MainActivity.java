@@ -24,6 +24,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,11 +51,13 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentUser;
     private DatabaseReference mCurrUserGroupsData;
 
+
     private NotificationManager mNotificationManager;
     private NotificationChannel mNotificationChannel;
     private final String mCHANNEL_ID = "";
     private String mGroupOpen = "";
     private Date mDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(logBack);
                 Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();
+                finish();
                 break;
         }
         return true;
@@ -187,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                             pos++;
                         }
                     }
+                    mNotificationManager.cancelAll();
                     mAdapter.notifyDataSetChanged();
                     mSRLMain.setRefreshing(false);
                     mRVGroups.scrollToPosition(0);

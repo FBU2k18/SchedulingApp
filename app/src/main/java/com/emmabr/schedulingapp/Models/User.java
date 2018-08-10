@@ -56,10 +56,6 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
     // add user to database
     public static void saveUser(User inputUser) {
         inputUser.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());

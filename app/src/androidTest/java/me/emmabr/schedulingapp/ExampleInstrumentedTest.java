@@ -1,4 +1,4 @@
-package me.emmabr.schedulingapp;
+package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

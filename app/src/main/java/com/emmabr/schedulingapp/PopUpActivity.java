@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class PopUpActivity extends Activity {
 

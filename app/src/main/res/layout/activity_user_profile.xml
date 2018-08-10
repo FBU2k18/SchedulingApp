@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,15 +9,15 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="165dp"
+        android:layout_height="145dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="73dp"
+        android:elevation="10dp"
         android:src="@drawable/default_pic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,26 +25,25 @@
         android:id="@+id/settingsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="227dp"
         android:gravity="center_horizontal"
         android:text="@string/display_name"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="26sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_image" />
 
     <Button
         android:id="@+id/settingsImageBtn"
-        android:layout_width="135dp"
-        android:layout_height="39dp"
+        android:layout_width="153dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="7dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/button"
@@ -60,12 +59,11 @@
 
     <Button
         android:id="@+id/settingsNameBtn"
-        android:layout_width="135dp"
-        android:layout_height="39dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="153dp"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/change_username"
@@ -78,4 +76,59 @@
         app:layout_constraintTop_toBottomOf="@+id/settingsImageBtn"
         app:layout_constraintVertical_bias="0.0" />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/ivCoverPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        android:background="@drawable/animation_list"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/tvNumGroups"
+        android:layout_width="49dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/settingsName"
+        android:text="#"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvNumCal"
+        android:layout_width="49dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvLabel2"
+        android:layout_centerHorizontal="true"
+        android:text="#"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="128dp"
+        android:text="# of people your calendar is shared with"
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="185dp"
+        android:text="# of groups you are part of"
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic" />
+
+</RelativeLayout>

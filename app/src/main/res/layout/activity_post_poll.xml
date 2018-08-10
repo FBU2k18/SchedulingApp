@@ -92,7 +92,7 @@
         android:ems="10"
         android:hint="@string/add_option"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCoverPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.352"
         app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +191,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ivCoverPhoto"
         android:layout_width="384dp"
         android:layout_height="376dp"
         android:layout_marginBottom="8dp"

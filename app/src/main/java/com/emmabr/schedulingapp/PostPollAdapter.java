@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.Map;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHolder> {
 

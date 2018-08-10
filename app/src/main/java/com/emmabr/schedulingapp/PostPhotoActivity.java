@@ -29,7 +29,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Date;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 

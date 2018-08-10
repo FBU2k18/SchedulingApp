@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.emmabr.schedulingapp.R;
+import com.emmabr.schedulingapp.R;
 
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 

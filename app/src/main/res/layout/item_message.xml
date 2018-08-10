@@ -64,4 +64,11 @@
         android:layout_alignEnd="@+id/tvTextMe"
         android:layout_alignTop="@+id/tvTextYou" />
 
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvTextYou"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
