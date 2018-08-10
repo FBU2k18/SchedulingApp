@@ -53,10 +53,22 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
                 //((AppCompatTextView) view).getText()
                 //i is no the new view that is clicked
                 //mPollOptions.remove(((AppCompatTextView) view).getText());
-                hashMap.remove(((AppCompatTextView) view).getText());
-                //notify item removed at the position removed from
-                //FIXME
-                notifyItemRemoved(hashMap.get(view));
+
+                if (((AppCompatTextView) view).getText() != null) {
+                    hashMap.remove(((AppCompatTextView) view).getText());
+                    //notify item removed at the position removed from
+                    notifyItemRemoved(viewHolder.getAdapterPosition());
+                    //reset the hash map
+                    int counter = 0;
+                    for(Map.Entry entry : hashMap.entrySet()) {
+                        entry.setValue(counter);
+                        ++counter;
+                    }
+
+                }
+
+
+
             }
         };
 
