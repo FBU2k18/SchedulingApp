@@ -2,6 +2,7 @@ package com.emmabr.schedulingapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,9 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.emmabr.schedulingapp.R;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class UserProfile extends AppCompatActivity {
 
@@ -47,16 +51,41 @@ public class UserProfile extends AppCompatActivity {
     private Button mImageBtn;
     private Button mNameBtn;
 
+    private ImageView mCoverPhoto1;
+
     private static final int GALLERY_PICK = 1;
 
     //Storage Firebase
     private StorageReference mImageStorage;
     private ProgressDialog mProgressDialog;
 
+    private AnimationDrawable mAnimationDrawable1;
+
+    // getting user data
+    private TextView mNumGroups;
+    private TextView mNumCals;
+
+    private String current_uid;
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAnimationDrawable1.start();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        // start Cover photo animation
+        mCoverPhoto1 = findViewById(R.id.ivCoverPhoto);
+
+        mAnimationDrawable1 = (AnimationDrawable) mCoverPhoto1.getBackground();
+        mAnimationDrawable1.setEnterFadeDuration(1000);
+        mAnimationDrawable1.setExitFadeDuration(1000);
+
 
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
         mName = (TextView) findViewById(R.id.settingsName);
@@ -66,8 +95,10 @@ public class UserProfile extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
+        mNumGroups = findViewById(R.id.tvNumGroups);
+        mNumCals = findViewById(R.id.tvNumCal);
 
-        String current_uid = mCurrentUser.getUid();
+        current_uid = mCurrentUser.getUid();
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(current_uid);
         mUserDatabase.keepSynced(true);
@@ -118,6 +149,26 @@ public class UserProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+        final ArrayList<String> numGroups = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("users").child(current_uid).child("userGroup").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                    String groupName = childData.getKey();
+                    numGroups.add(groupName);
+                    mNumGroups.setText(Integer.toString(numGroups.size()));
+                }
+                setUser(numGroups);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -191,5 +242,42 @@ public class UserProfile extends AppCompatActivity {
         }
         return true;
     }
+
+    private void setUser(final ArrayList<String> userGroups) {
+        final HashSet<String> userCalendars = new HashSet<>();
+        FirebaseDatabase.getInstance().getReference().child("groups").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (String uniqGroup: userGroups) {
+                    for (DataSnapshot childDate: dataSnapshot.getChildren()) {
+                        if (uniqGroup.contentEquals(childDate.getKey())) {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(uniqGroup).child("Recipients").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childData : dataSnapshot.getChildren()) {
+                                        if (!childData.getKey().contentEquals(current_uid)) {
+                                            userCalendars.add(childData.getKey());
+                                            mNumCals.setText(Integer.toString(userCalendars.size()));
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
 

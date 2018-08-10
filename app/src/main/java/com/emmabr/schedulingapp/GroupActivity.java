@@ -94,12 +94,14 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
     // getting users ids for email
     ArrayList<String> userBusyTimes;
+    ArrayList<String> userEmails;
 
     // populating available times
     private FrameLayout mFLOtherTypes;
     private BottomSheetBehavior mOtherTypesBehavior;
     private Button mBAddPoll;
     private Button mBAddPic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,6 +233,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
         // get busy times from Firebase
         userBusyTimes = new ArrayList<>();
+        userEmails = new ArrayList<>();
         final ArrayList<String> usersIDs = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
@@ -250,12 +253,14 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                                     for (String user : usersIDs) {
                                         for(DataSnapshot childUser : dataSnapshot.getChildren()) {
                                             if (user.contentEquals(childUser.getKey())) {
+                                                String email = (String) childUser.child("email").getValue();
+                                                userEmails.add(email);
                                                 String userCalendar = (String) childUser.child("calendar").getValue();
                                                 userBusyTimes.add(userCalendar);
                                             }
                                         }
                                     }
-                                    ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, usersIDs);
+                                    ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, userEmails);
                                     updateAvailTimes(updatedTimes);
                                     //getDays();
                                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -428,19 +433,12 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         for (int i = 0; i < uBusyTimes.size(); i++) {
             JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
             JSONArray busyTimes = new JSONArray();
-            if (i == 0) {
+            String userEmail = userIds.get(i);
                 busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                        .get("krithikai@gmail.com")).get("busy");
+                        .get(userEmail)).get("busy");
                 for (int j = 0; j < busyTimes.length(); j++) {
                     totalBusyTimes.add(busyTimes.getJSONObject(j));
                 }
-            } else {
-                busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
-                        .get("e2.cornish@gmail.com")).get("busy");
-                for (int j = 0; j < busyTimes.length(); j++) {
-                    totalBusyTimes.add(busyTimes.getJSONObject(j));
-                }
-            }
         }
         for (JSONObject userBusy : totalBusyTimes) {
                 for (int m = 0; m < calendar.size(); m++) {

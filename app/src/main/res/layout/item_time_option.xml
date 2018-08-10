@@ -41,8 +41,12 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/flRoundedRectangle"
         android:layout_alignParentTop="true"
+        android:layout_marginEnd="-1dp"
         android:layout_marginTop="91dp"
+        android:adjustViewBounds="true"
         android:backgroundTint="@color/colorPrimaryDark"
+        android:elevation="10dp"
+        android:scaleType="fitXY"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageButton
@@ -51,23 +55,23 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ibUpVote"
         android:layout_toStartOf="@+id/ibUpVote"
+        android:adjustViewBounds="true"
         android:backgroundTint="@color/colorPrimaryDark"
+        android:elevation="10dp"
+        android:scaleType="fitXY"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
-    <Button
+    <ImageButton
         android:id="@+id/ibAddCal"
-        android:layout_width="128dp"
-        android:layout_height="34dp"
+        android:layout_width="151dp"
+        android:layout_height="25dp"
         android:layout_alignStart="@+id/flRoundedRectangle"
         android:layout_alignTop="@+id/ibUpVote"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/button_border"
+        android:layout_marginTop="3dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/imagebutton_shape"
         android:elevation="10dp"
-        android:text="Add to Calendar"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="12sp"
-        android:textStyle="bold|italic"
-        android:visibility="visible" />
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/google_button_cal" />
 
 </RelativeLayout>
