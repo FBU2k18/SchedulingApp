@@ -16,7 +16,6 @@ import me.emmabr.schedulingapp.R;
 public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHolder> {
 
     private Map<String, Integer> hashMap;
-    //private ArrayList<String> mPollOptions;
     private String mGroupID;
     private Context mContext;
     private View.OnClickListener onClickListener;
@@ -40,7 +39,7 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
         String option = "";
         int j = 0;
         for(Map.Entry entry : hashMap.entrySet()) {
-            if (j == i) {
+            if (i == Integer.parseInt(entry.getValue().toString())) {
                 option = entry.getKey().toString();
             }
             ++j;
@@ -50,10 +49,6 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //((AppCompatTextView) view).getText()
-                //i is no the new view that is clicked
-                //mPollOptions.remove(((AppCompatTextView) view).getText());
-
                 if (((AppCompatTextView) view).getText() != null) {
                     hashMap.remove(((AppCompatTextView) view).getText());
                     //notify item removed at the position removed from
@@ -66,9 +61,6 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
                     }
 
                 }
-
-
-
             }
         };
 

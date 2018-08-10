@@ -107,13 +107,9 @@ public class PostPollActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot childData : dataSnapshot.getChildren()) {
                                             if (childData.hasChild("pollTitle") && !childData.hasChild("options")) {
-                                                //mAdapter.getUsersArray()
                                                 for(Map.Entry entry : mOptionsText.entrySet()) {
                                                     childData.child("options").child(entry.getKey().toString()).child("text").getRef().setValue(entry.getKey().toString());
                                                 }
-//                                                for (String option : mOptionsText) {
-//                                                    childData.child("options").child(option).child("text").getRef().setValue(option);
-//                                                }
                                             }
                                         }
                                         finish();
