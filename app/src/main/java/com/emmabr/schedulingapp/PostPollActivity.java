@@ -19,8 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.emmabr.schedulingapp.R;
 
@@ -35,7 +36,7 @@ public class PostPollActivity extends AppCompatActivity {
     private RecyclerView mRVPollOptions;
     private PostPollAdapter mAdapter;
 
-    private ArrayList<String> mOptionsText;
+    private Map<String, Integer> mOptionsText;
 
     private ImageView mIVPlus;
 
@@ -65,7 +66,7 @@ public class PostPollActivity extends AppCompatActivity {
         mETPollTitle = findViewById(R.id.etPollTitle);
         mETAddOption = findViewById(R.id.etAddOption);
 
-        mOptionsText = new ArrayList<>();
+        mOptionsText = new HashMap<String, Integer>();
         mAdapter = new PostPollAdapter(mOptionsText, mGroupID);
 
         mRVPollOptions = findViewById(R.id.rvPollOptions);
@@ -79,7 +80,8 @@ public class PostPollActivity extends AppCompatActivity {
                 if (mETAddOption.getText().toString().isEmpty())
                     Toast.makeText(PostPollActivity.this, "Option is empty!", Toast.LENGTH_LONG).show();
                 else {
-                    mOptionsText.add(mETAddOption.getText().toString());
+
+                    mOptionsText.put(mETAddOption.getText().toString(), mOptionsText.size());
                     mAdapter.notifyItemInserted(mOptionsText.size() - 1);
                     mETAddOption.setText("");
                 }
@@ -106,9 +108,12 @@ public class PostPollActivity extends AppCompatActivity {
                                         for (DataSnapshot childData : dataSnapshot.getChildren()) {
                                             if (childData.hasChild("pollTitle") && !childData.hasChild("options")) {
                                                 //mAdapter.getUsersArray()
-                                                for (String option : mOptionsText) {
-                                                    childData.child("options").child(option).child("text").getRef().setValue(option);
+                                                for(Map.Entry entry : mOptionsText.entrySet()) {
+                                                    childData.child("options").child(entry.getKey().toString()).child("text").getRef().setValue(entry.getKey().toString());
                                                 }
+//                                                for (String option : mOptionsText) {
+//                                                    childData.child("options").child(option).child("text").getRef().setValue(option);
+//                                                }
                                             }
                                         }
                                         finish();
