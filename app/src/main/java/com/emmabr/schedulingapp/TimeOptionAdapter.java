@@ -1,46 +1,22 @@
 package com.emmabr.schedulingapp;
 
-import android.accounts.Account;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.emmabr.schedulingapp.model.TimeOption;
-import com.emmabr.schedulingapp.model.User;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-
-import com.emmabr.schedulingapp.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventDateTime;
 import com.google.firebase.auth.FirebaseAuth;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import java.util.ArrayList;
 
 public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.ViewHolder> {
 
@@ -92,7 +68,7 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
         ImageButton ibUpVote;
         ImageButton ibDownVote;
         RelativeLayout rlOption;
-        ImageButton btAddCal;
+        ImageView btAddCal;
         TextView mBusyTime;
 
         public ViewHolder(final View itemView) {

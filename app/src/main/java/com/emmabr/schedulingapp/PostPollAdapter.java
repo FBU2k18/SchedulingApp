@@ -2,24 +2,26 @@ package com.emmabr.schedulingapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 import com.emmabr.schedulingapp.R;
 
 public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHolder> {
 
-    private ArrayList<String> mPollOptions;
+    private Map<String, Integer> hashMap;
     private String mGroupID;
     private Context mContext;
+    private View.OnClickListener onClickListener;
 
-    public PostPollAdapter(ArrayList<String> pollOptions, String groupId) {
-        this.mPollOptions = pollOptions;
+    public PostPollAdapter(Map<String, Integer> hashMap, String groupId) {
+        this.hashMap = hashMap;
         this.mGroupID = groupId;
     }
 
@@ -34,25 +36,44 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final PostPollAdapter.ViewHolder viewHolder, final int i) {
-        final String option = mPollOptions.get(i);
+        String option = "";
+        int j = 0;
+        for(Map.Entry entry : hashMap.entrySet()) {
+            if (i == Integer.parseInt(entry.getValue().toString())) {
+                option = entry.getKey().toString();
+            }
+            ++j;
+        }
         viewHolder.tvPollOption.setText(option);
 
-        viewHolder.tvPollOption.setOnClickListener(new View.OnClickListener() {
+        onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPollOptions.remove(i);
-                notifyItemRemoved(i);
+                if (((AppCompatTextView) view).getText() != null) {
+                    hashMap.remove(((AppCompatTextView) view).getText());
+                    //notify item removed at the position removed from
+                    notifyItemRemoved(viewHolder.getAdapterPosition());
+                    //reset the hash map
+                    int counter = 0;
+                    for(Map.Entry entry : hashMap.entrySet()) {
+                        entry.setValue(counter);
+                        ++counter;
+                    }
+
+                }
             }
-        });
+        };
+
+        viewHolder.tvPollOption.setOnClickListener(onClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return mPollOptions.size();
+        return hashMap.size();
     }
 
-    public ArrayList<String> getUsersArray() {
-        return mPollOptions;
+    public Map getMappedUsers() {
+        return hashMap;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,4 +86,5 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
             tvPollOption = itemView.findViewById(R.id.tvPollOption);
         }
     }
+
 }
