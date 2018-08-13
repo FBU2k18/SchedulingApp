@@ -21,6 +21,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRVGroups;
     private SwipeRefreshLayout mSRLMain;
     private SearchView mSVSearch;
+    private TextView mTVHasGroups;
 
     private String mCurrentUser;
     private DatabaseReference mCurrUserGroupsData;
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 getGroups();
             }
         });
+        mTVHasGroups = findViewById(R.id.tvHasGroups);
 
         getGroups();
     }
@@ -173,22 +176,25 @@ public class MainActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     members.clear();
                                     for (final DataSnapshot member : dataSnapshot.getChildren()) {
-                                                FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        if (dataSnapshot.getValue() == null)
-                                                            return;
-                                                        members.add(dataSnapshot.getValue().toString());
-                                                        mAdapter.notifyDataSetChanged();
-                                                    }
+                                        FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.getValue() == null)
+                                                    return;
+                                                members.add(dataSnapshot.getValue().toString());
+                                                mAdapter.notifyDataSetChanged();
+                                            }
 
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
                                         });
                                     }
                                 }
+
                                 @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
                             });
                             pos++;
                         }
@@ -197,6 +203,10 @@ public class MainActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                     mSRLMain.setRefreshing(false);
                     mRVGroups.scrollToPosition(0);
+                    if (mGroups.size() == 0)
+                        mTVHasGroups.setText("It appears you have no groups. Open the menu above to create your first!");
+                    else
+                        mTVHasGroups.setText("");
                 }
 
                 @Override

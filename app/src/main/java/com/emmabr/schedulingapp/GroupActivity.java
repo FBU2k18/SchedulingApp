@@ -131,7 +131,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("groupName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mTVGroupName.setText(dataSnapshot.getValue().toString());
+                if (dataSnapshot.getValue() != null)
+                    mTVGroupName.setText(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -364,6 +365,18 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     public void leaveGroup() {
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(FirebaseAuth.getInstance().getUid()).removeValue();
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid()).child("userGroup").child(mGroupID).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild("Recipients"))
+                    dataSnapshot.getRef().removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         finish();
     }
 
