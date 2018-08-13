@@ -339,10 +339,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.miRefresh:
-                //replace with intent
-                Log.i("Menu", "Refresh");
-                break;
             case R.id.miAddMember:
                 Intent intentAdd = new Intent(this, AddMemberActivity.class);
                 intentAdd.putExtra("mGroupID", mGroupID);
