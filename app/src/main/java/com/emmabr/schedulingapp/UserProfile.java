@@ -260,7 +260,7 @@ public class UserProfile extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                                         userCalendars.add(childData.getKey());
-                                        mNumCals.setText(Integer.toString(userCalendars.size()));
+                                        mNumCals.setText(Integer.toString(userCalendars.size() -1));
                                     }
                                 }
 
