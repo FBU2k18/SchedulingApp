@@ -374,7 +374,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
     public ArrayList<ArrayList<JSONObject>> createCalendar() throws JSONException {
         ArrayList<ArrayList<JSONObject>> masterCalendar = new ArrayList<>();
-        for (int k = 10; k < 18; k++) {
+        for (int k = 14; k < 22; k++) {
             ArrayList<JSONObject> calendar = new ArrayList<>();
             for (int i = 0; i < 24; i++) {
                 JSONObject singleHour = new JSONObject();
