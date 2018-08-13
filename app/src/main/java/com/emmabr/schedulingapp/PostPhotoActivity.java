@@ -29,8 +29,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Date;
 
-import com.emmabr.schedulingapp.R;
-
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPhotoActivity extends AppCompatActivity {

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emmabr.schedulingapp.PostPollActivity"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context="com.emmabr.schedulingapp.PostPollActivity">
 
     <EditText
         android:id="@+id/etPollTitle"
@@ -28,7 +28,6 @@
         android:id="@+id/bPostPoll"
         android:layout_width="124dp"
         android:layout_height="31dp"
-        android:layout_alignEnd="@+id/tvPollOptions"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -65,21 +64,6 @@
         app:layout_constraintTop_toBottomOf="@+id/etAddOption"
         app:layout_constraintVertical_bias="0.063" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/tvPollOptions"-->
-        <!--android:layout_width="297dp"-->
-        <!--android:layout_height="112dp"-->
-        <!--android:layout_below="@+id/etPollTitle"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:padding="5dp"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/etPollTitle" />-->
-
     <EditText
         android:id="@+id/etAddOption"
         android:layout_width="wrap_content"
@@ -115,67 +99,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rvPollOptions"
         app:layout_constraintVertical_bias="0.545"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/tvRemoveDescription"-->
-        <!--android:layout_width="197dp"-->
-        <!--android:layout_height="44dp"-->
-        <!--android:layout_alignBottom="@+id/ivMultiply"-->
-        <!--android:layout_alignStart="@+id/tvPollOptions"-->
-        <!--android:layout_below="@+id/ivPlus"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="20dp"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--android:layout_toLeftOf="@+id/etNumber"-->
-        <!--android:gravity="center_vertical|center_horizontal"-->
-        <!--android:padding="5dp"-->
-        <!--android:text="@string/instructions"-->
-        <!--android:textSize="14sp"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/imageView3"-->
-        <!--app:layout_constraintEnd_toStartOf="@+id/ivPlus"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/etAddOption"-->
-        <!--app:layout_constraintVertical_bias="0.0" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/ivMultiply"-->
-        <!--android:layout_width="46dp"-->
-        <!--android:layout_height="46dp"-->
-        <!--android:layout_alignEnd="@+id/tvPollOptions"-->
-        <!--android:layout_below="@+id/ivPlus"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bCancelPoll"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.148"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/etNumber"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/ivPlus"-->
-        <!--app:layout_constraintVertical_bias="0.571"-->
-        <!--app:srcCompat="@android:drawable/ic_delete" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/etNumber"-->
-        <!--android:layout_width="46dp"-->
-        <!--android:layout_height="46dp"-->
-        <!--android:layout_below="@+id/ivPlus"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_toLeftOf="@+id/ivMultiply"-->
-        <!--android:ems="10"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:hint="@string/pound"-->
-        <!--android:inputType="textPersonName"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bCancelPoll"-->
-        <!--app:layout_constraintEnd_toStartOf="@+id/ivPlus"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/tvRemoveDescription"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/etAddOption"-->
-        <!--app:layout_constraintVertical_bias="0.0" />-->
 
     <ImageView
         android:id="@+id/ivNewPoll"

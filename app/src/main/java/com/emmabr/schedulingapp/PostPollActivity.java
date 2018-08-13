@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.emmabr.schedulingapp.R;
-
 import static com.emmabr.schedulingapp.Models.Message.saveMessage;
 
 public class PostPollActivity extends AppCompatActivity {
@@ -61,12 +59,12 @@ public class PostPollActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .83), (int)(height * .56));
+        getWindow().setLayout((int) (width * .83), (int) (height * .56));
 
         mETPollTitle = findViewById(R.id.etPollTitle);
         mETAddOption = findViewById(R.id.etAddOption);
 
-        mOptionsText = new HashMap<String, Integer>();
+        mOptionsText = new HashMap<>();
         mAdapter = new PostPollAdapter(mOptionsText, mGroupID);
 
         mRVPollOptions = findViewById(R.id.rvPollOptions);
@@ -107,7 +105,7 @@ public class PostPollActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot childData : dataSnapshot.getChildren()) {
                                             if (childData.hasChild("pollTitle") && !childData.hasChild("options")) {
-                                                for(Map.Entry entry : mOptionsText.entrySet()) {
+                                                for (Map.Entry entry : mOptionsText.entrySet()) {
                                                     childData.child("options").child(entry.getKey().toString()).child("text").getRef().setValue(entry.getKey().toString());
                                                 }
                                             }
@@ -148,7 +146,7 @@ public class PostPollActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(valueEventListener != null) {
+        if (valueEventListener != null) {
             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("chatMessages").removeEventListener(valueEventListener);
         }
 

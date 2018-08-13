@@ -2,7 +2,6 @@ package com.emmabr.schedulingapp;
 
 import android.accounts.Account;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -44,7 +42,7 @@ public class AddCalendarActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .80), (int)(height * .20));
+        getWindow().setLayout((int) (width * .80), (int) (height * .20));
 
         mEventName = findViewById(R.id.etEventName);
         mCreateEvent = findViewById(R.id.btCreateEvent);

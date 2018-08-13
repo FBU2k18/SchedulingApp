@@ -26,8 +26,11 @@ import android.widget.Toast;
 
 import com.emmabr.schedulingapp.Models.GroupData;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -38,8 +41,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.emmabr.schedulingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -130,12 +131,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case R.id.miLogOut:
-                FirebaseAuth.getInstance().signOut();
-                Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(logBack);
-                Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();
-                finish();
-                break;
+                GoogleSignInOptions gsoLO = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestScopes(new Scope("https://www.googleapis.com/auth/calendar"))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient mGoogleSignInClientLogOut = GoogleSignIn.getClient(getApplicationContext(), gsoLO);
+                mGoogleSignInClientLogOut.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent logBack = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(logBack);
+                        Toast.makeText(MainActivity.this, "Log out successful!", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
         }
         return true;
     }

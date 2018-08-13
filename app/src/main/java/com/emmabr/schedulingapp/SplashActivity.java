@@ -9,8 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
-import com.emmabr.schedulingapp.R;
-
 public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 2500;
@@ -30,14 +28,14 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 Intent splashIntent;
-                if(currentUser == null) {
+                if (currentUser == null) {
                     splashIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                }else{
+                } else {
                     splashIntent = new Intent(SplashActivity.this, MainActivity.class);
                 }
                 startActivity(splashIntent);
                 finish();
             }
-        },SPLASH_TIME_OUT);
+        }, SPLASH_TIME_OUT);
     }
 }

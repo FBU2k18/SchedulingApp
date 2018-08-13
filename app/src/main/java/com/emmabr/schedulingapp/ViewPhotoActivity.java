@@ -3,12 +3,9 @@ package com.emmabr.schedulingapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-
-import com.emmabr.schedulingapp.R;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 
@@ -31,7 +28,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .8), (int)(height * .50));
+        getWindow().setLayout((int) (width * .8), (int) (height * .50));
 
         getSupportActionBar().hide();
     }

@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.emmabr.schedulingapp.Models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,18 +28,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -52,11 +48,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
-
-import com.emmabr.schedulingapp.R;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -159,59 +150,59 @@ public class RegisterActivity extends AppCompatActivity {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-}
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
-                        @Override
-                        public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                            if (task.isSuccessful()) {
-                                try {
-                                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                                    FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("token").setValue(account.getIdToken());
-                                    @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> firebaseTask = new AsyncTask<Void, Void, String>() {
-                                        @Override
-                                        protected String doInBackground(Void... voids) {
-                                            String tempCalHolder = null;
-                                            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
-                                                    Collections.singleton("https://www.googleapis.com/auth/calendar"));
-                                            GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                                            if (accountGoogle != null) {
-                                                credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
-                                            }
-                                            HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-                                            final Calendar service = new Calendar.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
-                                                    .setApplicationName("SchedulingApp").build();
-                                            try {
-                                                com.google.api.services.calendar.model.Calendar tempCalendar = service.calendars().get("primary").execute();
-                                                tempCalHolder = findFreeTime(tempCalendar, service);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                            return tempCalHolder;
-                                        }
-
-                                        @Override
-                                        protected void onPostExecute(String s) {
-                                            super.onPostExecute(s);
-                                            if (s != null) {
-                                                FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid())
-                                                        .child("calendar").setValue(s);
-                                            }
-                                        }
-                                    };
-                                    firebaseTask.execute();
-                                } catch (ApiException e) {
-                                    Toast.makeText(RegisterActivity.this, "It doesn't work", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                    if (task.isSuccessful()) {
+                        try {
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid()).child("token").setValue(account.getIdToken());
+                            @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, String> firebaseTask = new AsyncTask<Void, Void, String>() {
+                                @Override
+                                protected String doInBackground(Void... voids) {
+                                    String tempCalHolder = null;
+                                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+                                            Collections.singleton("https://www.googleapis.com/auth/calendar"));
+                                    GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                                    if (accountGoogle != null) {
+                                        credential.setSelectedAccount(new Account(accountGoogle.getEmail().toString(), "com.emmabr.schedulingapp"));
+                                    }
+                                    HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+                                    final Calendar service = new Calendar.Builder(httpTransport, JacksonFactory.getDefaultInstance(), credential)
+                                            .setApplicationName("SchedulingApp").build();
+                                    try {
+                                        com.google.api.services.calendar.model.Calendar tempCalendar = service.calendars().get("primary").execute();
+                                        tempCalHolder = findFreeTime(tempCalendar, service);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    return tempCalHolder;
                                 }
-                            }
+
+                                @Override
+                                protected void onPostExecute(String s) {
+                                    super.onPostExecute(s);
+                                    if (s != null) {
+                                        FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid())
+                                                .child("calendar").setValue(s);
+                                    }
+                                }
+                            };
+                            firebaseTask.execute();
+                        } catch (ApiException e) {
+                            Toast.makeText(RegisterActivity.this, "It doesn't work", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                }
+            });
             updateUI(mAuth.getCurrentUser());
         }
     }

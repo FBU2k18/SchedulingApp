@@ -18,8 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.emmabr.schedulingapp.R;
-
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     private ArrayList<Message> mMessages;
@@ -60,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         mContext.startActivity(intent);
                     }
                 });
-            } else if (message.getPollTitle() != null){
+            } else if (message.getPollTitle() != null) {
                 holder.tvTextMe.setText(message.getPollTitle());
                 holder.tvTextMe.setBackground(ContextCompat.getDrawable(mContext, R.drawable.user_message_text_background));
                 holder.ivPicYou.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));
@@ -91,7 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         mContext.startActivity(intent);
                     }
                 });
-            } else if (message.getPollTitle() != null){
+            } else if (message.getPollTitle() != null) {
                 holder.tvTextYou.setText(message.getPollTitle());
                 holder.tvTextYou.setBackground(ContextCompat.getDrawable(mContext, R.drawable.message_text_background));
                 holder.ivPicMe.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.ic_menu_sort_by_size));

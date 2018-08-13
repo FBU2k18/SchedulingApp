@@ -12,14 +12,14 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
+        android:gravity="left"
         android:maxWidth="270dp"
+        android:padding="10dp"
         android:paddingBottom="5dp"
         android:paddingLeft="25dp"
-        android:padding="10dp"
         android:paddingTop="5dp"
-        android:textColor="@color/lightText"
         android:text=""
-        android:gravity="left" />
+        android:textColor="@color/lightText" />
 
     <TextView
         android:id="@+id/tvFrom"
@@ -36,18 +36,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:padding="10dp"
         android:layout_below="@+id/tvFrom"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="10dp"
+        android:gravity="left"
         android:maxWidth="270dp"
+        android:padding="10dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="25dp"
         android:paddingTop="5dp"
         android:text=""
-        android:gravity="left"
         android:textColor="@color/lightText" />
 
     <ImageView

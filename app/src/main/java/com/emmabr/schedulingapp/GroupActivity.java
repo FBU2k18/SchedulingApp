@@ -1,10 +1,6 @@
 package com.emmabr.schedulingapp;
 
-import android.accounts.Account;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,31 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.emmabr.schedulingapp.Models.AvailableTime;
 import com.emmabr.schedulingapp.Models.Message;
-import com.emmabr.schedulingapp.model.TimeOption;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.Events;
-import com.google.api.services.calendar.model.FreeBusyRequest;
-import com.google.api.services.calendar.model.FreeBusyRequestItem;
-import com.google.api.services.calendar.model.FreeBusyResponse;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
+import com.emmabr.schedulingapp.Models.TimeOption;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -55,14 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -260,32 +226,32 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                         String userID = (String) childData.getValue();
                         usersIDs.add(userID);
                     }
-                        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                try {
-                                    for (String user : usersIDs) {
-                                        for (DataSnapshot childUser : dataSnapshot.getChildren()) {
-                                            if (user.contentEquals(childUser.getKey())) {
-                                                String email = (String) childUser.child("email").getValue();
-                                                userEmails.add(email);
-                                                String userCalendar = (String) childUser.child("calendar").getValue();
-                                                userBusyTimes.add(userCalendar);
-                                            }
+                    FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            try {
+                                for (String user : usersIDs) {
+                                    for (DataSnapshot childUser : dataSnapshot.getChildren()) {
+                                        if (user.contentEquals(childUser.getKey())) {
+                                            String email = (String) childUser.child("email").getValue();
+                                            userEmails.add(email);
+                                            String userCalendar = (String) childUser.child("calendar").getValue();
+                                            userBusyTimes.add(userCalendar);
                                         }
                                     }
-                                    ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, userEmails);
-                                    updateAvailTimes(updatedTimes);
-                                    //getDays();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
+                                ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, userEmails);
+                                updateAvailTimes(updatedTimes);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -298,11 +264,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         getMessages();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -407,11 +368,10 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             ArrayList<JSONObject> calendar = new ArrayList<>();
             for (int i = 0; i < 24; i++) {
                 JSONObject singleHour = new JSONObject();
-                String time = null;
-                String nextTime = null;
-                String dateTime = null;
-                String startTime = null;
-                String endTime = null;
+                String time;
+                String nextTime;
+                String startTime;
+                String endTime;
                 String currDate = "2018-04-" + Integer.toString(k) + "T";
                 String currNext = "2018-04-" + Integer.toString(k + 1) + "T";
                 if (i < 10) {
@@ -448,7 +408,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         // adding all users' busy times into an array of JSON objects
         for (int i = 0; i < uBusyTimes.size(); i++) {
             JSONObject userUniqTime = new JSONObject(uBusyTimes.get(i));
-            JSONArray busyTimes = new JSONArray();
+            JSONArray busyTimes;
             String userEmail = userIds.get(i);
             busyTimes = (JSONArray) ((JSONObject) ((JSONObject) userUniqTime.get("calendars"))
                     .get(userEmail)).get("busy");
@@ -498,7 +458,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 TimeOption newTime = new TimeOption(startTime, endTime);
                 if (mRefresh)
                     FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
-                        .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
+                            .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
             }
             mDays.add(date);
         }

@@ -75,7 +75,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="bottom|right"
-            android:background="@drawable/send_messsage_plane"/>
+            android:background="@drawable/send_messsage_plane" />
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"

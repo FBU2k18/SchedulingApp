@@ -28,7 +28,6 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.emmabr.schedulingapp.R;
 
 public class GroupProfile extends AppCompatActivity {
 

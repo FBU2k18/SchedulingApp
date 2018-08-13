@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,6 +67,7 @@ public class UserProfile extends AppCompatActivity {
     private TextView mNumCals;
 
     private String current_uid;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -91,10 +90,10 @@ public class UserProfile extends AppCompatActivity {
         mAnimationDrawable1.setExitFadeDuration(1000);
 
 
-        mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
-        mName = (TextView) findViewById(R.id.settingsName);
-        mImageBtn = (Button) findViewById(R.id.settingsImageBtn);
-        mNameBtn = (Button) findViewById(R.id.settingsNameBtn);
+        mDisplayImage = findViewById(R.id.settings_image);
+        mName = findViewById(R.id.settingsName);
+        mImageBtn = findViewById(R.id.settingsImageBtn);
+        mNameBtn = findViewById(R.id.settingsNameBtn);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mImageStorage = FirebaseStorage.getInstance().getReference();
@@ -143,7 +142,6 @@ public class UserProfile extends AppCompatActivity {
         mNameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: send to new activity or have a popup with text input
                 Intent intent = new Intent(UserProfile.this, PopUpActivity.class);
                 startActivity(intent);
             }
@@ -252,15 +250,15 @@ public class UserProfile extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (String uniqGroup: userGroups) {
-                    for (DataSnapshot childDate: dataSnapshot.getChildren()) {
+                for (String uniqGroup : userGroups) {
+                    for (DataSnapshot childDate : dataSnapshot.getChildren()) {
                         if (uniqGroup.contentEquals(childDate.getKey())) {
                             FirebaseDatabase.getInstance().getReference().child("groups").child(uniqGroup).child("Recipients").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot childData : dataSnapshot.getChildren()) {
                                         userCalendars.add(childData.getKey());
-                                        mNumCals.setText(Integer.toString(userCalendars.size() -1));
+                                        mNumCals.setText(Integer.toString(userCalendars.size() - 1));
                                     }
                                 }
 

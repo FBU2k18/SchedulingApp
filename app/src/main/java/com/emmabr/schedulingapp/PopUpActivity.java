@@ -19,8 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import com.emmabr.schedulingapp.R;
-
 public class PopUpActivity extends Activity {
 
     private DatabaseReference mUserDatabase;
@@ -56,15 +54,17 @@ public class PopUpActivity extends Activity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .87), (int)(height * .27));
+        getWindow().setLayout((int) (width * .87), (int) (height * .27));
 
         //listeners
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) { }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
 
         mBtnSet.setOnClickListener(new View.OnClickListener() {

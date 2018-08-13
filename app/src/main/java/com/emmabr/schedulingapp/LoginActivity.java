@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,11 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-
-    // Google Auth
-    private static final String TAG = "LogInActivity";
-    private final static int RC_SIGN_IN = 34;
-    private GoogleSignInClient mGoogleSignInClient;
 
     // shared Firebase object
     private FirebaseAuth mAuth;
@@ -61,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // gradient stuff
         mRelativeLayout = findViewById(R.id.relativeLayout);
-        mAnimationDrawable =(AnimationDrawable) mRelativeLayout.getBackground();
+        mAnimationDrawable = (AnimationDrawable) mRelativeLayout.getBackground();
         mAnimationDrawable.setEnterFadeDuration(5000);
         mAnimationDrawable.setExitFadeDuration(2000);
 

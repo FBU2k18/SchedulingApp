@@ -14,8 +14,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import com.emmabr.schedulingapp.R;
-
 public class GroupPopUp extends Activity {
 
     private Button mBSetGroup;
@@ -42,7 +40,7 @@ public class GroupPopUp extends Activity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .87), (int)(height * .28));
+        getWindow().setLayout((int) (width * .87), (int) (height * .28));
 
         mBSetGroup.setOnClickListener(new View.OnClickListener() {
             @Override

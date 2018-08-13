@@ -1,15 +1,7 @@
 package com.emmabr.schedulingapp.Models;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.Task;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -70,47 +62,7 @@ public class GroupData {
         return imageURL;
     }
 
-    public String getSeenStatus() {
-        return seenStatus;
-    }
-
     public ArrayList<String> getUsers() {
         return users;
-    }
-
-    public String getGroupMembers(String groupId) {
-        String memberString = "";
-        final ArrayList<String> members = new ArrayList<>();
-
-        FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("Recipients").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (final DataSnapshot member : dataSnapshot.getChildren()) {
-                    member.getRef().setPriority(null).continueWithTask(new Continuation<Void, Task<DataSnapshot>>() {
-                        @Override
-                        public Task<DataSnapshot> then(@NonNull Task<Void> task) {
-                            FirebaseDatabase.getInstance().getReference().child("users").child(member.getKey().toString()).child("nickName").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    members.add(dataSnapshot.getValue().toString());
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {}
-                            });
-                            return null;
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
-
-        for (int i = 0; i < members.size(); ++i) {
-            memberString = memberString + members.get(i) + " ";
-        }
-
-        return memberString;
     }
 }
