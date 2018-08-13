@@ -102,6 +102,7 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
     private Button mBAddPoll;
     private Button mBAddPic;
 
+    private boolean mRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +237,20 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         userBusyTimes = new ArrayList<>();
         userEmails = new ArrayList<>();
         final ArrayList<String> usersIDs = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue().toString().equals("false"))
+                    mRefresh = true;
+                else
+                    mRefresh = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -283,6 +298,11 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         getMessages();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -338,10 +358,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.miRefresh:
-                //replace with intent
-                Log.i("Menu", "Refresh");
                 break;
             case R.id.miAddMember:
                 Intent intentAdd = new Intent(this, AddMemberActivity.class);
@@ -480,11 +496,13 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String startTime = start.substring(startT + 1, startPeriod);
                 String endTime = end.substring(endT + 1, endPeriod);
                 TimeOption newTime = new TimeOption(startTime, endTime);
-                FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
+                if (mRefresh)
+                    FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("timeOptions")
                         .child(Integer.toString(index)).child(date).child(newTime.getStartTime()).setValue(newTime);
             }
             mDays.add(date);
         }
         mDayAdapter.notifyDataSetChanged();
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("true");
     }
 }

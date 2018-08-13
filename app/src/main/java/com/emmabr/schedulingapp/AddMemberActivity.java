@@ -128,12 +128,14 @@ public class AddMemberActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (!mGroupMembers.contains(user_id)) {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("false");
                             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(user_id).setValue(user_id);
-                            ValueEventListener eventListener = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
+                                    dataSnapshot.getRef().removeEventListener(this);
                                 }
 
                                 @Override
@@ -141,7 +143,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
                                 }
                             });
-                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).removeEventListener(eventListener);
                             mETSearchMember.setText("");
                             firebaseUserSearch("");
                             Toast.makeText(AddMemberActivity.this, "User Added to Group!", Toast.LENGTH_LONG).show();

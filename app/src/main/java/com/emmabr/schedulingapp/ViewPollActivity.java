@@ -51,6 +51,7 @@ public class ViewPollActivity extends AppCompatActivity {
         mPollAdapter = new PollAdapter(mOptions, mGroupID, mMessageID);
 
         mTVTitlePoll = findViewById(R.id.tvTitlePoll);
+        mTVTitlePoll.setSelected(true);
         mRVOptions = findViewById(R.id.rvOptions);
         mRVOptions.setLayoutManager(new LinearLayoutManager(this));
         mRVOptions.setAdapter(mPollAdapter);
