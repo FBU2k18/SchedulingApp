@@ -226,8 +226,8 @@ public class RegisterActivity extends AppCompatActivity {
     public String findFreeTime(com.google.api.services.calendar.model.Calendar userCalendar, Calendar service) throws Exception {
         ArrayList<FreeBusyRequestItem> totalCalendars = new ArrayList<>();
         totalCalendars.add(new FreeBusyRequestItem().setId(userCalendar.getId()));
-        String testStartTime = "2018-04-10 08:00:00";
-        String testEndTime = "2018-04-17 08:00:00";
+        String testStartTime = "2018-08-14 08:00:00";
+        String testEndTime = "2018-08-21 08:00:00";
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date d = df.parse(testStartTime);
