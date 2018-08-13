@@ -262,10 +262,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                                     ArrayList<ArrayList<JSONObject>> updatedTimes = deleteBusyTimes(totalFreeTimes, userBusyTimes, userEmails);
                                     updateAvailTimes(updatedTimes);
                                     //getDays();
-                                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                                    getSupportActionBar().setDisplayShowHomeEnabled(true);
-                                    getSupportActionBar().setDisplayShowTitleEnabled(false);
-                                    getSupportActionBar().setDisplayUseLogoEnabled(true);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -287,6 +283,11 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
 
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         getMessages();
 
