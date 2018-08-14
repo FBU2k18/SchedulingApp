@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tvOption"
-        android:layout_width="215dp"
+        android:layout_width="192dp"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:text="@string/option"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tvVotes"
-        android:layout_width="wrap_content"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvOption"
         android:layout_toEndOf="@+id/tvOption"
