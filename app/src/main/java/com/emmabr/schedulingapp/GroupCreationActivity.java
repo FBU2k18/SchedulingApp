@@ -32,16 +32,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
-
-import com.emmabr.schedulingapp.R;
-import com.google.firebase.database.ValueEventListener;
 
 import static com.emmabr.schedulingapp.Models.GroupData.saveGroup;
 
@@ -81,7 +76,7 @@ public class GroupCreationActivity extends AppCompatActivity {
         mETSearchUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-               // do what you want with your edit text here
+                // do what you want with your edit text here
                 String searchText = mETSearchUser.getText().toString();
                 firebaseUserSearch(searchText);
             }
@@ -159,7 +154,6 @@ public class GroupCreationActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         mALUsers.add(user_id);
                         Toast.makeText(GroupCreationActivity.this, "Added User!", Toast.LENGTH_LONG).show();
-                        //then clear the text in the edit test field
                     }
                 });
             }
@@ -181,9 +175,9 @@ public class GroupCreationActivity extends AppCompatActivity {
         }
 
         public void setDetails(Context ctx, String userName, String userImage, String userEmail) {
-            TextView user_name = (TextView) mView.findViewById(R.id.user_single_name);
-            ImageView user_image = (ImageView) mView.findViewById(R.id.user_single_image);
-            TextView user_email = (TextView) mView.findViewById(R.id.user_single_email);
+            TextView user_name = mView.findViewById(R.id.user_single_name);
+            ImageView user_image = mView.findViewById(R.id.user_single_image);
+            TextView user_email = mView.findViewById(R.id.user_single_email);
 
             user_name.setText(userName);
             user_email.setText(userEmail);
@@ -191,14 +185,10 @@ public class GroupCreationActivity extends AppCompatActivity {
             Glide.with(ctx)
                     .load(userImage)
                     .apply(new RequestOptions()
-                                    .placeholder(R.drawable.default_pic)
-                                    .fitCenter())
+                            .placeholder(R.drawable.default_pic)
+                            .fitCenter())
                     .into(user_image);
         }
-    }
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override

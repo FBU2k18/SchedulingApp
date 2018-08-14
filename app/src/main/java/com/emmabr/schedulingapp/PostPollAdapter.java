@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.Map;
 
-import com.emmabr.schedulingapp.R;
-
 public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHolder> {
 
     private Map<String, Integer> hashMap;
@@ -38,7 +36,7 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
     public void onBindViewHolder(@NonNull final PostPollAdapter.ViewHolder viewHolder, final int i) {
         String option = "";
         int j = 0;
-        for(Map.Entry entry : hashMap.entrySet()) {
+        for (Map.Entry entry : hashMap.entrySet()) {
             if (i == Integer.parseInt(entry.getValue().toString())) {
                 option = entry.getKey().toString();
             }
@@ -55,7 +53,7 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
                     notifyItemRemoved(viewHolder.getAdapterPosition());
                     //reset the hash map
                     int counter = 0;
-                    for(Map.Entry entry : hashMap.entrySet()) {
+                    for (Map.Entry entry : hashMap.entrySet()) {
                         entry.setValue(counter);
                         ++counter;
                     }
@@ -70,10 +68,6 @@ public class PostPollAdapter extends RecyclerView.Adapter<PostPollAdapter.ViewHo
     @Override
     public int getItemCount() {
         return hashMap.size();
-    }
-
-    public Map getMappedUsers() {
-        return hashMap;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

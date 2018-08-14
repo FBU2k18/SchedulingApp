@@ -28,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
-import com.emmabr.schedulingapp.R;
 
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> implements Filterable {
 
@@ -129,7 +128,6 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         public void onClick(View view) {
             if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                 GroupData group = mFilteredGroups.get(getAdapterPosition());
-                //replace with intent to go to group screen
                 Intent intent = new Intent(mContext, GroupActivity.class);
                 intent.putExtra("mGroupID", group.getGroupId());
                 mContext.startActivity(intent);

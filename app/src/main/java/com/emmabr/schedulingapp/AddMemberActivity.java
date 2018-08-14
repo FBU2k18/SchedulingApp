@@ -1,7 +1,6 @@
 package com.emmabr.schedulingapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +22,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.emmabr.schedulingapp.Models.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,8 +29,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import com.emmabr.schedulingapp.R;
 
 public class AddMemberActivity extends AppCompatActivity {
 
@@ -128,12 +122,14 @@ public class AddMemberActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (!mGroupMembers.contains(user_id)) {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("false");
                             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(user_id).setValue(user_id);
-                            ValueEventListener eventListener = FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("groupName").setValue(dataSnapshot.child("groupName").getValue().toString());
                                     FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("userGroup").child(mGroupID).child("imageURL").setValue(dataSnapshot.child("imageURL").getValue().toString());
+                                    dataSnapshot.getRef().removeEventListener(this);
                                 }
 
                                 @Override
@@ -141,7 +137,6 @@ public class AddMemberActivity extends AppCompatActivity {
 
                                 }
                             });
-                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).removeEventListener(eventListener);
                             mETSearchMember.setText("");
                             firebaseUserSearch("");
                             Toast.makeText(AddMemberActivity.this, "User Added to Group!", Toast.LENGTH_LONG).show();

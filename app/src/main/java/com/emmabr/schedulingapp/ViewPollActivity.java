@@ -15,8 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import com.emmabr.schedulingapp.R;
-
 public class ViewPollActivity extends AppCompatActivity {
 
     private String mMessageID;
@@ -45,12 +43,13 @@ public class ViewPollActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
 
-        getWindow().setLayout((int)(width * .85), (int)(height * .55));
+        getWindow().setLayout((int) (width * .85), (int) (height * .55));
 
         mOptions = new ArrayList<>();
         mPollAdapter = new PollAdapter(mOptions, mGroupID, mMessageID);
 
         mTVTitlePoll = findViewById(R.id.tvTitlePoll);
+        mTVTitlePoll.setSelected(true);
         mRVOptions = findViewById(R.id.rvOptions);
         mRVOptions.setLayoutManager(new LinearLayoutManager(this));
         mRVOptions.setAdapter(mPollAdapter);

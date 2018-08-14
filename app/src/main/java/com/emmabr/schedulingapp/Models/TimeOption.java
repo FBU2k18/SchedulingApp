@@ -1,4 +1,4 @@
-package com.emmabr.schedulingapp.model;
+package com.emmabr.schedulingapp.Models;
 
 import android.support.annotation.NonNull;
 
@@ -6,7 +6,6 @@ import com.emmabr.schedulingapp.TimeOptionAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class TimeOption implements Comparable {
     String startTime;
     String endTime;
     int votes;
-    ArrayList<String> upVoters; //possible way to keep track of who votes up
-    ArrayList<String> downVoters; //possible way to keep track of who votes down
+    ArrayList<String> upVoters; //way to keep track of who votes up
+    ArrayList<String> downVoters; //way to keep track of who votes down
     DataSnapshot self;
     TimeOptionAdapter.ViewHolder holder;
     boolean isMe;
@@ -48,12 +47,6 @@ public class TimeOption implements Comparable {
     }
 
     public String getTime() {
-//        int startT = startTime.indexOf("T");
-//        int endT = endTime.indexOf("T");
-//        int startPeriod = startTime.indexOf(".");
-//        int endPeriod = endTime.indexOf(".");
-//        startTime = startTime.substring(startT + 1, startPeriod);
-//        endTime = endTime.substring(endT + 1, endPeriod);
         String finalTime = startTime + " - " + endTime;
         return finalTime;
     }

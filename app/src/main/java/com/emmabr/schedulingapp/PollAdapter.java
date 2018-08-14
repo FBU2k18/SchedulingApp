@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-
 public class PollAdapter extends RecyclerView.Adapter<PollAdapter.ViewHolder> {
 
     private ArrayList<ArrayList<String>> mOptions;
