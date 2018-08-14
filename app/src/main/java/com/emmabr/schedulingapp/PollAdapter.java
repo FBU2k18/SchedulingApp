@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,11 +34,13 @@ public class PollAdapter extends RecyclerView.Adapter<PollAdapter.ViewHolder> {
         final ArrayList<String> option = mOptions.get(position);
         holder.tvOption.setText(option.get(0));
         holder.tvVotes.setText(Integer.toString(option.size() - 1));
-        Drawable background = mContext.getDrawable(R.drawable.message_text_background);
-        if (option.contains(FirebaseAuth.getInstance().getUid()))
+        Drawable background = mContext.getDrawable(R.drawable.poll_option_background);
+        if (option.contains(FirebaseAuth.getInstance().getUid())) {
             background.setTint(mContext.getResources().getColor(R.color.colorPrimaryDark));
-        else
+        }
+        else {
             background.setTint(mContext.getResources().getColor(R.color.colorPrimary));
+        }
         holder.rlPollBubble.setBackground(background);
 
         holder.rlPollBubble.setOnClickListener(new View.OnClickListener() {
