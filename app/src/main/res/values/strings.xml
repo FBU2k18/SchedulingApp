@@ -36,6 +36,8 @@
     <string name="finish">Finish</string>
     <string name="members">Members</string>
     <string name="day">Day</string>
+    <string name="user_groups">groups you are part of</string>
+    <string name="user_cal">people your calendar is shared with</string>
 
     <string name="singledisplayname">DisplayName</string>
     <string name="singleDisplayEmail">DisplayEmail</string>

@@ -7,6 +7,22 @@
     android:background="#FFFFFF"
     tools:context="com.emmabr.schedulingapp.UserProfile">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvUserCal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/tvNumCal"
+        android:layout_alignTop="@+id/tvNumCal"
+        android:layout_centerHorizontal="true" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvUserGroups"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/tvNumGroups"
+        android:layout_alignTop="@+id/tvNumGroups"
+        android:layout_centerHorizontal="true" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_image"
         android:layout_width="165dp"
@@ -83,10 +99,10 @@
     <TextView
         android:id="@+id/tvNumGroups"
         android:layout_width="41dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@+id/settingsName"
         android:layout_centerHorizontal="true"
-        android:text="0"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="33sp"
@@ -96,10 +112,10 @@
     <TextView
         android:id="@+id/tvNumCal"
         android:layout_width="49dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@+id/tvLabel"
         android:layout_centerHorizontal="true"
-        android:text="0"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="33sp"
@@ -113,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNumCal"
         android:layout_centerHorizontal="true"
-        android:text="people your calendar is shared with"
+        android:text="@string/user_cal"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -125,7 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNumGroups"
         android:layout_centerHorizontal="true"
-        android:text="groups you are part of"
+        android:text="@string/user_groups"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="italic"

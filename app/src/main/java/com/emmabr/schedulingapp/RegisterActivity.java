@@ -102,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (!TextUtils.isEmpty(username) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                     mRegProgress.setTitle("Registering User");
-                    mRegProgress.setMessage("Please wait while we create you account!");
+                    mRegProgress.setMessage("Please wait while we create your account!");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.show();
 
