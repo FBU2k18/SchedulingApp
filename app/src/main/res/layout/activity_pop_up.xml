@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.emmabr.schedulingapp.RoundedCornerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grey_gradient"
-    tools:context="com.emmabr.schedulingapp.PopUpActivity">
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+    tools:context="com.emmabr.schedulingapp.PopUpActivity"
+    android:layout_gravity="center">
 
         <EditText
             android:id="@+id/etPollName"
@@ -50,14 +46,11 @@
             android:layout_height="46dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:src="@drawable/new_username"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
 
-
-</com.emmabr.schedulingapp.RoundedCornerLayout>
+</android.support.constraint.ConstraintLayout>
