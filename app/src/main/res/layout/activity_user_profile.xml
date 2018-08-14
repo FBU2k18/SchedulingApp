@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlUser"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -25,7 +24,7 @@
     <TextView
         android:id="@+id/settingsName"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="71dp"
         android:layout_below="@+id/settings_image"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
@@ -43,7 +42,6 @@
         android:layout_height="44dp"
         android:layout_above="@+id/settingsNameBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
         android:background="@drawable/button"
         android:fontFamily="sans-serif"
         android:text="@string/change_image"
@@ -53,7 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsNameBtn"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
@@ -72,35 +69,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNumGroups"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsImageBtn"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/ivCoverPhoto"
         android:layout_width="match_parent"
         android:layout_height="163dp"
         android:background="@drawable/animation_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/tvNumGroups"
         android:layout_width="41dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvLabel"
         android:layout_below="@+id/settingsName"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="0"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="33sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabel" />
+        tools:layout_editor_absoluteX="172dp" />
 
     <TextView
         android:id="@+id/tvNumCal"
@@ -108,16 +99,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="0"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="33sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabel2" />
+        tools:layout_editor_absoluteX="168dp"
+        tools:layout_editor_absoluteY="322dp" />
 
     <TextView
         android:id="@+id/tvLabel2"
@@ -125,16 +113,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNumCal"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="people your calendar is shared with"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsName" />
+        tools:layout_editor_absoluteX="72dp" />
 
     <TextView
         android:id="@+id/tvLabel"
@@ -142,14 +125,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvNumGroups"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="groups you are part of"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNumCal" />
+        tools:layout_editor_absoluteX="112dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
