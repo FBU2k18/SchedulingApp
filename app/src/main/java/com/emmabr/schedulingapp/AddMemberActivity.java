@@ -122,7 +122,7 @@ public class AddMemberActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (!mGroupMembers.contains(user_id)) {
-                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("false");
+                            FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("1");
                             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("Recipients").child(user_id).setValue(user_id);
                             FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).addValueEventListener(new ValueEventListener() {
                                 @Override

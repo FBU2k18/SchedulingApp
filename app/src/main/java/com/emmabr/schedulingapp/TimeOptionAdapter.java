@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -37,10 +38,8 @@ public class TimeOptionAdapter extends RecyclerView.Adapter<TimeOptionAdapter.Vi
         time.setHolder(holder);
         holder.tvTime.setText(time.getTime());
         holder.tvVotes.setText(Integer.toString(time.getVotes()));
-        //get current user
         if (time.getUpVoters().contains(FirebaseAuth.getInstance().getUid()))
             holder.rlOption.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
-            //get current user again
         else if (time.getDownVoters().contains(FirebaseAuth.getInstance().getUid()))
             holder.rlOption.setBackgroundColor(mContext.getResources().getColor(android.R.color.holo_red_light));
         else

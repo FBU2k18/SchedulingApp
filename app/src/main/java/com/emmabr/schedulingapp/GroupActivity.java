@@ -206,10 +206,10 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
         FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue().toString().equals("false"))
-                    mRefresh = true;
-                else
+                if (dataSnapshot.getValue() != null && dataSnapshot.getValue().toString().equals("0"))
                     mRefresh = false;
+                else
+                    mRefresh = true;
             }
 
             @Override
@@ -372,8 +372,8 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
                 String nextTime;
                 String startTime;
                 String endTime;
-                String currDate = "2018-04-" + Integer.toString(k) + "T";
-                String currNext = "2018-04-" + Integer.toString(k + 1) + "T";
+                String currDate = "2018-08-" + Integer.toString(k) + "T";
+                String currNext = "2018-08-" + Integer.toString(k + 1) + "T";
                 if (i < 10) {
                     time = "0" + Integer.toString(i);
                     if (i + 1 == 10) {
@@ -463,6 +463,6 @@ public class GroupActivity extends AppCompatActivity implements LeaveGroupDialog
             mDays.add(date);
         }
         mDayAdapter.notifyDataSetChanged();
-        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("true");
+        FirebaseDatabase.getInstance().getReference().child("groups").child(mGroupID).child("seenStatus").setValue("0");
     }
 }
